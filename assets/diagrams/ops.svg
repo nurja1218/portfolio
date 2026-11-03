@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300" role="img" aria-label="로그 파이프라인과 시크릿 변경 파이프라인">
+
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#8c959f; --box:#f6f8fa;
+          --new:#e6f4ea; --newline:#2f855a; --warn:#fff4e5; --warnline:#b7791f; --group:#fbfbfc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#6e7681; --box:#161b22;
+            --new:#12261b; --newline:#3fb950; --warn:#2a1f0d; --warnline:#d29922; --group:#10151c; }
+  }
+  .bg { fill: var(--bg); }
+  .grp { fill: var(--group); stroke: var(--line); stroke-dasharray: 4 4; }
+  .grpt { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .box { fill: var(--box); stroke: var(--line); }
+  .new { fill: var(--new); stroke: var(--newline); }
+  .warn { fill: var(--warn); stroke: var(--warnline); }
+  .t { fill: var(--fg); font-size: 13px; }
+  .s { fill: var(--muted); font-size: 11px; }
+  .title { fill: var(--fg); font-size: 14px; font-weight: 700; }
+  .e { stroke: var(--line); stroke-width: 1.4; fill: none; marker-end: url(#a); }
+  .ed { stroke: var(--line); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#a); }
+  .el { fill: var(--muted); font-size: 11px; }
+  .ah { fill: var(--line); }
+  text { font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+</style>
+
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="760" height="300"/>
+<text class="title" x="20" y="24">로그 파이프라인</text>
+<text class="title" x="20" y="176">시크릿 변경 · 배포</text>
+<path class="e" d="M180.0,70.0 L210.0,70.0"/>
+<path class="e" d="M380.0,70.0 L410.0,70.0"/>
+<path class="e" d="M580.0,70.0 L610.0,70.0"/>
+<path class="e" d="M180.0,222.0 L210.0,222.0"/>
+<path class="e" d="M380.0,222.0 L410.0,222.0"/>
+<path class="e" d="M580.0,222.0 L610.0,222.0"/>
+<rect class="box" x="20" y="44" width="160" height="52" rx="8"/>
+<text class="t" x="100.0" y="66.0" text-anchor="middle">서비스 앱</text>
+<text class="s" x="100.0" y="82.0" text-anchor="middle">NestJS · Express · 다중 리전</text>
+<rect class="box" x="210" y="44" width="170" height="52" rx="8"/>
+<text class="t" x="295.0" y="66.0" text-anchor="middle">로그 전송기</text>
+<text class="s" x="295.0" y="82.0" text-anchor="middle">버퍼 → bulk · gzip · 백오프</text>
+<rect class="new" x="410" y="44" width="170" height="52" rx="8"/>
+<text class="t" x="495.0" y="66.0" text-anchor="middle">OpenSearch</text>
+<text class="s" x="495.0" y="82.0" text-anchor="middle">ISM 1일/5GB → 30일</text>
+<rect class="warn" x="610" y="44" width="130" height="52" rx="8"/>
+<text class="t" x="675.0" y="66.0" text-anchor="middle">디스크 알림</text>
+<text class="s" x="675.0" y="82.0" text-anchor="middle">80 · 90 · 95%</text>
+<rect class="box" x="20" y="196" width="160" height="52" rx="8"/>
+<text class="t" x="100.0" y="218.0" text-anchor="middle">Jenkins 파라미터</text>
+<text class="s" x="100.0" y="234.0" text-anchor="middle">변경 사유 필수</text>
+<rect class="warn" x="210" y="196" width="170" height="52" rx="8"/>
+<text class="t" x="295.0" y="218.0" text-anchor="middle">운영 승인 단계</text>
+<text class="s" x="295.0" y="234.0" text-anchor="middle">값은 *** 마스킹</text>
+<rect class="box" x="410" y="196" width="170" height="52" rx="8"/>
+<text class="t" x="495.0" y="218.0" text-anchor="middle">Secrets Manager</text>
+<text class="s" x="495.0" y="234.0" text-anchor="middle">새 버전 · 감사 기록</text>
+<rect class="new" x="610" y="196" width="130" height="52" rx="8"/>
+<text class="t" x="675.0" y="218.0" text-anchor="middle">배포</text>
+<text class="s" x="675.0" y="234.0" text-anchor="middle">실패 시 자동 롤백</text>
+</svg>

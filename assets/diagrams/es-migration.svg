@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 200" width="760" height="200" role="img" aria-label="Elasticsearch 스냅샷 마이그레이션 자동화">
+
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#8c959f; --box:#f6f8fa;
+          --new:#e6f4ea; --newline:#2f855a; --warn:#fff4e5; --warnline:#b7791f; --group:#fbfbfc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#6e7681; --box:#161b22;
+            --new:#12261b; --newline:#3fb950; --warn:#2a1f0d; --warnline:#d29922; --group:#10151c; }
+  }
+  .bg { fill: var(--bg); }
+  .grp { fill: var(--group); stroke: var(--line); stroke-dasharray: 4 4; }
+  .grpt { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .box { fill: var(--box); stroke: var(--line); }
+  .new { fill: var(--new); stroke: var(--newline); }
+  .warn { fill: var(--warn); stroke: var(--warnline); }
+  .t { fill: var(--fg); font-size: 13px; }
+  .s { fill: var(--muted); font-size: 11px; }
+  .title { fill: var(--fg); font-size: 14px; font-weight: 700; }
+  .e { stroke: var(--line); stroke-width: 1.4; fill: none; marker-end: url(#a); }
+  .ed { stroke: var(--line); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#a); }
+  .el { fill: var(--muted); font-size: 11px; }
+  .ah { fill: var(--line); }
+  text { font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+</style>
+
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="760" height="200"/>
+<rect class="grp" x="175" y="20" width="570" height="160" rx="10"/>
+<text class="grpt" x="187" y="38">Step Functions (각 단계 = Lambda)</text>
+<path class="e" d="M155.0,103.0 L195.0,103.0"/>
+<path class="e" d="M320.0,103.0 L335.0,103.0"/>
+<path class="e" d="M460.0,103.0 L475.0,103.0"/>
+<path class="e" d="M600.0,103.0 L615.0,103.0"/>
+<rect class="box" x="15" y="80" width="140" height="46" rx="8"/>
+<text class="t" x="85.0" y="99.0" text-anchor="middle">EventBridge</text>
+<text class="s" x="85.0" y="115.0" text-anchor="middle">주기 실행</text>
+<rect class="box" x="195" y="80" width="125" height="46" rx="8"/>
+<text class="t" x="257.5" y="99.0" text-anchor="middle">스냅샷 생성</text>
+<text class="s" x="257.5" y="115.0" text-anchor="middle">→ S3</text>
+<rect class="box" x="335" y="80" width="125" height="46" rx="8"/>
+<text class="t" x="397.5" y="99.0" text-anchor="middle">상태 확인</text>
+<text class="s" x="397.5" y="115.0" text-anchor="middle">실패 시 에러 처리</text>
+<rect class="new" x="475" y="80" width="125" height="46" rx="8"/>
+<text class="t" x="537.5" y="99.0" text-anchor="middle">Restore</text>
+<text class="s" x="537.5" y="115.0" text-anchor="middle">Staging 반영</text>
+<rect class="box" x="615" y="80" width="120" height="46" rx="8"/>
+<text class="t" x="675.0" y="99.0" text-anchor="middle">클러스터</text>
+<text class="s" x="675.0" y="115.0" text-anchor="middle">상태 확인</text>
+</svg>

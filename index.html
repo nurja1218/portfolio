@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>임준영 · 이력서</title>
+<meta name="description" content="백엔드 엔지니어 임준영 이력서">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<main>
+  <nav class="top"><a href="./" aria-current="page">이력서</a><a href="portfolio.html">경력기술서</a></nav>
+
+  <header class="hero">
+    <h1>임준영 Junyoung Lim</h1>
+    <p class="role">Backend Engineer · Product Engineer</p>
+    <div class="links">
+      <a href="mailto:nurja1218@gmail.com">nurja1218@gmail.com</a>
+      <a href="https://www.linkedin.com/in/junyoung-lim-904179249/">LinkedIn</a>
+      <a href="https://github.com/nurja1218">GitHub</a>
+    </div>
+    <div class="intro">
+      <p>스타트업 초기 멤버로 시작해 물류·커머스·AI 통번역 도메인에서 제품을 만들어 온 백엔드 엔지니어입니다.</p>
+      <p>사용자가 겪는 문제에서 출발해 원인을 측정으로 확인하고, 구현과 결과 측정까지 맡습니다. 최근에는 기능 단위로 PRD·시안·명세를 직접 작성하는 오너 역할을 맡고 있습니다.</p>
+    </div>
+  </header>
+
+  <h2>Career</h2>
+
+  <section class="job">
+    <div class="meta"><div class="co">플리토</div><div class="pos">Backend Engineer</div><div class="when">2025.02 – 현재</div></div>
+    <div>
+      <p class="desc">AI 기반 언어 데이터 · 실시간 AI 통번역 서비스</p>
+      <ul>
+        <li>해외 리전 응답 지연 해결 — DynamoDB Global Tables · 리전별 Redis 전환 (Close API <span class="num">1,673 → 327ms</span>, Create API <span class="num">2,630 → 90ms</span>)</li>
+        <li>사용자별 지식그래프(PostgreSQL + pgvector) 기반 번역·AI 어시스턴트 초개인화 개발 및 상용 반영</li>
+        <li>LangSmith 기반 LLM 프롬프트 관리 체계 구축 — 배포 없이 1분 내 반영, 자동 채점 통과 버전만 운영 반영</li>
+        <li>외부 AI 에이전트 연결(MCP) 기능 오너 — PRD · Figma 시안 · 서버 명세 작성 (구현 진행 중)</li>
+        <li>멀티 리전 로그 파이프라인(OpenSearch) 구축, 시크릿 변경 파이프라인 · 실패 시 자동 롤백 배포 도입</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="job">
+    <div class="meta"><div class="co">비주얼 (아몬즈)</div><div class="pos">Backend Engineer · 백엔드 2팀 부매니저</div><div class="when">2023.12 – 2025.01</div></div>
+    <div>
+      <p class="desc">100만 사용자 · 2,000개 이상 브랜드의 주얼리 버티컬 커머스</p>
+      <ul>
+        <li>선물 가능 상품 영역 확대로 선물 주문 건수 <span class="num">10배</span> 이상 증대</li>
+        <li>추천 상품 스케줄러 재구축 — 집계 구조 변경 · 배치 병렬 처리 (<span class="num">60분 → 15분</span>)</li>
+        <li>알림톡 발송을 Redis 큐 기반 메시지 워커로 분리 · 재시도 설계</li>
+        <li>Feature Flag 기반 Trunk-Based 개발 전략 도입, 최소 권한 기반 AWS 권한 정책 수립</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="job">
+    <div class="meta"><div class="co">윌로그</div><div class="pos">Backend · Frontend Engineer</div><div class="when">2021.07 – 2023.10</div></div>
+    <div>
+      <p class="desc">물류 배송 모니터링 솔루션 · 시드 라운드 합류, MVP부터 시리즈 B까지</p>
+      <ul>
+        <li>물류 통합 관제 플랫폼 설계 · 레거시 이관 (배송 약 <span class="num">200만 건</span>, 시계열 약 <span class="num">5억 건</span>)</li>
+        <li>기능 기준 서버 분리 (Core · 디바이스 · 고객사 연동 · 알림)</li>
+        <li>고객사 연동 API 지연 개선 — 청크 분할 · 병렬 처리 (<span class="num">20초 → 5초</span>)</li>
+        <li>InfluxDB로 디바이스 시계열 분리, GraphQL Subscription 실시간 업데이트</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="job">
+    <div class="meta"><div class="co">팜캣</div><div class="pos">Software Engineer</div><div class="when">2019.09 – 2021.06</div></div>
+    <div>
+      <p class="desc">제스처로 IT 기기를 제어하는 웨어러블 디바이스</p>
+      <ul>
+        <li>모션 입력을 사용자 설정 이벤트로 변환하는 제어 프로그램 개발 (Python · Flask · PyQt)</li>
+        <li>미국·일본 크라우드펀딩(12만 달러 · 1,000만 엔 이상) 제품 개발 참여</li>
+      </ul>
+    </div>
+  </section>
+
+  <h2>Skills</h2>
+  <dl class="skills">
+    <dt>Backend</dt><dd>TypeScript · NestJS · Express · GraphQL · REST · TypeORM</dd>
+    <dt>Data</dt><dd>PostgreSQL (pgvector) · MySQL · DynamoDB · Redis · MongoDB · Elasticsearch / OpenSearch · InfluxDB</dd>
+    <dt>AI</dt><dd>LLM 연동 · 프롬프트 관리 · 평가 (LangSmith) · 임베딩 검색</dd>
+    <dt>Infra</dt><dd>AWS (EC2 · ECS · Lambda · Step Functions · S3 · CloudFront · Secrets Manager) · Jenkins · Docker</dd>
+  </dl>
+
+  <h2>Etc</h2>
+  <dl class="skills">
+    <dt>발표</dt><dd>사내 워크숍 「모노레포란 무엇인가?」 (2024 S/S)</dd>
+    <dt>스터디</dt><dd>Real MySQL 8.0 (2023.12–2024.06) · 리팩터링 2판 운영 (2024.08–2024.10)</dd>
+    <dt>학력</dt><dd>한국외국어대학교 전자공학과 (2010–2016) · 서울사이버대학교 컴퓨터공학과 (2018–2020)</dd>
+  </dl>
+
+  <footer>최종 수정 2026-11-03</footer>
+</main>
+</body>
+</html>

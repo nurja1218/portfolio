@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 220" width="760" height="220" role="img" aria-label="알림 메시지 워커 구조">
+
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#8c959f; --box:#f6f8fa;
+          --new:#e6f4ea; --newline:#2f855a; --warn:#fff4e5; --warnline:#b7791f; --group:#fbfbfc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#6e7681; --box:#161b22;
+            --new:#12261b; --newline:#3fb950; --warn:#2a1f0d; --warnline:#d29922; --group:#10151c; }
+  }
+  .bg { fill: var(--bg); }
+  .grp { fill: var(--group); stroke: var(--line); stroke-dasharray: 4 4; }
+  .grpt { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .box { fill: var(--box); stroke: var(--line); }
+  .new { fill: var(--new); stroke: var(--newline); }
+  .warn { fill: var(--warn); stroke: var(--warnline); }
+  .t { fill: var(--fg); font-size: 13px; }
+  .s { fill: var(--muted); font-size: 11px; }
+  .title { fill: var(--fg); font-size: 14px; font-weight: 700; }
+  .e { stroke: var(--line); stroke-width: 1.4; fill: none; marker-end: url(#a); }
+  .ed { stroke: var(--line); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#a); }
+  .el { fill: var(--muted); font-size: 11px; }
+  .ah { fill: var(--line); }
+  text { font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+</style>
+
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="760" height="220"/>
+<path class="e" d="M170.0,93.0 L210.0,93.0"/>
+<path class="e" d="M360.0,94.1 L400.0,94.7"/>
+<path class="e" d="M570.0,76.8 L610.0,67.7"/>
+<path class="ed" d="M567.3,122.0 L610.0,135.5"/>
+<text class="el" x="548.7" y="144.7" text-anchor="middle">재시도 초과</text>
+<rect class="box" x="20" y="70" width="150" height="46" rx="8"/>
+<text class="t" x="95.0" y="89.0" text-anchor="middle">API 서버</text>
+<text class="s" x="95.0" y="105.0" text-anchor="middle">발송 요청만 등록</text>
+<rect class="new" x="210" y="70" width="150" height="46" rx="8"/>
+<text class="t" x="285.0" y="89.0" text-anchor="middle">Redis 큐</text>
+<text class="s" x="285.0" y="105.0" text-anchor="middle">발송 job</text>
+<rect class="new" x="400" y="70" width="170" height="52" rx="8"/>
+<text class="t" x="485.0" y="92.0" text-anchor="middle">메시지 워커 (분리 서버)</text>
+<text class="s" x="485.0" y="108.0" text-anchor="middle">배치 발송 · 중복 방지</text>
+<rect class="box" x="610" y="30" width="130" height="46" rx="8"/>
+<text class="t" x="675.0" y="57.0" text-anchor="middle">알림톡</text>
+<rect class="warn" x="610" y="130" width="130" height="52" rx="8"/>
+<text class="t" x="675.0" y="152.0" text-anchor="middle">MongoDB</text>
+<text class="s" x="675.0" y="168.0" text-anchor="middle">반복 실패 이력</text>
+</svg>

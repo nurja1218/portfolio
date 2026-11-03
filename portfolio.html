@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>임준영 · 경력기술서</title>
+<meta name="description" content="백엔드 엔지니어 임준영 경력기술서 — 아키텍처 중심">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<main>
+  <nav class="top"><a href="./">이력서</a><a href="portfolio.html" aria-current="page">경력기술서</a></nav>
+
+  <header class="hero">
+    <h1>경력기술서</h1>
+    <p class="role">그림이 본문, 글은 보조 설명입니다. 회사 내부 정보(서비스명·주소·고객 데이터)는 일반화했습니다.</p>
+  </header>
+
+  <!-- ───────────── 플리토 ───────────── -->
+  <section class="domain">
+    <h2>플리토 · 실시간 AI 통번역</h2>
+
+    <article class="case">
+      <h3>글로벌 리전 레이턴시 개선</h3>
+      <div class="tags"><span class="tag">2025.11 – 2026.05</span><span class="tag">설계 · 구현 주도</span><span class="tag">DynamoDB · Redis · PostgreSQL</span></div>
+      <figure><img src="assets/diagrams/latency.svg" alt="글로벌 리전 레이턴시 개선 전후 구조"></figure>
+      <dl class="psr">
+        <dt>문제</dt><dd>해외 리전에서 쓰면 국내보다 4~5배 느리다는 피드백. 유력한 원인은 서울 리전에 묶인 DB·Redis 쓰기 왕복(1회 약 150ms)이 요청마다 여러 번 발생하는 구조.</dd>
+        <dt>판단</dt><dd>Aurora Global Database·Aurora DSQL 검토 — 쓰기는 여전히 한 리전이거나 대륙 간 미지원이고 비용도 더 높아 보류. 실시간성이 강한 데이터만 리전 로컬 쓰기로 옮기기로 결정.</dd>
+        <dt>해결</dt><dd>대화방·세션·연결 추적을 DynamoDB Global Tables로, 캐시·작업 큐를 리전별 Redis로 전환. PostgreSQL은 큐로 비동기 동기화하고, 기능 플래그로 언제든 기존 구조로 되돌릴 수 있게 함.</dd>
+        <dt>결과</dt><dd>Close API <span class="num">1,673 → 327ms (-80%)</span>, Create API <span class="num">2,630 → 90ms (-97%)</span> — 해외 상황을 재현한 개발 환경에서 15회 측정. 남은 병목은 Pub/Sub fan-out.</dd>
+      </dl>
+    </article>
+
+    <article class="case">
+      <h3>지식그래프 기반 초개인화</h3>
+      <div class="tags"><span class="tag">2026.01 – 2026.10</span><span class="tag">백엔드 설계 · 구현 · 상용 반영</span><span class="tag">PostgreSQL · pgvector · LLM</span></div>
+      <figure><img src="assets/diagrams/personalization.svg" alt="지식그래프 기반 초개인화 흐름"></figure>
+      <dl class="psr">
+        <dt>문제</dt><dd>사용자가 여러 번 고친 표기나 자신의 분야 맥락을 번역·AI 답변이 기억하지 못함.</dd>
+        <dt>해결</dt><dd>사용자 활동에서 LLM이 사실을 추출하고, 다시 LLM이 기존 지식과 비교해 추가/갱신/유지를 판단해 사용자별 그래프로 저장. 번역에는 용어집·배경지식으로, AI 답변에는 질문과 의미가 가까운 사실만 넣음. 모든 쌓기는 백그라운드 잡.</dd>
+        <dt>개선</dt><dd>상용 데이터를 보니 노트 발표자의 이야기가 사용자 사실로 섞이는 문제가 있어 "사용자 중심" 관계 구조로 재설계. 고정 기준선 게이트로 회귀 없이 채택한 뒤 상용 사용자 이관 완료.</dd>
+      </dl>
+    </article>
+
+    <article class="case">
+      <h3>LLM 프롬프트 관리 체계</h3>
+      <div class="tags"><span class="tag">2026.06</span><span class="tag">설계 · 구현</span><span class="tag">LangSmith · 평가 자동화</span></div>
+      <figure><img src="assets/diagrams/llm-prompt.svg" alt="LLM 프롬프트 관리 흐름"></figure>
+      <dl class="psr">
+        <dt>문제</dt><dd>프롬프트가 코드에 있어 문장 하나를 고쳐도 배포가 필요했고, 바뀐 버전의 품질을 확인할 방법이 없음.</dd>
+        <dt>해결</dt><dd>LangSmith를 원본으로 두고 서버가 직접 조회(60초 캐시, 장애 시 DB 미러 폴백). 개발/운영은 태그로 분리하고, 골든셋 자동 채점을 통과한 버전만 운영 태그를 받게 함.</dd>
+        <dt>결과</dt><dd>코드 배포 없이 프롬프트를 고쳐 약 1분 안에 반영 — PO·PM용 사용 가이드를 함께 제공.</dd>
+      </dl>
+    </article>
+
+    <article class="case">
+      <h3>외부 AI 에이전트 연결(MCP) — 기능 오너</h3>
+      <div class="tags"><span class="tag wip">2026.10 – 진행 중</span><span class="tag">PRD · Figma · 서버 명세</span></div>
+      <dl class="psr">
+        <dt>목표</dt><dd>고객이 쓰는 AI 에이전트(Claude · ChatGPT · Cursor 등)가 대화·노트 기록을 읽고 용어집을 미리 준비하게 함.</dd>
+        <dt>한 일</dt><dd>타사 연결 방식·사용 한도를 비교 조사해 PRD를 쓰고, Figma 시안(데스크톱·모바일 웹)·서버 명세·아키텍처 그림을 한 벌로 작성. 이 문서 방식을 이후 기능(음성 파일 업로드)에도 적용 중.</dd>
+        <dt>상태</dt><dd>출시 전 — 선행 작업이 끝난 뒤 구현을 이어감.</dd>
+      </dl>
+    </article>
+
+    <article class="case">
+      <h3>로그 · 배포 운영 안정화</h3>
+      <div class="tags"><span class="tag">2025.10 – 2026.05</span><span class="tag">구축 · 장애 복구</span><span class="tag">OpenSearch · Jenkins</span></div>
+      <figure><img src="assets/diagrams/ops.svg" alt="로그 파이프라인과 시크릿 변경 파이프라인"></figure>
+      <dl class="psr">
+        <dt>로그</dt><dd>여러 리전의 서비스 로그를 OpenSearch로 수집(전송 실패가 서버에 영향 없게 설계). 이후 디스크 풀 장애는 debug 로그 유입이 원인이라 유입을 막고 보관 정책·압축·디스크 알림을 기본값으로 고정.</dd>
+        <dt>배포</dt><dd>시크릿 변경을 Jenkins 파이프라인으로 일원화(변경 사유 필수 · 값 마스킹 · 운영 승인). 서버 CPU 포화 장애 뒤 불필요한 로그를 정리하고, 배포가 실패하면 이전 버전으로 되돌리는 배포·로그 보관 정책을 도입.</dd>
+      </dl>
+    </article>
+  </section>
+
+  <!-- ───────────── 비주얼 ───────────── -->
+  <section class="domain">
+    <h2>비주얼 · 주얼리 버티컬 커머스</h2>
+
+    <article class="case">
+      <h3>추천 상품 스케줄러 재구축</h3>
+      <div class="tags"><span class="tag">MySQL · MongoDB · Elasticsearch</span></div>
+      <figure><img src="assets/diagrams/recommend.svg" alt="추천 상품 스케줄러 흐름"></figure>
+      <dl class="psr">
+        <dt>문제</dt><dd>3억 건 이상의 행동 지표를 매번 시간 범위로 조인·정렬해 60분 이상 걸리고, 추천 기준이 쿼리에 고정돼 3년간 손대지 못함.</dd>
+        <dt>해결</dt><dd>행동 지표를 1시간 단위로 MongoDB에 미리 집계해 ID 조회로 바꾸고, 점수 계산·반영을 배치 병렬 처리. 가중치는 관리자 페이지에서 설정, Elasticsearch 반영 실패는 재시도 후 알림.</dd>
+        <dt>결과</dt><dd>스케줄러 <span class="num">60분 → 15분</span>.</dd>
+      </dl>
+    </article>
+
+    <article class="case">
+      <h3>알림 메시지 워커</h3>
+      <div class="tags"><span class="tag">Redis 큐 · MongoDB</span></div>
+      <figure><img src="assets/diagrams/message-worker.svg" alt="알림 메시지 워커 구조"></figure>
+      <dl class="psr">
+        <dt>문제</dt><dd>100만 사용자 대상 주기 알림톡 발송이 API 서버에 부담을 줌.</dd>
+        <dt>해결</dt><dd>발송을 Redis 큐 + 별도 워커 서버로 분리하고 배치 발송·중복 방지 적용. 실패는 재시도, 반복 실패는 MongoDB에 이력 저장.</dd>
+      </dl>
+    </article>
+
+    <article class="case">
+      <h3>Elasticsearch 스냅샷 마이그레이션 자동화</h3>
+      <div class="tags"><span class="tag">Step Functions · Lambda · S3</span></div>
+      <figure><img src="assets/diagrams/es-migration.svg" alt="Elasticsearch 스냅샷 마이그레이션 흐름"></figure>
+      <dl class="psr">
+        <dt>해결</dt><dd>스테이징 검색 데이터를 운영과 맞추기 위해 스냅샷 생성 → 상태 확인 → 복원 → 클러스터 확인을 Step Functions 단계로 자동화하고 EventBridge로 주기 실행.</dd>
+      </dl>
+    </article>
+
+    <article class="case">
+      <h3>개발 방식 · 권한</h3>
+      <ul class="mini">
+        <li><b>Feature Flag 기반 Trunk-Based 개발</b>환경별 브랜치 충돌과 배포 지연 문제 → 기능 플래그로 활성화를 제어하고 main 하나로 배포. API 배포 상태를 문서(Swagger) 라벨로 공유.</li>
+        <li><b>AWS 권한 정책</b>모든 권한을 가진 단일 그룹 → 신규 입사자는 읽기 전용, 업무별 권한 그룹, 민감 작업은 별도 승인으로 분리.</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- ───────────── 윌로그 ───────────── -->
+  <section class="domain">
+    <h2>윌로그 · 물류 배송 모니터링</h2>
+
+    <article class="case">
+      <h3>기능 기준 서버 분리 · 통합 관제 플랫폼</h3>
+      <div class="tags"><span class="tag">NestJS · GraphQL · ECS · Lambda · InfluxDB</span></div>
+      <figure><img src="assets/diagrams/willog-servers.svg" alt="기능 기준 서버 분리 구조"></figure>
+      <dl class="psr">
+        <dt>문제</dt><dd>고객사 연동 API 트래픽이 몰리면 서비스 전체가 영향을 받았고, 산업별 서비스가 따로 있어 운영 리소스가 늘어남.</dd>
+        <dt>해결</dt><dd>클라이언트 API(Core) · 디바이스 시계열(DDM) · 고객사 연동(CDL) · 알림(Noti)으로 서버를 분리하고 일부는 Lambda로 구성. 산업별 서비스는 출고·배송·검수·도착 공통 구조의 통합 플랫폼으로 이관.</dd>
+        <dt>결과</dt><dd>운영 중인 고객사 서비스를 멈추지 않고 배송 약 <span class="num">200만 건</span> · 디바이스 시계열 약 <span class="num">5억 건</span> 이관.</dd>
+      </dl>
+    </article>
+
+    <article class="case">
+      <h3>문제 해결 · 협업</h3>
+      <ul class="mini">
+        <li><b>고객사 연동 API 지연</b>10분마다 1만 건 이상 들어오는 연동 요청의 중복 검사가 느린 쿼리를 만듦 → 메모리 조회로 쿼리 수를 줄이고 1,000건 단위로 나눠 병렬 처리 (<span class="num">20초 → 5초</span>), 이후 Serverless로 분리.</li>
+        <li><b>시계열 데이터 분리</b>콤마로 이어 붙인 문자열로 저장하던 측정값을 InfluxDB로 분리, 실시간 변경은 GraphQL Subscription으로 전달.</li>
+        <li><b>VOC time</b>니즈가 정리되지 않은 고객사에 MVP를 먼저 제공하고 한 달에 한 번 현장 실무자를 만나 기능을 맞춤 개발.</li>
+      </ul>
+    </article>
+  </section>
+
+  <footer>최종 수정 2026-11-03 · 그림 원본: <code>tools/diagrams.py</code></footer>
+</main>
+</body>
+</html>

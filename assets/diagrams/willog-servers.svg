@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300" role="img" aria-label="기능 기준 서버 분리 구조">
+
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#8c959f; --box:#f6f8fa;
+          --new:#e6f4ea; --newline:#2f855a; --warn:#fff4e5; --warnline:#b7791f; --group:#fbfbfc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#6e7681; --box:#161b22;
+            --new:#12261b; --newline:#3fb950; --warn:#2a1f0d; --warnline:#d29922; --group:#10151c; }
+  }
+  .bg { fill: var(--bg); }
+  .grp { fill: var(--group); stroke: var(--line); stroke-dasharray: 4 4; }
+  .grpt { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .box { fill: var(--box); stroke: var(--line); }
+  .new { fill: var(--new); stroke: var(--newline); }
+  .warn { fill: var(--warn); stroke: var(--warnline); }
+  .t { fill: var(--fg); font-size: 13px; }
+  .s { fill: var(--muted); font-size: 11px; }
+  .title { fill: var(--fg); font-size: 14px; font-weight: 700; }
+  .e { stroke: var(--line); stroke-width: 1.4; fill: none; marker-end: url(#a); }
+  .ed { stroke: var(--line); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#a); }
+  .el { fill: var(--muted); font-size: 11px; }
+  .ah { fill: var(--line); }
+  text { font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+</style>
+
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="760" height="300"/>
+<path class="e" d="M170.0,53.9 L250.0,54.9"/>
+<path class="e" d="M170.0,143.9 L250.0,144.9"/>
+<path class="e" d="M170.0,233.9 L250.0,234.9"/>
+<path class="e" d="M440.0,48.5 L540.0,40.5"/>
+<path class="e" d="M440.0,77.9 L540.0,101.1"/>
+<path class="e" d="M440.0,138.5 L540.0,130.5"/>
+<path class="e" d="M440.0,236.0 L540.0,236.0"/>
+<rect class="box" x="20" y="30" width="150" height="46" rx="8"/>
+<text class="t" x="95.0" y="57.0" text-anchor="middle">웹 · 모바일 웹</text>
+<rect class="box" x="20" y="120" width="150" height="46" rx="8"/>
+<text class="t" x="95.0" y="147.0" text-anchor="middle">고객사 시스템</text>
+<rect class="box" x="20" y="210" width="150" height="46" rx="8"/>
+<text class="t" x="95.0" y="237.0" text-anchor="middle">트래킹 디바이스</text>
+<rect class="new" x="250" y="30" width="190" height="52" rx="8"/>
+<text class="t" x="345.0" y="52.0" text-anchor="middle">Core</text>
+<text class="s" x="345.0" y="68.0" text-anchor="middle">GraphQL API · ECS</text>
+<rect class="new" x="250" y="120" width="190" height="52" rx="8"/>
+<text class="t" x="345.0" y="142.0" text-anchor="middle">CDL</text>
+<text class="s" x="345.0" y="158.0" text-anchor="middle">배송 데이터 연동 REST</text>
+<rect class="new" x="250" y="210" width="190" height="52" rx="8"/>
+<text class="t" x="345.0" y="232.0" text-anchor="middle">DDM</text>
+<text class="s" x="345.0" y="248.0" text-anchor="middle">디바이스 시계열 API</text>
+<rect class="box" x="540" y="10" width="190" height="46" rx="8"/>
+<text class="t" x="635.0" y="29.0" text-anchor="middle">Noti</text>
+<text class="s" x="635.0" y="45.0" text-anchor="middle">카카오톡 · SMS</text>
+<rect class="box" x="540" y="100" width="190" height="46" rx="8"/>
+<text class="t" x="635.0" y="119.0" text-anchor="middle">RDB</text>
+<text class="s" x="635.0" y="135.0" text-anchor="middle">배송 · 주문</text>
+<rect class="box" x="540" y="213" width="190" height="46" rx="8"/>
+<text class="t" x="635.0" y="232.0" text-anchor="middle">InfluxDB</text>
+<text class="s" x="635.0" y="248.0" text-anchor="middle">디바이스 측정값</text>
+</svg>

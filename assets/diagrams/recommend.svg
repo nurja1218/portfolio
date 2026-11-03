@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 260" width="760" height="260" role="img" aria-label="추천 상품 스케줄러 재구축 흐름">
+
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#8c959f; --box:#f6f8fa;
+          --new:#e6f4ea; --newline:#2f855a; --warn:#fff4e5; --warnline:#b7791f; --group:#fbfbfc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#6e7681; --box:#161b22;
+            --new:#12261b; --newline:#3fb950; --warn:#2a1f0d; --warnline:#d29922; --group:#10151c; }
+  }
+  .bg { fill: var(--bg); }
+  .grp { fill: var(--group); stroke: var(--line); stroke-dasharray: 4 4; }
+  .grpt { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .box { fill: var(--box); stroke: var(--line); }
+  .new { fill: var(--new); stroke: var(--newline); }
+  .warn { fill: var(--warn); stroke: var(--warnline); }
+  .t { fill: var(--fg); font-size: 13px; }
+  .s { fill: var(--muted); font-size: 11px; }
+  .title { fill: var(--fg); font-size: 14px; font-weight: 700; }
+  .e { stroke: var(--line); stroke-width: 1.4; fill: none; marker-end: url(#a); }
+  .ed { stroke: var(--line); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#a); }
+  .el { fill: var(--muted); font-size: 11px; }
+  .ah { fill: var(--line); }
+  text { font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+</style>
+
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="760" height="260"/>
+<path class="e" d="M175.0,66.0 L205.0,66.0"/>
+<path class="e" d="M355.0,66.0 L385.0,66.0"/>
+<path class="e" d="M465.0,92.0 L465.0,160.0"/>
+<path class="e" d="M355.0,186.0 L385.0,186.0"/>
+<path class="e" d="M545.0,186.0 L585.0,186.0"/>
+<path class="ed" d="M665.0,160.0 L665.0,92.0"/>
+<rect class="box" x="15" y="40" width="160" height="52" rx="8"/>
+<text class="t" x="95.0" y="62.0" text-anchor="middle">MySQL</text>
+<text class="s" x="95.0" y="78.0" text-anchor="middle">유저 행동 지표 3억 건+</text>
+<rect class="box" x="205" y="40" width="150" height="52" rx="8"/>
+<text class="t" x="280.0" y="62.0" text-anchor="middle">1시간 집계</text>
+<text class="s" x="280.0" y="78.0" text-anchor="middle">스케줄러</text>
+<rect class="new" x="385" y="40" width="160" height="52" rx="8"/>
+<text class="t" x="465.0" y="62.0" text-anchor="middle">MongoDB</text>
+<text class="s" x="465.0" y="78.0" text-anchor="middle">시간별 집계 (ID 조회)</text>
+<rect class="new" x="385" y="160" width="160" height="52" rx="8"/>
+<text class="t" x="465.0" y="182.0" text-anchor="middle">추천 점수 계산</text>
+<text class="s" x="465.0" y="198.0" text-anchor="middle">배치 · 병렬 처리</text>
+<rect class="box" x="205" y="160" width="150" height="52" rx="8"/>
+<text class="t" x="280.0" y="182.0" text-anchor="middle">관리자 페이지</text>
+<text class="s" x="280.0" y="198.0" text-anchor="middle">가중치 설정</text>
+<rect class="box" x="585" y="160" width="160" height="52" rx="8"/>
+<text class="t" x="665.0" y="182.0" text-anchor="middle">Elasticsearch</text>
+<text class="s" x="665.0" y="198.0" text-anchor="middle">bulk 갱신 · 재시도</text>
+<rect class="warn" x="585" y="40" width="160" height="52" rx="8"/>
+<text class="t" x="665.0" y="62.0" text-anchor="middle">Slack · 로그</text>
+<text class="s" x="665.0" y="78.0" text-anchor="middle">재시도 초과 시</text>
+</svg>
