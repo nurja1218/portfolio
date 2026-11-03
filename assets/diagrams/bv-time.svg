@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" width="760" height="330" role="img" aria-label="작업 층 그래프와 시간 축 — 실제 인계 노트 체인">
+
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#8c959f; --box:#f6f8fa;
+          --new:#e6f4ea; --newline:#2f855a; --warn:#fff4e5; --warnline:#b7791f; --group:#fbfbfc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#6e7681; --box:#161b22;
+            --new:#12261b; --newline:#3fb950; --warn:#2a1f0d; --warnline:#d29922; --group:#10151c; }
+  }
+  .bg { fill: var(--bg); }
+  .grp { fill: var(--group); stroke: var(--line); stroke-dasharray: 4 4; }
+  .grpt { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .box { fill: var(--box); stroke: var(--line); }
+  .new { fill: var(--new); stroke: var(--newline); }
+  .warn { fill: var(--warn); stroke: var(--warnline); }
+  .t { fill: var(--fg); font-size: 13px; }
+  .s { fill: var(--muted); font-size: 11px; }
+  .title { fill: var(--fg); font-size: 14px; font-weight: 700; }
+  .e { stroke: var(--line); stroke-width: 1.4; fill: none; marker-end: url(#a); }
+  .ed { stroke: var(--line); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#a); }
+  .el { fill: var(--muted); font-size: 11px; }
+  .ah { fill: var(--line); }
+  text { font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+</style>
+
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="760" height="330"/>
+<text class="title" x="20" y="24">시간 축 — 세션 인계 노트 15개가 superseded-by 로 이어진 실제 체인 (9/30 → 10/17)</text>
+<path class="e" d="M145.0,71.0 L165.0,71.0"/>
+<path class="e" d="M295.0,71.0 L315.0,71.0"/>
+<path class="e" d="M445.0,71.0 L465.0,71.0"/>
+<path class="e" d="M575.0,71.0 L595.0,71.0"/>
+<path class="e" d="M260.0,212.0 L195.0,212.0"/>
+<text class="el" x="227.5" y="206.0" text-anchor="middle">moc</text>
+<path class="e" d="M490.0,197.1 L560.0,188.0"/>
+<path class="ed" d="M490.0,228.2 L560.0,238.0"/>
+<rect class="box" x="15" y="45" width="130" height="52" rx="8"/>
+<text class="t" x="80.0" y="67.0" text-anchor="middle">인계 09-30</text>
+<text class="s" x="80.0" y="83.0" text-anchor="middle">설계 확정</text>
+<rect class="box" x="165" y="45" width="130" height="52" rx="8"/>
+<text class="t" x="230.0" y="67.0" text-anchor="middle">인계 10-01</text>
+<text class="s" x="230.0" y="83.0" text-anchor="middle">미완 정리</text>
+<rect class="box" x="315" y="45" width="130" height="52" rx="8"/>
+<text class="t" x="380.0" y="67.0" text-anchor="middle">인계 10-02</text>
+<text class="s" x="380.0" y="83.0" text-anchor="middle">상용 준비</text>
+<rect class="box" x="465" y="45" width="110" height="52" rx="8"/>
+<text class="t" x="520.0" y="75.0" text-anchor="middle">… 11개 …</text>
+<rect class="new" x="595" y="45" width="150" height="52" rx="8"/>
+<text class="t" x="670.0" y="67.0" text-anchor="middle">인계 10-17</text>
+<text class="s" x="670.0" y="83.0" text-anchor="middle">체인 끝 = 현재 상태</text>
+<rect class="warn" x="15" y="180" width="180" height="64" rx="8"/>
+<text class="t" x="105.0" y="200.0" text-anchor="middle">도메인 허브 (MOC) 66</text>
+<text class="s" x="105.0" y="216.0" text-anchor="middle">moc 링크 828</text>
+<text class="s" x="105.0" y="232.0" text-anchor="middle">Bases: domain 으로 자동 표</text>
+<rect class="box" x="260" y="170" width="230" height="84" rx="8"/>
+<text class="t" x="375.0" y="192.0" text-anchor="middle">작업 노트 913</text>
+<text class="s" x="375.0" y="208.0" text-anchor="middle">domain · status · created · tags</text>
+<text class="s" x="375.0" y="224.0" text-anchor="middle">status: draft → active → done → archived</text>
+<text class="s" x="375.0" y="240.0" text-anchor="middle">날짜로 시작하는 파일 232</text>
+<rect class="box" x="560" y="150" width="185" height="52" rx="8"/>
+<text class="t" x="652.5" y="172.0" text-anchor="middle">depends-on 925</text>
+<text class="s" x="652.5" y="188.0" text-anchor="middle">읽을 때 같이 읽을 노트</text>
+<rect class="box" x="560" y="225" width="185" height="52" rx="8"/>
+<text class="t" x="652.5" y="247.0" text-anchor="middle">implements 456</text>
+<text class="s" x="652.5" y="263.0" text-anchor="middle">노트 ↔ 브랜치·커밋</text>
+</svg>

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300" role="img" aria-label="기억 층 그래프 — 허브 · 색인 · 사실 노트">
+
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#8c959f; --box:#f6f8fa;
+          --new:#e6f4ea; --newline:#2f855a; --warn:#fff4e5; --warnline:#b7791f; --group:#fbfbfc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#6e7681; --box:#161b22;
+            --new:#12261b; --newline:#3fb950; --warn:#2a1f0d; --warnline:#d29922; --group:#10151c; }
+  }
+  .bg { fill: var(--bg); }
+  .grp { fill: var(--group); stroke: var(--line); stroke-dasharray: 4 4; }
+  .grpt { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .box { fill: var(--box); stroke: var(--line); }
+  .new { fill: var(--new); stroke: var(--newline); }
+  .warn { fill: var(--warn); stroke: var(--warnline); }
+  .t { fill: var(--fg); font-size: 13px; }
+  .s { fill: var(--muted); font-size: 11px; }
+  .title { fill: var(--fg); font-size: 14px; font-weight: 700; }
+  .e { stroke: var(--line); stroke-width: 1.4; fill: none; marker-end: url(#a); }
+  .ed { stroke: var(--line); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#a); }
+  .el { fill: var(--muted); font-size: 11px; }
+  .ah { fill: var(--line); }
+  text { font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+</style>
+
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="760" height="300"/>
+<path class="e" d="M172.0,110.0 L272.7,61.0"/>
+<path class="e" d="M185.0,126.8 L235.0,116.2"/>
+<path class="e" d="M185.0,150.0 L235.0,153.0"/>
+<path class="e" d="M185.0,173.2 L250.7,195.0"/>
+<path class="e" d="M405.0,104.6 L460.0,108.9"/>
+<path class="ed" d="M602.5,180.0 L602.5,215.0"/>
+<rect class="warn" x="15" y="110" width="170" height="70" rx="8"/>
+<text class="t" x="100.0" y="133.0" text-anchor="middle">MEMORY.md 허브</text>
+<text class="s" x="100.0" y="149.0" text-anchor="middle">모든 세션에 자동 로드</text>
+<text class="s" x="100.0" y="165.0" text-anchor="middle">색인 링크만 · 한 줄 = 훅</text>
+<rect class="box" x="235" y="15" width="170" height="46" rx="8"/>
+<text class="t" x="320.0" y="34.0" text-anchor="middle">색인: 작업 방식 피드백</text>
+<text class="s" x="320.0" y="50.0" text-anchor="middle">35줄</text>
+<rect class="box" x="235" y="75" width="170" height="46" rx="8"/>
+<text class="t" x="320.0" y="94.0" text-anchor="middle">색인: 진행 중 작업</text>
+<text class="s" x="320.0" y="110.0" text-anchor="middle">72줄</text>
+<rect class="box" x="235" y="135" width="170" height="46" rx="8"/>
+<text class="t" x="320.0" y="154.0" text-anchor="middle">색인: 운영 지식</text>
+<text class="s" x="320.0" y="170.0" text-anchor="middle">21줄</text>
+<rect class="box" x="235" y="195" width="170" height="46" rx="8"/>
+<text class="t" x="320.0" y="214.0" text-anchor="middle">색인: 보관 · 기타</text>
+<text class="s" x="320.0" y="230.0" text-anchor="middle">45 + 12줄</text>
+<rect class="new" x="460" y="60" width="285" height="120" rx="8"/>
+<text class="t" x="602.5" y="92.0" text-anchor="middle">사실 노트 299개 — 한 사실 = 한 파일</text>
+<text class="s" x="602.5" y="108.0" text-anchor="middle">속성 type: 프로젝트 142 · 피드백 106 · 참조 44</text>
+<text class="s" x="602.5" y="124.0" text-anchor="middle">modified (수정 시각) · originSessionId (출처 세션)</text>
+<text class="s" x="602.5" y="140.0" text-anchor="middle">본문 [[링크]] 507 — 연결 485</text>
+<text class="s" x="602.5" y="156.0" text-anchor="middle">가장 많이 참조된 노트 = &#x27;단정 전에 경로 전체를 본다&#x27; (19)</text>
+<rect class="box" x="460" y="215" width="285" height="52" rx="8"/>
+<text class="t" x="602.5" y="237.0" text-anchor="middle">아직 안 쓴 기억 22</text>
+<text class="s" x="602.5" y="253.0" text-anchor="middle">링크만 있고 파일 없음 = 써야 할 것 표시</text>
+</svg>

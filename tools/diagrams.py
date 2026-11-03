@@ -239,23 +239,81 @@ DIAGRAMS = {
         ],
         "edges": [{"from": "eb", "to": "s1"}, {"from": "s1", "to": "s2"}, {"from": "s2", "to": "s3"}, {"from": "s3", "to": "s4"}],
     },
-    # personal — brain vault workflow
-    "brain-vault": {
-        "w": 760, "h": 330, "alt": "Brain Vault 작업 체계 구조",
-        "groups": [{"x": 300, "y": 15, "w": 445, "h": 300, "label": "Brain Vault (Obsidian · git 자동 백업)"}],
+    # personal — brain vault: overall loop (real wiring, 2026-11-03)
+    "bv-overview": {
+        "w": 760, "h": 360, "alt": "brain-vault 전체 구조 — 에이전트가 읽고 쓰는 흐름",
+        "groups": [{"x": 300, "y": 12, "w": 445, "h": 336, "label": "brain-vault (Obsidian · obsidian-git 자동 백업)"}],
         "nodes": [
-            {"id": "s", "x": 15, "y": 60, "w": 220, "h": 60, "label": ["Claude Code 세션", "여러 기기 · 여러 계정"]},
-            {"id": "h", "x": 15, "y": 200, "w": 220, "h": 60, "kind": "warn", "label": ["git 훅", "AI 귀속 문구 차단 · 마커 검사"]},
-            {"id": "cfg", "x": 325, "y": 50, "w": 190, "h": 56, "kind": "new", "label": ["claude-config/", "규칙 · 훅 · 스킬 (~/.claude 링크)"]},
-            {"id": "mem", "x": 535, "y": 50, "w": 190, "h": 56, "kind": "new", "label": ["memory/", "한 사실 한 파일 + 색인"]},
-            {"id": "prj", "x": 325, "y": 140, "w": 190, "h": 56, "label": ["projects/<레포>/", "명세 · 결정 · 장애 노트"]},
-            {"id": "car", "x": 535, "y": 140, "w": 190, "h": 56, "label": ["personal/career/", "작업당 한 장 · 근거 첨부"]},
-            {"id": "art", "x": 325, "y": 230, "w": 400, "h": 56, "label": ["artifacts/", "게시한 그림·설명서 사본 → 접근 제한 정적 사이트"]},
+            {"id": "s", "x": 15, "y": 40, "w": 230, "h": 64, "label": ["Claude Code 세션", "여러 기기 · 여러 계정 · 같은 vault"]},
+            {"id": "r", "x": 15, "y": 150, "w": 230, "h": 76, "label": ["읽기", "① 기억 허브 자동 로드", "② 시작 훅: 폴더 _index · 최근 결정", "③ 링크·depends-on 따라가기"]},
+            {"id": "w", "x": 15, "y": 260, "w": 230, "h": 76, "kind": "new", "label": ["쓰기", "새 사실 = 기억 파일 1개 + 허브 1줄", "작업 노트 = 속성 + 엣지", "인계 노트 → 이전 인계 대체"]},
+            {"id": "mem", "x": 320, "y": 40, "w": 200, "h": 64, "kind": "new", "label": ["기억 층 memory/", "사실 299 · 허브 1 · 색인 6"]},
+            {"id": "cfg", "x": 535, "y": 40, "w": 195, "h": 64, "label": ["claude-config/", "규칙 · 훅 · 스킬 (~/.claude 링크)"]},
+            {"id": "prj", "x": 320, "y": 150, "w": 200, "h": 64, "kind": "new", "label": ["작업 층 projects/", "노트 913 · 도메인 허브 66"]},
+            {"id": "car", "x": 535, "y": 150, "w": 195, "h": 64, "label": ["산출 층", "career · artifacts"]},
+            {"id": "obs", "x": 320, "y": 260, "w": 410, "h": 64, "label": ["Obsidian 화면 — 같은 파일을 사람이 본다", "그래프 뷰 · 백링크 · 속성 패널 · 도메인 허브 Bases 표"]},
         ],
         "edges": [
-            {"from": "s", "to": "cfg", "label": "시작 시 규칙 로드", "dy": -8},
-            {"from": "s", "to": "prj", "label": "작성 전 노트 검색", "dx": -6, "dy": 20},
-            {"from": "s", "to": "h", "dashed": True, "label": "커밋할 때 실행", "dx": 46, "dy": 4},
+            {"from": "s", "to": "r"},
+            {"from": "r", "to": "w", "label": "작업", "dx": 22, "dy": 4},
+            {"from": "r", "to": "mem", "label": "읽기", "dx": -8, "dy": -4},
+            {"from": "w", "to": "prj", "dashed": True, "label": "쓰기", "dx": -8, "dy": -4},
+        ],
+    },
+    # personal — brain vault: memory layer graph (real counts)
+    "bv-memory": {
+        "w": 760, "h": 300, "alt": "기억 층 그래프 — 허브 · 색인 · 사실 노트",
+        "nodes": [
+            {"id": "hub", "x": 15, "y": 110, "w": 170, "h": 70, "kind": "warn", "label": ["MEMORY.md 허브", "모든 세션에 자동 로드", "색인 링크만 · 한 줄 = 훅"]},
+            {"id": "i1", "x": 235, "y": 15, "w": 170, "h": 46, "label": ["색인: 작업 방식 피드백", "35줄"]},
+            {"id": "i2", "x": 235, "y": 75, "w": 170, "h": 46, "label": ["색인: 진행 중 작업", "72줄"]},
+            {"id": "i3", "x": 235, "y": 135, "w": 170, "h": 46, "label": ["색인: 운영 지식", "21줄"]},
+            {"id": "i4", "x": 235, "y": 195, "w": 170, "h": 46, "label": ["색인: 보관 · 기타", "45 + 12줄"]},
+            {"id": "fact", "x": 460, "y": 60, "w": 285, "h": 120, "kind": "new", "label": ["사실 노트 299개 — 한 사실 = 한 파일", "속성 type: 프로젝트 142 · 피드백 106 · 참조 44", "modified (수정 시각) · originSessionId (출처 세션)", "본문 [[링크]] 507 — 연결 485", "가장 많이 참조된 노트 = '단정 전에 경로 전체를 본다' (19)"]},
+            {"id": "todo", "x": 460, "y": 215, "w": 285, "h": 52, "label": ["아직 안 쓴 기억 22", "링크만 있고 파일 없음 = 써야 할 것 표시"]},
+        ],
+        "edges": [
+            {"from": "hub", "to": "i1"}, {"from": "hub", "to": "i2"}, {"from": "hub", "to": "i3"}, {"from": "hub", "to": "i4"},
+            {"from": "i2", "to": "fact"}, {"from": "fact", "to": "todo", "dashed": True},
+        ],
+    },
+    # personal — brain vault: work layer + time axis (real handoff chain, names generalized)
+    "bv-time": {
+        "w": 760, "h": 330, "alt": "작업 층 그래프와 시간 축 — 실제 인계 노트 체인",
+        "titles": [{"x": 20, "y": 24, "label": "시간 축 — 세션 인계 노트 15개가 superseded-by 로 이어진 실제 체인 (9/30 → 10/17)"}],
+        "nodes": [
+            {"id": "h1", "x": 15, "y": 45, "w": 130, "h": 52, "label": ["인계 09-30", "설계 확정"]},
+            {"id": "h2", "x": 165, "y": 45, "w": 130, "h": 52, "label": ["인계 10-01", "미완 정리"]},
+            {"id": "h3", "x": 315, "y": 45, "w": 130, "h": 52, "label": ["인계 10-02", "상용 준비"]},
+            {"id": "hd", "x": 465, "y": 45, "w": 110, "h": 52, "label": ["… 11개 …"]},
+            {"id": "h15", "x": 595, "y": 45, "w": 150, "h": 52, "kind": "new", "label": ["인계 10-17", "체인 끝 = 현재 상태"]},
+            {"id": "moc", "x": 15, "y": 180, "w": 180, "h": 64, "kind": "warn", "label": ["도메인 허브 (MOC) 66", "moc 링크 828", "Bases: domain 으로 자동 표"]},
+            {"id": "n", "x": 260, "y": 170, "w": 230, "h": 84, "label": ["작업 노트 913", "domain · status · created · tags", "status: draft → active → done → archived", "날짜로 시작하는 파일 232"]},
+            {"id": "dep", "x": 560, "y": 150, "w": 185, "h": 52, "label": ["depends-on 925", "읽을 때 같이 읽을 노트"]},
+            {"id": "impl", "x": 560, "y": 225, "w": 185, "h": 52, "label": ["implements 456", "노트 ↔ 브랜치·커밋"]},
+        ],
+        "edges": [
+            {"from": "h1", "to": "h2"}, {"from": "h2", "to": "h3"}, {"from": "h3", "to": "hd"}, {"from": "hd", "to": "h15"},
+            {"from": "n", "to": "moc", "label": "moc", "dy": -6}, {"from": "n", "to": "dep"}, {"from": "n", "to": "impl", "dashed": True},
+        ],
+    },
+    # personal — brain vault: spec flow + handoff flow (from skills/*/SKILL.md)
+    "bv-workflow": {
+        "w": 760, "h": 330, "alt": "작업 방식 — 명세 체인과 세션 인계",
+        "titles": [{"x": 20, "y": 22, "label": "명세 체인 — 명세서도 vault 노드 (domain · moc · implements)"},
+                   {"x": 20, "y": 190, "label": "세션 인계 — 인계서는 handoff/ 노드, 다음 인계가 superseded-by 로 잇는다"}],
+        "nodes": [
+            {"id": "d", "x": 15, "y": 38, "w": 170, "h": 76, "kind": "new", "label": ["/spec-docs", "코드 분석 → 명세서", "Phase · 완료 기준 · 용어", "구현은 안 한다"]},
+            {"id": "rv", "x": 200, "y": 38, "w": 170, "h": 76, "label": ["/spec-review", "다른 모델 교차 비판 2라운드", "+ 보안 관점", "외부 의견 먼저 → 차이만 합성"]},
+            {"id": "rn", "x": 385, "y": 38, "w": 170, "h": 76, "label": ["/spec-run", "Phase 별 실행", "3파일+ = 격리된 워커", "Phase 마다 결과 4항목"]},
+            {"id": "vf", "x": 570, "y": 38, "w": 175, "h": 76, "label": ["/spec-verify", "교차 비판 + 프로젝트 기준", "수렴 게이트 · 라운드 상한 3", "지적 판정을 명세에 기록"]},
+            {"id": "ho", "x": 15, "y": 210, "w": 240, "h": 100, "kind": "new", "label": ["/handoff-out (세션 끝)", "① 산출물이 vault 에 기록됐는지 검색으로 감사", "② 다시 볼 수 있는 것 = 명령 + 기대값", "③ 다시 못 보는 것 = 결정 · 기각 · 실패 · 제약", "④ 코드블럭 출력 + handoff/ 에 저장"]},
+            {"id": "hn", "x": 280, "y": 225, "w": 190, "h": 70, "kind": "warn", "label": ["인계 노트 136개", "2026-08 ~ 11", "이어 쓴 39개 = superseded-by"]},
+            {"id": "hi", "x": 495, "y": 210, "w": 250, "h": 100, "label": ["/handoff-in (새 세션)", "① 적힌 명령을 실제로 실행 — [시간] 태그부터", "② 현재 상태는 실측 > 인계서", "③ 불일치를 근거와 함께 보고", "④ 착수하지 않고 대기"]},
+        ],
+        "edges": [
+            {"from": "d", "to": "rv"}, {"from": "rv", "to": "rn"}, {"from": "rn", "to": "vf"},
+            {"from": "ho", "to": "hn"}, {"from": "hn", "to": "hi"},
         ],
     },
     # willog — server split by function
