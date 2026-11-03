@@ -239,6 +239,25 @@ DIAGRAMS = {
         ],
         "edges": [{"from": "eb", "to": "s1"}, {"from": "s1", "to": "s2"}, {"from": "s2", "to": "s3"}, {"from": "s3", "to": "s4"}],
     },
+    # personal — brain vault workflow
+    "brain-vault": {
+        "w": 760, "h": 330, "alt": "Brain Vault 작업 체계 구조",
+        "groups": [{"x": 300, "y": 15, "w": 445, "h": 300, "label": "Brain Vault (Obsidian · git 자동 백업)"}],
+        "nodes": [
+            {"id": "s", "x": 15, "y": 60, "w": 220, "h": 60, "label": ["Claude Code 세션", "여러 기기 · 여러 계정"]},
+            {"id": "h", "x": 15, "y": 200, "w": 220, "h": 60, "kind": "warn", "label": ["git 훅", "AI 귀속 문구 차단 · 마커 검사"]},
+            {"id": "cfg", "x": 325, "y": 50, "w": 190, "h": 56, "kind": "new", "label": ["claude-config/", "규칙 · 훅 · 스킬 (~/.claude 링크)"]},
+            {"id": "mem", "x": 535, "y": 50, "w": 190, "h": 56, "kind": "new", "label": ["memory/", "한 사실 한 파일 + 색인"]},
+            {"id": "prj", "x": 325, "y": 140, "w": 190, "h": 56, "label": ["projects/<레포>/", "명세 · 결정 · 장애 노트"]},
+            {"id": "car", "x": 535, "y": 140, "w": 190, "h": 56, "label": ["personal/career/", "작업당 한 장 · 근거 첨부"]},
+            {"id": "art", "x": 325, "y": 230, "w": 400, "h": 56, "label": ["artifacts/", "게시한 그림·설명서 사본 → 접근 제한 정적 사이트"]},
+        ],
+        "edges": [
+            {"from": "s", "to": "cfg", "label": "시작 시 규칙 로드", "dy": -8},
+            {"from": "s", "to": "prj", "label": "작성 전 노트 검색", "dx": -6, "dy": 20},
+            {"from": "s", "to": "h", "dashed": True, "label": "커밋할 때 실행", "dx": 46, "dy": 4},
+        ],
+    },
     # willog — server split by function
     "willog-servers": {
         "w": 760, "h": 300, "alt": "기능 기준 서버 분리 구조",

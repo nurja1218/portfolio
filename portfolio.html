@@ -23,7 +23,7 @@
 
     <article class="case">
       <h3>글로벌 리전 레이턴시 개선</h3>
-      <div class="tags"><span class="tag">2025.11 – 2026.05</span><span class="tag">설계 · 구현 주도</span><span class="tag">DynamoDB · Redis · PostgreSQL</span></div>
+      <div class="tags"><span class="tag">2025.11 – 2026.05</span><span class="tag">설계 · 구현 주도</span><span class="tag">DynamoDB · Redis · PostgreSQL</span><a class="tag" href="https://github.com/nurja1218/regional-write-latency-lab">재현 실험 코드 →</a></div>
       <figure><img src="assets/diagrams/latency.svg" alt="글로벌 리전 레이턴시 개선 전후 구조"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>해외 리전에서 쓰면 국내보다 4~5배 느리다는 피드백. 유력한 원인은 서울 리전에 묶인 DB·Redis 쓰기 왕복(1회 약 150ms)이 요청마다 여러 번 발생하는 구조.</dd>
