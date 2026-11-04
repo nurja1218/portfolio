@@ -33,23 +33,23 @@
 <path class="ed" d="M665.0,160.0 L665.0,92.0"/>
 <rect class="box" x="15" y="40" width="160" height="52" rx="8"/>
 <text class="t" x="95.0" y="62.0" text-anchor="middle">MySQL</text>
-<text class="s" x="95.0" y="78.0" text-anchor="middle">유저 행동 지표 3억 건+</text>
+<text class="s" x="95.0" y="78.0" text-anchor="middle">유저 행동 로그 3억 건+</text>
 <rect class="box" x="205" y="40" width="150" height="52" rx="8"/>
-<text class="t" x="280.0" y="62.0" text-anchor="middle">1시간 집계</text>
-<text class="s" x="280.0" y="78.0" text-anchor="middle">스케줄러</text>
+<text class="t" x="280.0" y="62.0" text-anchor="middle">일별 행동 집계</text>
+<text class="s" x="280.0" y="78.0" text-anchor="middle">(동료 구현)</text>
 <rect class="new" x="385" y="40" width="160" height="52" rx="8"/>
 <text class="t" x="465.0" y="62.0" text-anchor="middle">MongoDB</text>
-<text class="s" x="465.0" y="78.0" text-anchor="middle">시간별 집계 (ID 조회)</text>
+<text class="s" x="465.0" y="78.0" text-anchor="middle">상품 × 일 × 행동 유형</text>
 <rect class="new" x="385" y="160" width="160" height="52" rx="8"/>
 <text class="t" x="465.0" y="182.0" text-anchor="middle">추천 점수 계산</text>
-<text class="s" x="465.0" y="198.0" text-anchor="middle">배치 · 병렬 처리</text>
+<text class="s" x="465.0" y="198.0" text-anchor="middle">1,000개 읽기 · 100개 병렬</text>
 <rect class="box" x="205" y="160" width="150" height="52" rx="8"/>
-<text class="t" x="280.0" y="182.0" text-anchor="middle">관리자 페이지</text>
-<text class="s" x="280.0" y="198.0" text-anchor="middle">가중치 설정</text>
+<text class="t" x="280.0" y="182.0" text-anchor="middle">가중치 설정값</text>
+<text class="s" x="280.0" y="198.0" text-anchor="middle">쿼리에서 분리</text>
 <rect class="box" x="585" y="160" width="160" height="52" rx="8"/>
 <text class="t" x="665.0" y="182.0" text-anchor="middle">Elasticsearch</text>
-<text class="s" x="665.0" y="198.0" text-anchor="middle">bulk 갱신 · 재시도</text>
+<text class="s" x="665.0" y="198.0" text-anchor="middle">100건씩 bulk 반영</text>
 <rect class="warn" x="585" y="40" width="160" height="52" rx="8"/>
-<text class="t" x="665.0" y="62.0" text-anchor="middle">Slack · 로그</text>
-<text class="s" x="665.0" y="78.0" text-anchor="middle">재시도 초과 시</text>
+<text class="t" x="665.0" y="62.0" text-anchor="middle">Slack 알림</text>
+<text class="s" x="665.0" y="78.0" text-anchor="middle">작업 실패 시</text>
 </svg>

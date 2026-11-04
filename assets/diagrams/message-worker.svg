@@ -29,7 +29,7 @@
 <path class="e" d="M360.0,94.1 L400.0,94.7"/>
 <path class="e" d="M570.0,76.8 L610.0,67.7"/>
 <path class="ed" d="M567.3,122.0 L610.0,135.5"/>
-<text class="el" x="548.7" y="144.7" text-anchor="middle">재시도 초과</text>
+<text class="el" x="548.7" y="144.7" text-anchor="middle">3회 재시도 후</text>
 <rect class="box" x="20" y="70" width="150" height="46" rx="8"/>
 <text class="t" x="95.0" y="89.0" text-anchor="middle">API 서버</text>
 <text class="s" x="95.0" y="105.0" text-anchor="middle">발송 요청만 등록</text>
@@ -38,7 +38,7 @@
 <text class="s" x="285.0" y="105.0" text-anchor="middle">발송 job</text>
 <rect class="new" x="400" y="70" width="170" height="52" rx="8"/>
 <text class="t" x="485.0" y="92.0" text-anchor="middle">메시지 워커 (분리 서버)</text>
-<text class="s" x="485.0" y="108.0" text-anchor="middle">배치 발송 · 중복 방지</text>
+<text class="s" x="485.0" y="108.0" text-anchor="middle">500건씩 병렬 · 1초 간격</text>
 <rect class="box" x="610" y="30" width="130" height="46" rx="8"/>
 <text class="t" x="675.0" y="57.0" text-anchor="middle">알림톡</text>
 <rect class="warn" x="610" y="130" width="130" height="52" rx="8"/>
