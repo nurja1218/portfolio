@@ -27,7 +27,7 @@
       <dl class="psr">
         <dt>문제</dt><dd>해외 리전에서 쓰면 국내보다 4~5배 느리다는 피드백. 유력한 원인은 서울 리전에 묶인 DB·Redis 쓰기 왕복(1회 약 150ms)이 요청마다 여러 번 발생하는 구조.</dd>
         <dt>판단</dt><dd>Aurora Global Database·Aurora DSQL 검토 — 쓰기는 여전히 한 리전이거나 대륙 간 미지원이고 비용도 더 높아 보류. 실시간성이 강한 데이터만 리전 로컬 쓰기로 옮기기로 결정.</dd>
-        <dt>해결</dt><dd>대화방·세션·연결 추적을 DynamoDB Global Tables로, 캐시·작업 큐를 리전별 Redis로 전환. PostgreSQL은 큐로 비동기 동기화하고, 기능 플래그로 언제든 기존 구조로 되돌릴 수 있게 함.</dd>
+        <dt>해결</dt><dd>대화방·세션·참가자 연결 수를 DynamoDB Global Tables로, 작업 큐를 리전별 Redis로 옮기고, 실시간 메시지는 모든 리전에 발행해 각 리전에서 구독. PostgreSQL은 응답을 기다리지 않고 뒤따라 쓰게 하고(DynamoDB 실패 시 PostgreSQL로 처리), 기능 플래그로 언제든 기존 구조로 되돌릴 수 있게 함.</dd>
         <dt>결과</dt><dd>Close API <span class="num">1,673 → 327ms (-80%)</span>, Create API <span class="num">2,630 → 90ms (-97%)</span> — 해외 상황을 재현한 개발 환경에서 15회 측정. 남은 병목은 Pub/Sub fan-out.</dd>
       </dl>
     </article>
@@ -38,7 +38,7 @@
       <figure><img src="assets/diagrams/personalization.svg" alt="지식그래프 기반 초개인화 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>사용자가 여러 번 고친 표기나 자신의 분야 맥락을 번역·AI 답변이 기억하지 못함.</dd>
-        <dt>해결</dt><dd>사용자 활동에서 LLM이 사실을 추출하고, 다시 LLM이 기존 지식과 비교해 추가/갱신/유지를 판단해 사용자별 그래프로 저장. 번역에는 용어집·배경지식으로, AI 답변에는 질문과 의미가 가까운 사실만 넣음. 모든 쌓기는 백그라운드 잡.</dd>
+        <dt>해결</dt><dd>사용자 활동에서 LLM이 사실을 추출하고, 기존 사실과 같은 대상인지·값이 바뀌었는지 LLM이 다시 판단해 같으면 누적, 바뀌면 과거 값을 닫고 새 값으로 사용자별 그래프에 저장. 번역에는 용어집·배경지식으로, AI 답변에는 질문과 의미가 가까운 사실만 넣음. 모든 쌓기는 백그라운드 잡.</dd>
         <dt>개선</dt><dd>상용 데이터를 보니 노트 발표자의 이야기가 사용자 사실로 섞이는 문제가 있어 "사용자 중심" 관계 구조로 재설계. 고정 기준선 게이트로 회귀 없이 채택한 뒤 상용 사용자 이관 완료.</dd>
       </dl>
     </article>
@@ -69,7 +69,7 @@
       <div class="tags"><span class="tag">2025.10 – 2026.05</span><span class="tag">구축 · 장애 복구</span><span class="tag">OpenSearch · Jenkins</span></div>
       <figure><img src="assets/diagrams/ops.svg" alt="로그 파이프라인과 시크릿 변경 파이프라인"></figure>
       <dl class="psr">
-        <dt>로그</dt><dd>여러 리전의 서비스 로그를 OpenSearch로 수집(전송 실패가 서버에 영향 없게 설계). 이후 디스크 풀 장애는 debug 로그 유입이 원인이라 유입을 막고 보관 정책·압축·디스크 알림을 기본값으로 고정.</dd>
+        <dt>로그</dt><dd>여러 리전의 서비스 로그를 OpenSearch로 수집하는 로거를 동료와 함께 구축(전송 실패가 서버에 영향 없게 설계). 이후 디스크 풀 장애는 debug 로그 유입이 원인이라 유입을 막고 보관 정책·압축·디스크 알림을 기본값으로 고정.</dd>
         <dt>배포</dt><dd>시크릿 변경을 Jenkins 파이프라인으로 일원화(변경 사유 필수 · 값 마스킹 · 운영 승인). 서버 CPU 포화 장애 뒤 불필요한 로그를 정리하고, 배포가 실패하면 이전 버전으로 되돌리는 배포·로그 보관 정책을 도입.</dd>
       </dl>
     </article>

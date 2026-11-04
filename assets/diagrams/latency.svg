@@ -43,7 +43,7 @@
 <path class="e" d="M205.0,385.2 L245.0,386.3"/>
 <path class="ed" d="M197.7,406.0 L267.3,428.0"/>
 <path class="ed" d="M396.5,428.0 L573.5,356.0"/>
-<text class="el" x="503.0" y="396.0" text-anchor="middle">PG 동기화</text>
+<text class="el" x="479.0" y="370.0" text-anchor="middle">뒤따라 반영</text>
 <path class="ed" d="M125.0,406.0 L125.0,494.0 L500.0,494.0 L500.0,423.0 L545.0,423.0"/>
 <text class="el" x="312.5" y="488.0" text-anchor="middle">실시간 이벤트 발행</text>
 <rect class="box" x="55" y="108" width="180" height="46" rx="8"/>
@@ -59,13 +59,13 @@
 <text class="t" x="125.0" y="387.0" text-anchor="middle">API 서버</text>
 <rect class="new" x="245" y="300" width="190" height="52" rx="8"/>
 <text class="t" x="340.0" y="322.0" text-anchor="middle">DynamoDB Global Table</text>
-<text class="s" x="340.0" y="338.0" text-anchor="middle">세션·대화방·연결 ~5ms</text>
+<text class="s" x="340.0" y="338.0" text-anchor="middle">세션·대화방·연결 수 ~5ms</text>
 <rect class="new" x="245" y="366" width="190" height="46" rx="8"/>
 <text class="t" x="340.0" y="385.0" text-anchor="middle">로컬 Redis</text>
-<text class="s" x="340.0" y="401.0" text-anchor="middle">캐시·작업 큐 ~1ms</text>
+<text class="s" x="340.0" y="401.0" text-anchor="middle">작업 큐 · Pub/Sub 구독</text>
 <rect class="box" x="245" y="428" width="190" height="46" rx="8"/>
-<text class="t" x="340.0" y="447.0" text-anchor="middle">동기화 워커</text>
-<text class="s" x="340.0" y="463.0" text-anchor="middle">응답 후 비동기 (Bull 큐)</text>
+<text class="t" x="340.0" y="447.0" text-anchor="middle">PG 비동기 쓰기</text>
+<text class="s" x="340.0" y="463.0" text-anchor="middle">응답을 기다리지 않음</text>
 <rect class="box" x="545" y="310" width="170" height="46" rx="8"/>
 <text class="t" x="630.0" y="329.0" text-anchor="middle">PostgreSQL</text>
 <text class="s" x="630.0" y="345.0" text-anchor="middle">최종 일관성 반영</text>
