@@ -45,22 +45,22 @@
 
     <article class="case">
       <h3>LLM 프롬프트 관리 체계</h3>
-      <div class="tags"><span class="tag">2026.06</span><span class="tag">설계 · 구현</span><span class="tag">LangSmith · 평가 자동화</span></div>
+      <div class="tags"><span class="tag">2026.06</span><span class="tag">설계 · 구현</span><span class="tag">LangSmith</span></div>
       <figure><img src="assets/diagrams/llm-prompt.svg" alt="LLM 프롬프트 관리 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>프롬프트가 코드에 있어 문장 하나를 고쳐도 배포가 필요했고, 바뀐 버전의 품질을 확인할 방법이 없음.</dd>
-        <dt>해결</dt><dd>LangSmith를 원본으로 두고 서버가 직접 조회(60초 캐시, 장애 시 DB 미러 폴백). 개발/운영은 태그로 분리하고, 골든셋 자동 채점을 통과한 버전만 운영 태그를 받게 함.</dd>
+        <dt>해결</dt><dd>LangSmith를 원본으로 두고 서버가 직접 조회(60초 캐시, 장애 시 DB 미러 폴백). 개발/운영은 태그로 분리하고, 프롬프트를 직접 호출한 테스트 결과표를 검토해 통과한 버전만 운영 태그를 받게 함.</dd>
         <dt>결과</dt><dd>코드 배포 없이 프롬프트를 고쳐 약 1분 안에 반영 — PO·PM용 사용 가이드를 함께 제공.</dd>
       </dl>
     </article>
 
     <article class="case">
-      <h3>외부 AI 에이전트 연결(MCP) — 기능 오너</h3>
-      <div class="tags"><span class="tag wip">2026.10 – 진행 중</span><span class="tag">PRD · Figma · 서버 명세</span></div>
+      <h3>외부 AI 에이전트 연결(MCP) — 기능 제안</h3>
+      <div class="tags"><span class="tag wip">2026.10 – 검토 중</span><span class="tag">PRD · Figma · 서버 명세</span></div>
       <dl class="psr">
         <dt>목표</dt><dd>고객이 쓰는 AI 에이전트(Claude · ChatGPT · Cursor 등)가 대화·노트 기록을 읽고 용어집을 미리 준비하게 함.</dd>
         <dt>한 일</dt><dd>타사 연결 방식·사용 한도를 비교 조사해 PRD를 쓰고, Figma 시안(데스크톱·모바일 웹)·서버 명세·아키텍처 그림을 한 벌로 작성. 이 문서 방식을 이후 기능(음성 파일 업로드)에도 적용 중.</dd>
-        <dt>상태</dt><dd>출시 전 — 선행 작업이 끝난 뒤 구현을 이어감.</dd>
+        <dt>상태</dt><dd>문서 검토 후 구현 예정.</dd>
       </dl>
     </article>
 
