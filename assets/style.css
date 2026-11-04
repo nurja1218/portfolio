@@ -74,13 +74,13 @@ footer { color: var(--muted); font-size: 12px; margin-top: 56px; }
     --bg: #ffffff; --fg: #1f2328; --muted: #57606a; --line: #d0d7de; --soft: #f6f8fa;
     --accent: #0550ae; --tag: #eef4fb; --tagfg: #0550ae; --wip: #fff8c5; --wipfg: #7d4e00;
   }
-  @page { size: A4; margin: 14mm 14mm 16mm; }
-  body { font-size: 9.5pt; line-height: 1.45; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { size: A4; margin: 14mm 14mm 12mm; }
+  body { font-size: 9.5pt; line-height: 1.4; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   main { max-width: none; padding: 0; }
   nav.top, footer { display: none; }
   header.hero h1 { font-size: 20pt; }
   .intro { margin-top: 10px; }
-  h2 { margin: 16px 0 10px; padding-bottom: 4px; break-after: avoid; }
+  h2 { margin: 12px 0 8px; padding-bottom: 4px; break-after: avoid; }
   .job, .skills { grid-template-columns: 130px 1fr; gap: 2px 16px; }
   .job, .case, .skills > * { break-inside: avoid; }
   .job { margin-bottom: 10px; }

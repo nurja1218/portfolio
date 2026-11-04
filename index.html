@@ -22,7 +22,7 @@
     </div>
     <div class="intro">
       <p>스타트업 초기 멤버로 시작해 물류·커머스·AI 통번역 도메인에서 제품을 만들어 온 백엔드 엔지니어입니다.</p>
-      <p>사용자가 겪는 문제에서 출발해 원인을 측정으로 확인하고, 구현과 결과 측정까지 맡습니다. 최근에는 기능 단위로 PRD·시안·명세를 직접 작성하는 오너 역할을 맡고 있습니다.</p>
+      <p>사용자가 겪는 문제에서 출발해 원인을 측정으로 확인한 뒤 구현합니다. 최근에는 기능 단위 오너 역할을 맡기 위해 PRD·시안·명세를 직접 작성해 제안하고 진행하고 있습니다.</p>
     </div>
   </header>
 
@@ -34,9 +34,10 @@
       <p class="desc">AI 기반 언어 데이터 · 실시간 AI 통번역 서비스</p>
       <ul>
         <li>해외 리전 응답 지연 해결 — DynamoDB Global Tables · 리전별 Redis 전환 (Close API <span class="num">1,673 → 327ms</span>, Create API <span class="num">2,630 → 90ms</span>)</li>
+        <li>실시간 메시지는 모든 리전 Redis에 발행하고 각 리전이 로컬에서 구독, 저장보다 발행을 먼저 해 저장 지연이 메시지 전달을 늦추지 않게 함</li>
         <li>사용자별 지식그래프(PostgreSQL + pgvector) 기반 번역·AI 어시스턴트 초개인화 개발 및 상용 반영</li>
-        <li>LangSmith 기반 LLM 프롬프트 관리 체계 구축 — 배포 없이 1분 내 반영, 자동 채점 통과 버전만 운영 반영</li>
-        <li>외부 AI 에이전트 연결(MCP) 기능 오너 — PRD · Figma 시안 · 서버 명세 작성 (구현 진행 중)</li>
+        <li>LangSmith 기반 LLM 프롬프트 관리 체계 구축 — 배포 없이 1분 내 반영, 프롬프트를 직접 호출한 테스트 결과표를 검토해 통과한 버전만 운영 반영</li>
+        <li>외부 AI 에이전트 연결(MCP) 기능 제안 — PRD · Figma 시안 · 서버 명세 작성 (검토 후 구현 예정)</li>
         <li>멀티 리전 로그 파이프라인(OpenSearch) 구축, 시크릿 변경 파이프라인 · 실패 시 자동 롤백 배포 도입</li>
       </ul>
     </div>
@@ -83,18 +84,18 @@
   <dl class="skills">
     <dt>Backend</dt><dd>TypeScript · NestJS · Express · GraphQL · REST · TypeORM</dd>
     <dt>Data</dt><dd>PostgreSQL (pgvector) · MySQL · DynamoDB · Redis · MongoDB · Elasticsearch / OpenSearch · InfluxDB</dd>
-    <dt>AI</dt><dd>LLM 연동 · 프롬프트 관리 · 평가 (LangSmith) · 임베딩 검색</dd>
+    <dt>AI</dt><dd>LLM 연동 · 프롬프트 관리 (LangSmith) · 임베딩 검색</dd>
     <dt>Infra</dt><dd>AWS (EC2 · ECS · Lambda · Step Functions · S3 · CloudFront · Secrets Manager) · Jenkins · Docker</dd>
   </dl>
 
   <h2>Etc</h2>
   <dl class="skills">
     <dt>발표</dt><dd>사내 워크숍 「모노레포란 무엇인가?」 (2024 S/S)</dd>
-    <dt>스터디</dt><dd>Real MySQL 8.0 (2023.12–2024.06) · 리팩터링 2판 운영 (2024.08–2024.10)</dd>
+    <dt>스터디</dt><dd>Real MySQL 8.0 (2023.12–2024.06) · 리팩터링 2판 운영 (2024.08–2024.10) · 혼자 공부하는 컴퓨터 구조+운영체제 (2025.10–2025.12, 플리토 사내 2인)</dd>
     <dt>학력</dt><dd>한국외국어대학교 전자공학과 (2010–2016) · 서울사이버대학교 컴퓨터공학과 (2018–2020)</dd>
   </dl>
 
-  <footer>최종 수정 2026-11-03</footer>
+  <footer>최종 수정 2026-11-04</footer>
 </main>
 </body>
 </html>
