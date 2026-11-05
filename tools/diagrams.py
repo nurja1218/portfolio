@@ -285,13 +285,15 @@ DIAGRAMS = {
         ],
     },
     # bejewel — recommendation scheduler
+    # 근거: MySQL = RDS(health 체크 'rds', 노션 "AWS RDS(MySQL)"), 점수 계산 = scheduler 앱 @Cron — ECS 배포 추정(Dockerfile-scheduler · ECR, terraform 의 다른 워커와 같은 틀).
+    # MongoDB·Elasticsearch 는 호스팅 근거 없음 → 제품 로고만.
     "recommend": {
         "w": 760, "h": 260, "alt": "추천 상품 스케줄러 재구축 흐름",
         "nodes": [
-            {"id": "my", "x": 15, "y": 40, "w": 175, "h": 56, "icon": "brand:mysql", "label": ["MySQL", "유저 행동 로그 3억 건+"]},
+            {"id": "my", "x": 15, "y": 40, "w": 175, "h": 56, "icon": "aws:rds", "label": ["MySQL (RDS)", "유저 행동 로그 3억 건+"]},
             {"id": "agg", "x": 205, "y": 40, "w": 165, "h": 56, "icon": "g:funnel", "label": ["일별 행동 집계", "(동료 구현)"]},
             {"id": "mg", "x": 385, "y": 40, "w": 180, "h": 56, "kind": "new", "icon": "brand:mongodb", "label": ["MongoDB", "상품 × 일 × 행동 유형"]},
-            {"id": "sc", "x": 385, "y": 160, "w": 180, "h": 64, "kind": "new", "icon": "g:chart", "label": ["추천 점수 계산", "1,000개 읽기", "100개씩 병렬"]},
+            {"id": "sc", "x": 385, "y": 156, "w": 180, "h": 72, "kind": "new", "icon": "aws:ecs", "label": ["추천 점수 계산", "스케줄러 앱 · ECS", "1,000개 읽기", "100개씩 병렬"]},
             {"id": "adm", "x": 205, "y": 164, "w": 165, "h": 56, "icon": "g:sliders", "label": ["가중치 설정값", "쿼리에서 분리"]},
             {"id": "es", "x": 580, "y": 164, "w": 165, "h": 56, "icon": "brand:elasticsearch", "label": ["Elasticsearch", "100건씩 bulk 반영"]},
             {"id": "sl", "x": 580, "y": 40, "w": 165, "h": 56, "kind": "warn", "icon": "g:bell", "label": ["Slack 알림", "작업 실패 시"]},
@@ -302,13 +304,15 @@ DIAGRAMS = {
         ],
     },
     # bejewel — message worker
+    # 근거: 워커 = ECS(EC2 launch type) amondz-terraform-v2/5.ecs/var.tfvars:9 "message-ec2", Bull Redis = ElastiCache 추정(같은 레포 다른 Bull 큐가 *.cache.amazonaws.com),
+    # API 서버 = ECS 추정(같은 terraform 틀), 알림톡 = BizM(스윗트래커) API — constants/service/bizm.js:92
     "message-worker": {
         "w": 760, "h": 220, "alt": "알림 메시지 워커 구조",
         "nodes": [
-            {"id": "api", "x": 15, "y": 70, "w": 160, "icon": "g:server", "label": ["API 서버", "발송 요청만 등록"]},
-            {"id": "q", "x": 200, "y": 70, "w": 150, "kind": "new", "icon": "brand:redis", "label": ["Redis 큐", "발송 job"]},
-            {"id": "wk", "x": 375, "y": 67, "w": 200, "h": 52, "kind": "new", "icon": "g:server", "label": ["메시지 워커 (분리 서버)", "500건씩 병렬 · 1초 간격"]},
-            {"id": "kt", "x": 605, "y": 25, "w": 140, "icon": "brand:kakaotalk", "label": ["알림톡"]},
+            {"id": "api", "x": 15, "y": 70, "w": 160, "icon": "aws:ecs", "label": ["API 서버", "발송 요청만 등록"]},
+            {"id": "q", "x": 195, "y": 70, "w": 165, "kind": "new", "icon": "aws:elasticache", "label": ["Redis 큐", "ElastiCache · Bull"]},
+            {"id": "wk", "x": 380, "y": 61, "w": 200, "h": 64, "kind": "new", "icon": "aws:ecs", "label": ["메시지 워커 (분리 서버)", "ECS", "500건씩 병렬 · 1초 간격"]},
+            {"id": "kt", "x": 605, "y": 22, "w": 140, "h": 52, "icon": "brand:kakaotalk", "label": ["알림톡", "BizM API"]},
             {"id": "mg", "x": 605, "y": 130, "w": 140, "h": 52, "kind": "warn", "icon": "brand:mongodb", "label": ["MongoDB", "반복 실패 이력"]},
         ],
         "edges": [
@@ -316,7 +320,7 @@ DIAGRAMS = {
             {"from": "wk", "to": "mg", "dashed": True, "label": "3회 재시도 후", "dx": -40, "dy": 16},
         ],
     },
-    # bejewel — ES snapshot migration
+    # bejewel — ES snapshot migration (근거: 노션 이력서 "AWS Step Function, Lambda, AWS EventBridge, S3를 활용하여 Elasticsearch Migration 스케줄러 구현")
     "es-migration": {
         "w": 760, "h": 200, "alt": "Elasticsearch 스냅샷 마이그레이션 자동화",
         "groups": [{"x": 170, "y": 20, "w": 580, "h": 160, "label": "Step Functions (각 단계 = Lambda)", "icons": ["aws:stepfunctions", "aws:lambda"]}],
@@ -407,18 +411,20 @@ DIAGRAMS = {
         ],
     },
     # willog — server split by function
+    # 근거: Core·DDM = ECS(EC2 launch type) legacy-nestjs/*/taskdef-prod.json:31, CDL = API Gateway + Lambda serverless/platform-client-data-loader/serverless.yml:74,
+    # Noti = Lambda + SOLAPI serverless/platform-noti-manager/.../solapi.util.ts:1, RDB = MySQL(package.json) — RDS 추정(같은 회사 다른 DB 가 Aurora 클러스터)
     "willog-servers": {
         "w": 760, "h": 300, "alt": "기능 기준 서버 분리 구조",
         "nodes": [
             {"id": "cl", "x": 15, "y": 30, "w": 165, "icon": "g:browser", "label": ["웹 · 모바일 웹"]},
-            {"id": "cs", "x": 15, "y": 120, "w": 165, "icon": "g:building", "label": ["고객사 시스템"]},
-            {"id": "dv", "x": 15, "y": 210, "w": 165, "icon": "g:device", "label": ["트래킹 디바이스"]},
-            {"id": "core", "x": 240, "y": 30, "w": 220, "h": 52, "kind": "new", "icon": "aws:ecs", "label": ["Core", "GraphQL API · ECS"]},
-            {"id": "cdl", "x": 240, "y": 120, "w": 220, "h": 52, "kind": "new", "icon": "aws:lambda", "label": ["CDL", "배송 데이터 연동 REST · Lambda"]},
-            {"id": "ddm", "x": 240, "y": 210, "w": 220, "h": 52, "kind": "new", "icon": "aws:ecs", "label": ["DDM", "디바이스 시계열 API · ECS"]},
-            {"id": "noti", "x": 525, "y": 10, "w": 220, "icon": "aws:lambda", "label": ["Noti", "카카오톡 · SMS · Lambda"]},
-            {"id": "rdb", "x": 525, "y": 100, "w": 220, "icon": "g:db", "label": ["RDB", "배송 · 주문"]},
-            {"id": "inf", "x": 525, "y": 213, "w": 220, "icon": "brand:influxdb", "label": ["InfluxDB", "디바이스 측정값"]},
+            {"id": "cs", "x": 15, "y": 129, "w": 165, "icon": "g:building", "label": ["고객사 시스템"]},
+            {"id": "dv", "x": 15, "y": 216, "w": 165, "icon": "g:device", "label": ["트래킹 디바이스"]},
+            {"id": "core", "x": 240, "y": 27, "w": 220, "h": 52, "kind": "new", "icon": "aws:ecs", "label": ["Core", "GraphQL API · ECS"]},
+            {"id": "cdl", "x": 240, "y": 120, "w": 220, "h": 64, "kind": "new", "icon": "aws:lambda", "label": ["CDL", "API Gateway · Lambda", "배송 데이터 연동 REST"]},
+            {"id": "ddm", "x": 240, "y": 213, "w": 220, "h": 52, "kind": "new", "icon": "aws:ecs", "label": ["DDM", "디바이스 시계열 API · ECS"]},
+            {"id": "noti", "x": 525, "y": 8, "w": 220, "h": 64, "icon": "aws:lambda", "label": ["Noti", "Lambda · SOLAPI", "카카오톡 · SMS"]},
+            {"id": "rdb", "x": 525, "y": 110, "w": 220, "icon": "aws:rds", "label": ["RDB (MySQL · RDS)", "배송 · 주문"]},
+            {"id": "inf", "x": 525, "y": 216, "w": 220, "icon": "brand:influxdb", "label": ["InfluxDB", "디바이스 측정값"]},
         ],
         "edges": [
             {"from": "cl", "to": "core"}, {"from": "cs", "to": "cdl"}, {"from": "dv", "to": "ddm"},
