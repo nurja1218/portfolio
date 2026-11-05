@@ -38,7 +38,7 @@
         <li>사용자별 지식그래프(PostgreSQL + pgvector) 기반 번역·AI 어시스턴트 초개인화 개발 및 상용 반영</li>
         <li>LangSmith 기반 LLM 프롬프트 관리 체계 구축 — 배포 없이 1분 내 반영, 프롬프트를 직접 호출한 테스트 결과표를 검토해 통과한 버전만 운영 반영</li>
         <li>외부 AI 에이전트 연결(MCP) 기능 제안 — PRD · Figma 시안 · 서버 명세 작성 (검토 후 구현 예정)</li>
-        <li>멀티 리전 로그 파이프라인(OpenSearch) 구축, 시크릿 변경 파이프라인 · 실패 시 자동 롤백 배포 도입</li>
+        <li>멀티 리전 로그 수집(OpenSearch) 공동 구축, 시크릿 변경 파이프라인 · 실패 시 자동 롤백 배포 도입</li>
       </ul>
     </div>
   </section>
@@ -49,9 +49,9 @@
       <p class="desc">100만 사용자 · 2,000개 이상 브랜드의 주얼리 버티컬 커머스</p>
       <ul>
         <li>선물 가능 상품 영역 확대로 선물 주문 건수 <span class="num">10배</span> 이상 증대</li>
-        <li>추천 상품 스케줄러 재구축 — 집계 구조 변경 · 배치 병렬 처리 (<span class="num">60분 → 15분</span>)</li>
+        <li>추천 상품 스케줄러 재구축 — 행동 집계 기반 점수 계산 · 배치 병렬 처리 (<span class="num">60분 → 15분</span>)</li>
         <li>알림톡 발송을 Redis 큐 기반 메시지 워커로 분리 · 재시도 설계</li>
-        <li>Feature Flag 기반 Trunk-Based 개발 전략 도입, 최소 권한 기반 AWS 권한 정책 수립</li>
+        <li>Feature Flag 기반 Trunk-Based 개발 도입 참여, 최소 권한 기반 AWS 권한 정책 수립</li>
       </ul>
     </div>
   </section>
@@ -63,7 +63,7 @@
       <ul>
         <li>물류 통합 관제 플랫폼 설계 · 레거시 이관 (배송 약 <span class="num">200만 건</span>, 시계열 약 <span class="num">5억 건</span>)</li>
         <li>기능 기준 서버 분리 (Core · 디바이스 · 고객사 연동 · 알림)</li>
-        <li>고객사 연동 API 지연 개선 — 청크 분할 · 병렬 처리 (<span class="num">20초 → 5초</span>)</li>
+        <li>고객사 연동 API 지연 개선 — 중복 검사 쿼리 묶음 조회 (<span class="num">20초 → 5초</span>)</li>
         <li>InfluxDB로 디바이스 시계열 분리, GraphQL Subscription 실시간 업데이트</li>
       </ul>
     </div>
