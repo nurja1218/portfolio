@@ -7,6 +7,7 @@ usage: python3 tools/diagrams.py   # writes assets/diagrams/*.svg
 """
 from pathlib import Path
 import html
+import re
 
 OUT = Path(__file__).resolve().parent.parent / "assets" / "diagrams"
 
@@ -36,16 +37,94 @@ STYLE = """
 """
 
 
+ICON_DIR = Path(__file__).resolve().parent / "icons"
+ICON = 28  # icon tile size inside a node
+PAD = 44   # text area starts this far from the node's left edge when it has an icon
+
+# Simple Icons (CC0) glyphs on a brand-colored tile
+BRAND = {"postgresql": "#4169E1", "redis": "#FF4438", "mongodb": "#47A248", "mysql": "#4479A1",
+         "elasticsearch": "#005571", "opensearch": "#005EB8", "jenkins": "#D24939", "langchain": "#1C3C3C",
+         "kakaotalk": "#FFCD00", "influxdb": "#22ADF6", "graphql": "#E10098", "nestjs": "#E0234E"}
+BRAND_GLYPH = {"kakaotalk": "#191919"}
+
+# Generic glyphs (24x24, white stroke) on a neutral tile — for things that are not a product
+GENERIC = {
+    "server": '<rect x="4" y="4" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="16" height="6" rx="1.5"/><circle cx="7.5" cy="7" r=".9" fill="#fff"/><circle cx="7.5" cy="17" r=".9" fill="#fff"/>',
+    "db": '<ellipse cx="12" cy="6" rx="7" ry="2.5"/><path d="M5 6v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6"/><path d="M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/>',
+    "user": '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3.1-6 7-6s7 2 7 6"/>',
+    "llm": '<path d="M12 3l1.8 7.2L21 12l-7.2 1.8L12 21l-1.8-7.2L3 12l7.2-1.8z" fill="#fff"/>',
+    "translate": '<path d="M4 5h9M8.5 3v2M6 5c.5 3 2.5 5.5 5 6.5M11 5c-.5 3-2.5 5.5-5 6.5"/><path d="M13 20l3.5-8 3.5 8M14.2 17.5h4.6"/>',
+    "chat": '<path d="M4 5h16v10h-9l-4 4v-4H4z"/>',
+    "check": '<rect x="5" y="4" width="14" height="16" rx="1.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>',
+    "send": '<path d="M3 11L21 4l-7 17-3-8z"/><path d="M11 13l10-9"/>',
+    "bell": '<path d="M6 16v-5a6 6 0 0112 0v5l2 2H4z"/><path d="M10 21h4"/>',
+    "shield": '<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+    "rollback": '<path d="M5 12a7 7 0 107-7H8"/><path d="M10 2L7 5l3 3"/>',
+    "sliders": '<path d="M5 7h14M5 12h14M5 17h14"/><circle cx="9" cy="7" r="1.8" fill="#fff"/><circle cx="15" cy="12" r="1.8" fill="#fff"/><circle cx="8" cy="17" r="1.8" fill="#fff"/>',
+    "chart": '<path d="M6 19v-7M12 19V5M18 19v-4M4 19h16"/>',
+    "funnel": '<path d="M4 5h16l-6 7v6l-4 2v-8z"/>',
+    "clock": '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+    "browser": '<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9h18"/>',
+    "building": '<path d="M5 20V5h9v15M14 10h5v10M3 20h18M8 8h3M8 12h3M8 16h3"/>',
+    "device": '<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 7h4"/><circle cx="12" cy="16" r="1.2"/>',
+    "fanout": '<circle cx="6" cy="12" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="18" cy="12" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 12h8M7.6 10.8l8.8-3.6M7.6 13.2l8.8 3.6"/>',
+    "graph": '<circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="17" r="2.2"/><path d="M8 7.5l8-1M7 9l4 6M17 8l-4 7"/>',
+}
+GENERIC_TILE = "#6e7781"
+
+
+def _aws(name, x, y, size):
+    """Embed an AWS Architecture Icon (64x64 or 40x40 source) as a nested svg."""
+    src = (ICON_DIR / "aws" / f"{name}.svg").read_text()
+    vb = src.split('viewBox="', 1)[1].split('"', 1)[0]
+    inner = src.split(">", 2)[2] if src.startswith("<?xml") else src.split(">", 1)[1]
+    inner = inner.rsplit("</svg>", 1)[0]
+    inner = re.sub(r"<title>.*?</title>", "", inner)
+    inner = re.sub(r'\s(id|xmlns:xlink)="[^"]*"', "", inner)
+    return f'<svg x="{x}" y="{y}" width="{size}" height="{size}" viewBox="{vb}">{inner}</svg>'
+
+
+def _brand(name, x, y, size):
+    src = (ICON_DIR / "brand" / f"{name}.svg").read_text()
+    d = src.split(' d="', 1)[1].split('"', 1)[0]
+    g, pad = BRAND_GLYPH.get(name, "#fff"), size * 0.18
+    return (f'<rect x="{x}" y="{y}" width="{size}" height="{size}" rx="6" fill="{BRAND[name]}"/>'
+            f'<svg x="{x + pad}" y="{y + pad}" width="{size - 2 * pad}" height="{size - 2 * pad}" viewBox="0 0 24 24"><path fill="{g}" d="{d}"/></svg>')
+
+
+def _generic(name, x, y, size):
+    pad = size * 0.14
+    return (f'<rect x="{x}" y="{y}" width="{size}" height="{size}" rx="6" fill="{GENERIC_TILE}"/>'
+            f'<svg x="{x + pad}" y="{y + pad}" width="{size - 2 * pad}" height="{size - 2 * pad}" viewBox="0 0 24 24">'
+            f'<g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{GENERIC[name]}</g></svg>')
+
+
+def icon(name, x, y, size=ICON):
+    kind, key = name.split(":", 1)
+    return {"aws": _aws, "brand": _brand, "g": _generic}[kind](key, x, y, size)
+
+
+def text_width(line, size):
+    """Rough rendered width — CJK ≈ 1em, latin ≈ 0.58em. Used only to warn about overflow."""
+    return sum(size * (1.0 if ord(c) > 0x2E80 else 0.32 if c == " " else 0.6) for c in line)
+
+
 def node(n):
     x, y, w, h = n["x"], n["y"], n["w"], n.get("h", 46)
     cls = n.get("kind", "box")
     lines = n["label"] if isinstance(n["label"], list) else [n["label"]]
     out = [f'<rect class="{cls}" x="{x}" y="{y}" width="{w}" height="{h}" rx="8"/>']
+    tx, room = x + w / 2, w - 12
+    if n.get("icon"):
+        out.append(icon(n["icon"], x + 9, y + (h - ICON) / 2))
+        tx, room = x + PAD + (w - PAD - 8) / 2, w - PAD - 8
     total = len(lines)
     for i, line in enumerate(lines):
         cy = y + h / 2 + (i - (total - 1) / 2) * 16 + 4
         c = "t" if i == 0 else "s"
-        out.append(f'<text class="{c}" x="{x + w / 2}" y="{cy}" text-anchor="middle">{html.escape(line)}</text>')
+        if text_width(line, 13 if i == 0 else 11) > room:
+            print(f"  ! overflow in {n['id']}: {line!r}")
+        out.append(f'<text class="{c}" x="{tx}" y="{cy}" text-anchor="middle">{html.escape(line)}</text>')
     return "\n".join(out)
 
 
@@ -91,7 +170,11 @@ def render(spec):
              f'<rect class="bg" width="{W}" height="{H}"/>']
     for g in spec.get("groups", []):
         parts.append(f'<rect class="grp" x="{g["x"]}" y="{g["y"]}" width="{g["w"]}" height="{g["h"]}" rx="10"/>')
-        parts.append(f'<text class="grpt" x="{g["x"] + 12}" y="{g["y"] + 18}">{html.escape(g["label"])}</text>')
+        lx = g["x"] + 12
+        for ic in g.get("icons", []):
+            parts.append(icon(ic, lx, g["y"] + 5, 18))
+            lx += 22
+        parts.append(f'<text class="grpt" x="{lx + (2 if g.get("icons") else 0)}" y="{g["y"] + 18}">{html.escape(g["label"])}</text>')
     for t in spec.get("titles", []):
         parts.append(f'<text class="title" x="{t["x"]}" y="{t["y"]}">{html.escape(t["label"])}</text>')
     for e in spec["edges"]:
@@ -104,26 +187,29 @@ def render(spec):
 
 DIAGRAMS = {
     # Flitto — global latency: before / after
+    # 인프라 매핑 근거(2026-11-05 실측): 서버 = EKS eks-rtt-<리전>(apps/chat-tr/deploy/build.sh:41-45),
+    # PG = RDS PostgreSQL rtt-prod(해외는 읽기 복제본), Redis = ElastiCache(서울 kr-redis · 해외 *-valkey-rtt).
+    # Before 의 API 서버는 k8s 전환(2026-07-01, 7ea312acf) 전이라 EC2(ansible · pm2).
     "latency": {
         "w": 760, "h": 530, "alt": "글로벌 리전 레이턴시 개선 전후 구조",
         "titles": [{"x": 20, "y": 24, "label": "Before — 모든 쓰기가 서울 리전으로 왕복"},
                    {"x": 20, "y": 266, "label": "After — 리전 로컬 쓰기 + 비동기 동기화"}],
         "groups": [
-            {"x": 20, "y": 36, "w": 250, "h": 190, "label": "해외 리전"},
-            {"x": 470, "y": 36, "w": 270, "h": 190, "label": "서울 리전"},
-            {"x": 20, "y": 278, "w": 430, "h": 232, "label": "해외 리전"},
-            {"x": 520, "y": 278, "w": 220, "h": 232, "label": "서울 리전"},
+            {"x": 20, "y": 36, "w": 250, "h": 190, "label": "해외 리전", "icons": ["aws:region"]},
+            {"x": 470, "y": 36, "w": 270, "h": 190, "label": "서울 리전", "icons": ["aws:region"]},
+            {"x": 20, "y": 278, "w": 430, "h": 232, "label": "해외 리전", "icons": ["aws:region"]},
+            {"x": 515, "y": 278, "w": 225, "h": 232, "label": "서울 리전", "icons": ["aws:region"]},
         ],
         "nodes": [
-            {"id": "api0", "x": 55, "y": 108, "w": 180, "label": ["API 서버", "세션·DB·캐시 접근"]},
-            {"id": "pg0", "x": 505, "y": 70, "w": 200, "label": ["PostgreSQL", "쓰기 (writer 1곳)"]},
-            {"id": "rd0", "x": 505, "y": 150, "w": 200, "label": ["Redis", "세션·캐시·큐·Pub/Sub"]},
-            {"id": "api1", "x": 45, "y": 360, "w": 160, "label": ["API 서버"]},
-            {"id": "ddb", "x": 245, "y": 300, "w": 190, "h": 52, "kind": "new", "label": ["DynamoDB Global Table", "세션·대화방·연결 수 ~5ms"]},
-            {"id": "lrd", "x": 245, "y": 366, "w": 190, "kind": "new", "label": ["로컬 Redis", "작업 큐 · Pub/Sub 구독"]},
-            {"id": "q", "x": 245, "y": 428, "w": 190, "label": ["PG 비동기 쓰기", "응답을 기다리지 않음"]},
-            {"id": "pg1", "x": 545, "y": 310, "w": 170, "label": ["PostgreSQL", "최종 일관성 반영"]},
-            {"id": "ps", "x": 545, "y": 400, "w": 170, "kind": "warn", "label": ["Pub/Sub fan-out", "남은 병목 ~150ms"]},
+            {"id": "api0", "x": 45, "y": 108, "w": 195, "icon": "aws:ec2", "label": ["API 서버 (당시 EC2)", "세션·DB·캐시 접근"]},
+            {"id": "pg0", "x": 495, "y": 70, "w": 220, "icon": "aws:rds", "label": ["PostgreSQL (RDS)", "쓰기 (writer 1곳)"]},
+            {"id": "rd0", "x": 495, "y": 150, "w": 220, "icon": "aws:elasticache", "label": ["Redis (ElastiCache)", "세션·캐시·큐·Pub/Sub"]},
+            {"id": "api1", "x": 32, "y": 360, "w": 148, "icon": "aws:eks", "label": ["API 서버", "EKS (리전별)"]},
+            {"id": "ddb", "x": 212, "y": 300, "w": 232, "h": 52, "kind": "new", "icon": "aws:dynamodb", "label": ["DynamoDB Global Table", "세션·대화방·연결 수 ~5ms"]},
+            {"id": "lrd", "x": 212, "y": 366, "w": 232, "kind": "new", "icon": "aws:elasticache", "label": ["로컬 ElastiCache", "Valkey · 작업 큐 · Pub/Sub 구독"]},
+            {"id": "q", "x": 212, "y": 428, "w": 232, "icon": "g:clock", "label": ["PG 비동기 쓰기", "응답을 기다리지 않음"]},
+            {"id": "pg1", "x": 535, "y": 310, "w": 190, "icon": "aws:rds", "label": ["PostgreSQL (RDS)", "최종 일관성 반영"]},
+            {"id": "ps", "x": 535, "y": 400, "w": 190, "kind": "warn", "icon": "g:fanout", "label": ["Pub/Sub fan-out", "남은 병목 ~150ms"]},
         ],
         "edges": [
             {"from": "api0", "to": "pg0", "label": "쓰기 왕복 ~150ms"},
@@ -132,43 +218,44 @@ DIAGRAMS = {
             {"from": "api1", "to": "lrd"},
             {"from": "api1", "to": "q", "dashed": True},
             {"from": "q", "to": "pg1", "dashed": True, "label": "뒤따라 반영", "dx": -6, "dy": -22},
-            {"from": "api1", "to": "ps", "dashed": True, "via": [(125, 494), (500, 494), (500, 423)], "label": "실시간 이벤트 발행", "dy": -6},
+            {"from": "api1", "to": "ps", "dashed": True, "via": [(110, 494), (495, 494), (495, 423)], "label": "실시간 이벤트 발행", "dy": -6},
         ],
     },
-    # Flitto — hyper-personalization knowledge graph
+    # Flitto — hyper-personalization knowledge graph (쌓기 = job-worker 큐, apps/job-worker/src/queue/hyper-personalization-graph)
     "personalization": {
-        "w": 760, "h": 330, "alt": "지식그래프 기반 초개인화 쌓기와 꺼내기 흐름",
-        "groups": [{"x": 175, "y": 20, "w": 330, "h": 150, "label": "백그라운드 잡 (응답을 막지 않음)"}],
+        "w": 760, "h": 340, "alt": "지식그래프 기반 초개인화 쌓기와 꺼내기 흐름",
+        "groups": [{"x": 180, "y": 20, "w": 565, "h": 140, "label": "백그라운드 잡 (job-worker · EKS, 응답을 막지 않음)", "icons": ["aws:eks"]}],
         "nodes": [
-            {"id": "src", "x": 15, "y": 50, "w": 140, "h": 96, "label": ["사용자 활동", "대화 요약 · 노트", "AI 어시스턴트 대화", "용어 교정"]},
-            {"id": "ext", "x": 190, "y": 70, "w": 140, "h": 56, "label": ["① 추출 LLM", "사용자 관련 사실"]},
-            {"id": "jdg", "x": 350, "y": 70, "w": 140, "h": 56, "label": ["② 판단 LLM", "추가 / 갱신 / 유지"]},
-            {"id": "kg", "x": 260, "y": 210, "w": 240, "h": 70, "kind": "new", "label": ["사용자별 지식그래프", "PostgreSQL + pgvector", "노드·관계·임베딩 · 과거 값은 닫아서 보존"]},
-            {"id": "tr", "x": 560, "y": 170, "w": 185, "h": 52, "label": ["번역 프롬프트", "용어집(치환) + 배경지식(이해)"]},
-            {"id": "ai", "x": 560, "y": 250, "w": 185, "h": 52, "label": ["AI 어시스턴트 답변", "질문과 가까운 사실만"]},
+            {"id": "src", "x": 10, "y": 40, "w": 155, "h": 96, "icon": "g:user", "label": ["사용자 활동", "대화 요약 · 노트", "AI 어시스턴트 대화", "용어 교정"]},
+            {"id": "ext", "x": 195, "y": 60, "w": 200, "h": 56, "icon": "g:llm", "label": ["① 추출 LLM", "사용자 관련 사실"]},
+            {"id": "jdg", "x": 420, "y": 52, "w": 310, "h": 72, "icon": "g:llm", "label": ["② 판단 LLM", "같은 대상 · 같은 값 → 누적", "값이 바뀜 → 과거 값을 닫고 새 값"]},
+            {"id": "kg", "x": 200, "y": 215, "w": 280, "h": 70, "kind": "new", "icon": "aws:rds", "label": ["사용자별 지식그래프", "RDS PostgreSQL + pgvector", "노드·관계·임베딩 · 과거 값은 닫아서 보존"]},
+            {"id": "tr", "x": 525, "y": 190, "w": 220, "h": 52, "icon": "g:translate", "label": ["번역 프롬프트", "용어집(치환) + 배경지식(이해)"]},
+            {"id": "ai", "x": 525, "y": 268, "w": 220, "h": 52, "icon": "g:chat", "label": ["AI 어시스턴트 답변", "질문과 가까운 사실만"]},
         ],
         "edges": [
             {"from": "src", "to": "ext"},
             {"from": "ext", "to": "jdg"},
-            {"from": "jdg", "to": "kg", "label": "저장"},
+            {"from": "jdg", "to": "kg", "label": "저장", "dx": 30, "dy": 8},
             {"from": "kg", "to": "tr", "label": "꺼내기", "dy": -4},
-            {"from": "kg", "to": "ai", "label": "의미 검색", "dy": 14},
+            {"from": "kg", "to": "ai", "label": "의미 검색", "dx": -8, "dy": 22},
         ],
     },
-    # Flitto — LLM prompt management
+    # Flitto — LLM prompt management. 읽는 쪽 = LlmInvoker 를 쓰는 API 앱 5개 + job-worker, 호출 시점에 조회(SWR 캐시 60초)
+    # 미러 = PG llm_prompt_repo / llm_prompt_commit (prompt-resolver.service.ts:5-6), provider 4종 (llm-prompt/providers/)
     "llm-prompt": {
         "w": 760, "h": 300, "alt": "LLM 프롬프트 관리 체계 흐름",
         "nodes": [
-            {"id": "po", "x": 20, "y": 40, "w": 150, "label": ["PO · 개발자", "프롬프트 수정·커밋"]},
-            {"id": "gate", "x": 20, "y": 130, "w": 150, "h": 52, "kind": "warn", "label": ["평가 게이트", "골든셋 자동 채점"]},
-            {"id": "ls", "x": 270, "y": 70, "w": 210, "h": 60, "kind": "new", "label": ["LangSmith (원본)", "staging / production 태그"]},
-            {"id": "mir", "x": 270, "y": 210, "w": 210, "label": ["DB 미러", "장애 대비 폴백"]},
-            {"id": "api", "x": 560, "y": 70, "w": 180, "h": 60, "label": ["API · 워커", "invoke(key, vars) 한 줄", "60초 캐시"]},
-            {"id": "llm", "x": 560, "y": 210, "w": 180, "label": ["LLM Provider"]},
+            {"id": "po", "x": 10, "y": 40, "w": 160, "icon": "g:user", "label": ["PO · 개발자", "프롬프트 수정·커밋"]},
+            {"id": "gate", "x": 10, "y": 130, "w": 160, "h": 52, "kind": "warn", "icon": "g:check", "label": ["테스트 결과 검토", "직접 호출한 결과표"]},
+            {"id": "ls", "x": 295, "y": 70, "w": 210, "h": 60, "kind": "new", "icon": "brand:langchain", "label": ["LangSmith (원본)", "staging / production 태그"]},
+            {"id": "mir", "x": 295, "y": 205, "w": 210, "h": 60, "icon": "aws:rds", "label": ["DB 미러", "RDS PostgreSQL", "장애 대비 폴백"]},
+            {"id": "api", "x": 553, "y": 60, "w": 197, "h": 80, "icon": "aws:eks", "label": ["API 앱 · job-worker", "EKS · 호출할 때 조회", "invoke(key, vars) 한 줄", "60초 캐시"]},
+            {"id": "llm", "x": 553, "y": 205, "w": 197, "h": 60, "icon": "g:llm", "label": ["LLM Provider", "Vertex AI · OpenAI", "Bedrock · Upstage"]},
         ],
         "edges": [
-            {"from": "po", "to": "ls", "label": "커밋 (서비스 무영향)", "dy": -12},
-            {"from": "gate", "to": "ls", "label": "통과 시 태그 승격", "dy": 22},
+            {"from": "po", "to": "ls", "label": "커밋 (서비스 무영향)", "dx": 6, "dy": -14},
+            {"from": "gate", "to": "ls", "label": "통과 시 운영 태그", "dx": 6, "dy": 26},
             {"from": "ls", "to": "mir", "dashed": True, "label": "웹훅 · 주기 동기화", "dx": 52},
             {"from": "api", "to": "ls", "label": "1차 조회"},
             {"from": "api", "to": "mir", "dashed": True, "label": "2차 폴백", "dy": 16},
@@ -176,18 +263,20 @@ DIAGRAMS = {
         ],
     },
     # Flitto — log pipeline + secret change pipeline
+    # 전송기 = 앱 프로세스 안 Winston transport(당시 packages/shared/.../winston-opensearch.transport.ts, 지금 nest-common).
+    # OpenSearch = Amazon OpenSearch Service rtt-log-es (VPC) — 운영 시크릿 OPENSEARCH_ENDPOINT. Express 앱은 2026-09 제거(57dcb4be6).
     "ops": {
         "w": 760, "h": 300, "alt": "로그 파이프라인과 시크릿 변경 파이프라인",
-        "titles": [{"x": 20, "y": 24, "label": "로그 파이프라인"}, {"x": 20, "y": 176, "label": "시크릿 변경 · 배포"}],
+        "titles": [{"x": 20, "y": 24, "label": "로그 파이프라인"}, {"x": 20, "y": 184, "label": "시크릿 변경 · 배포"}],
         "nodes": [
-            {"id": "apps", "x": 20, "y": 44, "w": 160, "h": 52, "label": ["서비스 앱", "NestJS · Express · 다중 리전"]},
-            {"id": "tp", "x": 210, "y": 44, "w": 170, "h": 52, "label": ["로그 전송기", "버퍼 → bulk · gzip · 백오프"]},
-            {"id": "os", "x": 410, "y": 44, "w": 170, "h": 52, "kind": "new", "label": ["OpenSearch", "ISM 1일/5GB → 30일"]},
-            {"id": "al", "x": 610, "y": 44, "w": 130, "h": 52, "kind": "warn", "label": ["디스크 알림", "80 · 90 · 95%"]},
-            {"id": "jk", "x": 20, "y": 196, "w": 160, "h": 52, "label": ["Jenkins 파라미터", "변경 사유 필수"]},
-            {"id": "ap", "x": 210, "y": 196, "w": 170, "h": 52, "kind": "warn", "label": ["운영 승인 단계", "값은 *** 마스킹"]},
-            {"id": "sm", "x": 410, "y": 196, "w": 170, "h": 52, "label": ["Secrets Manager", "새 버전 · 감사 기록"]},
-            {"id": "dp", "x": 610, "y": 196, "w": 130, "h": 52, "kind": "new", "label": ["배포", "실패 시 자동 롤백"]},
+            {"id": "apps", "x": 15, "y": 40, "w": 160, "h": 80, "icon": "aws:eks", "label": ["서비스 앱", "NestJS · EKS", "5개 리전"]},
+            {"id": "tp", "x": 193, "y": 40, "w": 170, "h": 80, "icon": "g:send", "label": ["로그 전송기", "앱 프로세스 내부", "버퍼 → bulk · gzip", "지수 백오프"]},
+            {"id": "os", "x": 381, "y": 40, "w": 200, "h": 80, "kind": "new", "icon": "aws:opensearch", "label": ["OpenSearch Service", "AWS 관리형", "ISM 1일/5GB → 30일"]},
+            {"id": "al", "x": 599, "y": 40, "w": 146, "h": 80, "kind": "warn", "icon": "g:bell", "label": ["디스크 알림", "80 · 90 · 95%"]},
+            {"id": "jk", "x": 15, "y": 200, "w": 172, "h": 64, "icon": "brand:jenkins", "label": ["Jenkins 파라미터", "변경 사유 필수"]},
+            {"id": "ap", "x": 205, "y": 200, "w": 158, "h": 64, "kind": "warn", "icon": "g:shield", "label": ["운영 승인 단계", "값은 *** 마스킹"]},
+            {"id": "sm", "x": 381, "y": 200, "w": 200, "h": 64, "icon": "aws:secretsmanager", "label": ["Secrets Manager", "새 버전 · 감사 기록"]},
+            {"id": "dp", "x": 599, "y": 200, "w": 146, "h": 64, "kind": "new", "icon": "g:rollback", "label": ["배포", "실패 시", "자동 롤백"]},
         ],
         "edges": [
             {"from": "apps", "to": "tp"}, {"from": "tp", "to": "os"}, {"from": "os", "to": "al"},
@@ -198,13 +287,13 @@ DIAGRAMS = {
     "recommend": {
         "w": 760, "h": 260, "alt": "추천 상품 스케줄러 재구축 흐름",
         "nodes": [
-            {"id": "my", "x": 15, "y": 40, "w": 160, "h": 52, "label": ["MySQL", "유저 행동 로그 3억 건+"]},
-            {"id": "agg", "x": 205, "y": 40, "w": 150, "h": 52, "label": ["일별 행동 집계", "(동료 구현)"]},
-            {"id": "mg", "x": 385, "y": 40, "w": 160, "h": 52, "kind": "new", "label": ["MongoDB", "상품 × 일 × 행동 유형"]},
-            {"id": "sc", "x": 385, "y": 160, "w": 160, "h": 52, "kind": "new", "label": ["추천 점수 계산", "1,000개 읽기 · 100개 병렬"]},
-            {"id": "adm", "x": 205, "y": 160, "w": 150, "h": 52, "label": ["가중치 설정값", "쿼리에서 분리"]},
-            {"id": "es", "x": 585, "y": 160, "w": 160, "h": 52, "label": ["Elasticsearch", "100건씩 bulk 반영"]},
-            {"id": "sl", "x": 585, "y": 40, "w": 160, "h": 52, "kind": "warn", "label": ["Slack 알림", "작업 실패 시"]},
+            {"id": "my", "x": 15, "y": 40, "w": 175, "h": 56, "icon": "brand:mysql", "label": ["MySQL", "유저 행동 로그 3억 건+"]},
+            {"id": "agg", "x": 205, "y": 40, "w": 165, "h": 56, "icon": "g:funnel", "label": ["일별 행동 집계", "(동료 구현)"]},
+            {"id": "mg", "x": 385, "y": 40, "w": 180, "h": 56, "kind": "new", "icon": "brand:mongodb", "label": ["MongoDB", "상품 × 일 × 행동 유형"]},
+            {"id": "sc", "x": 385, "y": 160, "w": 180, "h": 64, "kind": "new", "icon": "g:chart", "label": ["추천 점수 계산", "1,000개 읽기", "100개씩 병렬"]},
+            {"id": "adm", "x": 205, "y": 164, "w": 165, "h": 56, "icon": "g:sliders", "label": ["가중치 설정값", "쿼리에서 분리"]},
+            {"id": "es", "x": 580, "y": 164, "w": 165, "h": 56, "icon": "brand:elasticsearch", "label": ["Elasticsearch", "100건씩 bulk 반영"]},
+            {"id": "sl", "x": 580, "y": 40, "w": 165, "h": 56, "kind": "warn", "icon": "g:bell", "label": ["Slack 알림", "작업 실패 시"]},
         ],
         "edges": [
             {"from": "my", "to": "agg"}, {"from": "agg", "to": "mg"}, {"from": "mg", "to": "sc"},
@@ -215,11 +304,11 @@ DIAGRAMS = {
     "message-worker": {
         "w": 760, "h": 220, "alt": "알림 메시지 워커 구조",
         "nodes": [
-            {"id": "api", "x": 20, "y": 70, "w": 150, "label": ["API 서버", "발송 요청만 등록"]},
-            {"id": "q", "x": 210, "y": 70, "w": 150, "kind": "new", "label": ["Redis 큐", "발송 job"]},
-            {"id": "wk", "x": 400, "y": 70, "w": 170, "h": 52, "kind": "new", "label": ["메시지 워커 (분리 서버)", "500건씩 병렬 · 1초 간격"]},
-            {"id": "kt", "x": 610, "y": 30, "w": 130, "label": ["알림톡"]},
-            {"id": "mg", "x": 610, "y": 130, "w": 130, "h": 52, "kind": "warn", "label": ["MongoDB", "반복 실패 이력"]},
+            {"id": "api", "x": 15, "y": 70, "w": 160, "icon": "g:server", "label": ["API 서버", "발송 요청만 등록"]},
+            {"id": "q", "x": 200, "y": 70, "w": 150, "kind": "new", "icon": "brand:redis", "label": ["Redis 큐", "발송 job"]},
+            {"id": "wk", "x": 375, "y": 67, "w": 200, "h": 52, "kind": "new", "icon": "g:server", "label": ["메시지 워커 (분리 서버)", "500건씩 병렬 · 1초 간격"]},
+            {"id": "kt", "x": 605, "y": 25, "w": 140, "icon": "brand:kakaotalk", "label": ["알림톡"]},
+            {"id": "mg", "x": 605, "y": 130, "w": 140, "h": 52, "kind": "warn", "icon": "brand:mongodb", "label": ["MongoDB", "반복 실패 이력"]},
         ],
         "edges": [
             {"from": "api", "to": "q"}, {"from": "q", "to": "wk"}, {"from": "wk", "to": "kt"},
@@ -229,13 +318,13 @@ DIAGRAMS = {
     # bejewel — ES snapshot migration
     "es-migration": {
         "w": 760, "h": 200, "alt": "Elasticsearch 스냅샷 마이그레이션 자동화",
-        "groups": [{"x": 175, "y": 20, "w": 570, "h": 160, "label": "Step Functions (각 단계 = Lambda)"}],
+        "groups": [{"x": 170, "y": 20, "w": 580, "h": 160, "label": "Step Functions (각 단계 = Lambda)", "icons": ["aws:stepfunctions", "aws:lambda"]}],
         "nodes": [
-            {"id": "eb", "x": 15, "y": 80, "w": 140, "label": ["EventBridge", "주기 실행"]},
-            {"id": "s1", "x": 195, "y": 80, "w": 125, "label": ["스냅샷 생성", "→ S3"]},
-            {"id": "s2", "x": 335, "y": 80, "w": 125, "label": ["상태 확인", "실패 시 에러 처리"]},
-            {"id": "s3", "x": 475, "y": 80, "w": 125, "kind": "new", "label": ["Restore", "Staging 반영"]},
-            {"id": "s4", "x": 615, "y": 80, "w": 120, "label": ["클러스터", "상태 확인"]},
+            {"id": "eb", "x": 10, "y": 77, "w": 145, "h": 52, "icon": "aws:eventbridge", "label": ["EventBridge", "주기 실행"]},
+            {"id": "s1", "x": 182, "y": 77, "w": 132, "h": 52, "icon": "aws:s3", "label": ["스냅샷 생성", "→ S3"]},
+            {"id": "s2", "x": 326, "y": 70, "w": 132, "h": 64, "icon": "g:check", "label": ["상태 확인", "실패 시", "에러 처리"]},
+            {"id": "s3", "x": 470, "y": 77, "w": 132, "h": 52, "kind": "new", "icon": "brand:elasticsearch", "label": ["Restore", "Staging 반영"]},
+            {"id": "s4", "x": 614, "y": 77, "w": 126, "h": 52, "icon": "g:check", "label": ["클러스터", "상태 확인"]},
         ],
         "edges": [{"from": "eb", "to": "s1"}, {"from": "s1", "to": "s2"}, {"from": "s2", "to": "s3"}, {"from": "s3", "to": "s4"}],
     },
@@ -320,15 +409,15 @@ DIAGRAMS = {
     "willog-servers": {
         "w": 760, "h": 300, "alt": "기능 기준 서버 분리 구조",
         "nodes": [
-            {"id": "cl", "x": 20, "y": 30, "w": 150, "label": ["웹 · 모바일 웹"]},
-            {"id": "cs", "x": 20, "y": 120, "w": 150, "label": ["고객사 시스템"]},
-            {"id": "dv", "x": 20, "y": 210, "w": 150, "label": ["트래킹 디바이스"]},
-            {"id": "core", "x": 250, "y": 30, "w": 190, "h": 52, "kind": "new", "label": ["Core", "GraphQL API · ECS"]},
-            {"id": "cdl", "x": 250, "y": 120, "w": 190, "h": 52, "kind": "new", "label": ["CDL", "배송 데이터 연동 REST"]},
-            {"id": "ddm", "x": 250, "y": 210, "w": 190, "h": 52, "kind": "new", "label": ["DDM", "디바이스 시계열 API"]},
-            {"id": "noti", "x": 540, "y": 10, "w": 190, "label": ["Noti", "카카오톡 · SMS"]},
-            {"id": "rdb", "x": 540, "y": 100, "w": 190, "label": ["RDB", "배송 · 주문"]},
-            {"id": "inf", "x": 540, "y": 213, "w": 190, "label": ["InfluxDB", "디바이스 측정값"]},
+            {"id": "cl", "x": 15, "y": 30, "w": 165, "icon": "g:browser", "label": ["웹 · 모바일 웹"]},
+            {"id": "cs", "x": 15, "y": 120, "w": 165, "icon": "g:building", "label": ["고객사 시스템"]},
+            {"id": "dv", "x": 15, "y": 210, "w": 165, "icon": "g:device", "label": ["트래킹 디바이스"]},
+            {"id": "core", "x": 240, "y": 30, "w": 220, "h": 52, "kind": "new", "icon": "aws:ecs", "label": ["Core", "GraphQL API · ECS"]},
+            {"id": "cdl", "x": 240, "y": 120, "w": 220, "h": 52, "kind": "new", "icon": "aws:lambda", "label": ["CDL", "배송 데이터 연동 REST · Lambda"]},
+            {"id": "ddm", "x": 240, "y": 210, "w": 220, "h": 52, "kind": "new", "icon": "aws:ecs", "label": ["DDM", "디바이스 시계열 API · ECS"]},
+            {"id": "noti", "x": 525, "y": 10, "w": 220, "icon": "aws:lambda", "label": ["Noti", "카카오톡 · SMS · Lambda"]},
+            {"id": "rdb", "x": 525, "y": 100, "w": 220, "icon": "g:db", "label": ["RDB", "배송 · 주문"]},
+            {"id": "inf", "x": 525, "y": 213, "w": 220, "icon": "brand:influxdb", "label": ["InfluxDB", "디바이스 측정값"]},
         ],
         "edges": [
             {"from": "cl", "to": "core"}, {"from": "cs", "to": "cdl"}, {"from": "dv", "to": "ddm"},

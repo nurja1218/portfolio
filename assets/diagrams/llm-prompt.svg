@@ -25,33 +25,59 @@
 
 <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
 <rect class="bg" width="760" height="300"/>
-<path class="e" d="M170.0,72.9 L270.0,86.1"/>
-<text class="el" x="220.0" y="67.5" text-anchor="middle">커밋 (서비스 무영향)</text>
-<path class="e" d="M170.0,141.0 L270.0,121.0"/>
-<text class="el" x="220.0" y="153.0" text-anchor="middle">통과 시 태그 승격</text>
-<path class="ed" d="M375.0,130.0 L375.0,210.0"/>
-<text class="el" x="427.0" y="164.0" text-anchor="middle">웹훅 · 주기 동기화</text>
-<path class="e" d="M560.0,100.0 L480.0,100.0"/>
-<text class="el" x="520.0" y="94.0" text-anchor="middle">1차 조회</text>
-<path class="ed" d="M588.0,130.0 L422.6,210.0"/>
-<text class="el" x="505.3" y="186.0" text-anchor="middle">2차 폴백</text>
-<path class="e" d="M650.0,130.0 L650.0,210.0"/>
-<rect class="box" x="20" y="40" width="150" height="46" rx="8"/>
-<text class="t" x="95.0" y="59.0" text-anchor="middle">PO · 개발자</text>
-<text class="s" x="95.0" y="75.0" text-anchor="middle">프롬프트 수정·커밋</text>
-<rect class="warn" x="20" y="130" width="150" height="52" rx="8"/>
-<text class="t" x="95.0" y="152.0" text-anchor="middle">평가 게이트</text>
-<text class="s" x="95.0" y="168.0" text-anchor="middle">골든셋 자동 채점</text>
-<rect class="new" x="270" y="70" width="210" height="60" rx="8"/>
-<text class="t" x="375.0" y="96.0" text-anchor="middle">LangSmith (원본)</text>
-<text class="s" x="375.0" y="112.0" text-anchor="middle">staging / production 태그</text>
-<rect class="box" x="270" y="210" width="210" height="46" rx="8"/>
-<text class="t" x="375.0" y="229.0" text-anchor="middle">DB 미러</text>
-<text class="s" x="375.0" y="245.0" text-anchor="middle">장애 대비 폴백</text>
-<rect class="box" x="560" y="70" width="180" height="60" rx="8"/>
-<text class="t" x="650.0" y="88.0" text-anchor="middle">API · 워커</text>
-<text class="s" x="650.0" y="104.0" text-anchor="middle">invoke(key, vars) 한 줄</text>
-<text class="s" x="650.0" y="120.0" text-anchor="middle">60초 캐시</text>
-<rect class="box" x="560" y="210" width="180" height="46" rx="8"/>
-<text class="t" x="650.0" y="237.0" text-anchor="middle">LLM Provider</text>
+<path class="e" d="M170.0,72.5 L295.0,87.5"/>
+<text class="el" x="238.5" y="66.0" text-anchor="middle">커밋 (서비스 무영향)</text>
+<path class="e" d="M170.0,141.5 L295.0,119.0"/>
+<text class="el" x="238.5" y="156.3" text-anchor="middle">통과 시 운영 태그</text>
+<path class="ed" d="M400.0,130.0 L400.0,205.0"/>
+<text class="el" x="452.0" y="161.5" text-anchor="middle">웹훅 · 주기 동기화</text>
+<path class="e" d="M553.0,100.0 L505.0,100.0"/>
+<text class="el" x="529.0" y="94.0" text-anchor="middle">1차 조회</text>
+<path class="ed" d="M577.0,140.0 L455.9,205.0"/>
+<text class="el" x="516.4" y="188.5" text-anchor="middle">2차 폴백</text>
+<path class="e" d="M651.5,140.0 L651.5,205.0"/>
+<rect class="box" x="10" y="40" width="160" height="46" rx="8"/>
+<rect x="19" y="49.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="22.92" y="52.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3.1-6 7-6s7 2 7 6"/></g></svg>
+<text class="t" x="108.0" y="59.0" text-anchor="middle">PO · 개발자</text>
+<text class="s" x="108.0" y="75.0" text-anchor="middle">프롬프트 수정·커밋</text>
+<rect class="warn" x="10" y="130" width="160" height="52" rx="8"/>
+<rect x="19" y="142.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="22.92" y="145.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="16" rx="1.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></g></svg>
+<text class="t" x="108.0" y="152.0" text-anchor="middle">테스트 결과 검토</text>
+<text class="s" x="108.0" y="168.0" text-anchor="middle">직접 호출한 결과표</text>
+<rect class="new" x="295" y="70" width="210" height="60" rx="8"/>
+<rect x="304" y="86.0" width="28" height="28" rx="6" fill="#1C3C3C"/><svg x="309.04" y="91.04" width="17.92" height="17.92" viewBox="0 0 24 24"><path fill="#fff" d="M13.796 0a6.93 6.93 0 0 0-4.91 2.019L5.451 5.455l3.273 3.27 3.432-3.432a2.284 2.284 0 0 1 3.277 0 2.28 2.28 0 0 1 0 3.275L12 12.001l3.273 3.273 3.433-3.435c2.692-2.692 2.692-7.127 0-9.82A6.92 6.92 0 0 0 13.796 0m-5.07 8.728-3.433 3.434c-2.692 2.693-2.692 7.126 0 9.819A6.92 6.92 0 0 0 10.203 24a6.93 6.93 0 0 0 4.911-2.02l3.432-3.432-3.271-3.272-3.433 3.433a2.284 2.284 0 0 1-3.277 0 2.28 2.28 0 0 1 0-3.276L12 12z"/></svg>
+<text class="t" x="418.0" y="96.0" text-anchor="middle">LangSmith (원본)</text>
+<text class="s" x="418.0" y="112.0" text-anchor="middle">staging / production 태그</text>
+<rect class="box" x="295" y="205" width="210" height="60" rx="8"/>
+<svg x="304" y="221.0" width="28" height="28" viewBox="0 0 64 64">
+    
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g fill="#C925D1">
+            <rect x="0" y="0" width="64" height="64"></rect>
+        </g>
+        <path d="M54,11 L54,19 L52,19 L52,13.414 L45.707,19.707 L44.293,18.293 L50.586,12 L45.125,12 L45.125,10 L53,10 C53.553,10 54,10.448 54,11 L54,11 Z M12,18.875 L10,18.875 L10,11 C10,10.448 10.447,10 11,10 L19,10 L19,12 L13.414,12 L19.707,18.293 L18.293,19.707 L12,13.414 L12,18.875 Z M19.707,45.707 L13.414,52 L18.875,52 L18.875,54 L11,54 C10.447,54 10,53.552 10,53 L10,45 L12,45 L12,50.586 L18.293,44.293 L19.707,45.707 Z M51.5,31.781 C51.5,29.352 48.634,26.932 43.833,25.307 L44.474,23.413 C50.21,25.354 53.5,28.404 53.5,31.781 C53.5,35.158 50.21,38.208 44.474,40.15 L43.833,38.255 C48.634,36.631 51.5,34.21 51.5,31.781 L51.5,31.781 Z M12.543,31.781 C12.543,34.105 15.224,36.46 19.715,38.081 L19.035,39.961 C13.639,38.014 10.543,35.033 10.543,31.781 C10.543,28.53 13.639,25.548 19.035,23.601 L19.715,25.482 C15.224,27.103 12.543,29.458 12.543,31.781 L12.543,31.781 Z M52,45.125 L54,45.125 L54,53 C54,53.552 53.553,54 53,54 L45,54 L45,52 L50.586,52 L44.293,45.707 L45.707,44.293 L52,50.586 L52,45.125 Z M32.022,31.402 C26.999,31.402 24.126,30.059 24,29.483 L24,26.257 C26.159,27.266 29.609,27.593 32,27.593 C34.391,27.593 37.841,27.266 40,26.257 L40,29.483 C39.894,30.057 37.051,31.402 32.022,31.402 L32.022,31.402 Z M32.022,37.13 C26.999,37.13 24.126,35.786 24,35.21 L24,31.956 C25.953,32.937 29.055,33.402 32.022,33.402 C34.973,33.402 38.055,32.938 40,31.96 L40,35.21 C39.894,35.785 37.052,37.13 32.022,37.13 L32.022,37.13 Z M32,42.268 C26.95,42.268 24.104,40.917 24,40.346 L24,37.683 C25.953,38.665 29.055,39.13 32.022,39.13 C34.973,39.13 38.055,38.666 40,37.687 L40,40.342 C39.896,40.917 37.05,42.268 32,42.268 L32,42.268 Z M32,22.193 C36.971,22.193 39.642,23.37 39.982,23.894 C39.642,24.417 36.971,25.593 32,25.593 C26.909,25.593 24.233,24.361 24,23.949 L24,23.93 C24.233,23.426 26.909,22.193 32,22.193 L32,22.193 Z M32,20.193 C28.286,20.193 22,20.973 22,23.894 L22,40.346 C22,43.041 27.184,44.268 32,44.268 C36.816,44.268 42,43.041 42,40.346 L42,23.894 C42,20.973 35.714,20.193 32,20.193 L32,20.193 Z" fill="#FFFFFF"></path>
+    </g>
+</svg>
+<text class="t" x="418.0" y="223.0" text-anchor="middle">DB 미러</text>
+<text class="s" x="418.0" y="239.0" text-anchor="middle">RDS PostgreSQL</text>
+<text class="s" x="418.0" y="255.0" text-anchor="middle">장애 대비 폴백</text>
+<rect class="box" x="553" y="60" width="197" height="80" rx="8"/>
+<svg x="562" y="86.0" width="28" height="28" viewBox="0 0 64 64">
+    
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g fill="#ED7100">
+            <rect x="0" y="0" width="64" height="64"></rect>
+        </g>
+        <path d="M37.708,25.0004058 L32.65,31.3403171 L37.967,38.0212236 L35.752,38.0212236 L31,32.0003079 L31,38.0002239 L29,38.0002239 L29,25.0004058 L31,25.0004058 L31,30.2413325 L35.463,25.0004058 L37.708,25.0004058 Z M50,36.3822466 L44,33.3822885 L44,25.0004058 C44,24.6374109 43.803,24.3024156 43.485,24.1264181 L35,19.412484 L35,12.7495773 L50,21.5724538 L50,36.3822466 Z M51.507,20.1384739 L34.507,10.1386138 C34.199,9.95761637 33.815,9.95461641 33.504,10.1326139 C33.192,10.3106114 33,10.6416068 33,11.0006018 L33,20.0004758 C33,20.3634707 33.197,20.6984661 33.515,20.8744636 L42,25.5883976 L42,34.0002799 C42,34.3792746 42.214,34.7252697 42.553,34.8952674 L50.553,38.8952114 C50.694,38.9652104 50.847,39.0002099 51,39.0002099 C51.183,39.0002099 51.365,38.9502106 51.525,38.851212 C51.82,38.6682146 52,38.3472191 52,38.0002239 L52,21.0004618 C52,20.6464668 51.812,20.3184714 51.507,20.1384739 L51.507,20.1384739 Z M32,51.8280304 L15,41.4391758 L15,21.5544541 L29,12.8045765 L29,19.4464836 L21.47,24.1524177 C21.178,24.3354152 21,24.6554107 21,25.0004058 L21,38.0002239 C21,38.351219 21.185,38.6772144 21.485,38.8572119 L31.485,44.857128 C31.789,45.0401254 32.167,45.0481253 32.479,44.8781277 L42.988,39.1462079 L48.035,42.0291675 L32,51.8280304 Z M50.496,41.1321801 L43.496,37.1322361 C43.194,36.9592385 42.825,36.9562385 42.521,37.1222362 L32.023,42.8481561 L23,37.4342318 L23,25.5543981 L30.53,20.848464 C30.822,20.6654665 31,20.345471 31,20.0004758 L31,11.0006018 C31,10.6366069 30.803,10.3026115 30.484,10.125614 C30.168,9.9486165 29.778,9.95961634 29.47,10.1526136 L13.47,20.1524737 C13.178,20.3354711 13,20.6554667 13,21.0004618 L13,42.0001679 C13,42.3481631 13.182,42.6711585 13.479,42.854156 L31.479,53.854002 C31.639,53.9510007 31.819,54 32,54 C32.181,54 32.361,53.9510007 32.521,53.854002 L50.521,42.854156 C50.823,42.6691586 51.005,42.3391632 51.0001004,41.9851681 C50.995,41.6321731 50.803,41.3071776 50.496,41.1321801 L50.496,41.1321801 Z" fill="#FFFFFF"></path>
+    </g>
+</svg>
+<text class="t" x="669.5" y="80.0" text-anchor="middle">API 앱 · job-worker</text>
+<text class="s" x="669.5" y="96.0" text-anchor="middle">EKS · 호출할 때 조회</text>
+<text class="s" x="669.5" y="112.0" text-anchor="middle">invoke(key, vars) 한 줄</text>
+<text class="s" x="669.5" y="128.0" text-anchor="middle">60초 캐시</text>
+<rect class="box" x="553" y="205" width="197" height="60" rx="8"/>
+<rect x="562" y="221.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="565.92" y="224.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 7.2L21 12l-7.2 1.8L12 21l-1.8-7.2L3 12l7.2-1.8z" fill="#fff"/></g></svg>
+<text class="t" x="669.5" y="223.0" text-anchor="middle">LLM Provider</text>
+<text class="s" x="669.5" y="239.0" text-anchor="middle">Vertex AI · OpenAI</text>
+<text class="s" x="669.5" y="255.0" text-anchor="middle">Bedrock · Upstage</text>
 </svg>
