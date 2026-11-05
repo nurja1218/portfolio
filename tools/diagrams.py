@@ -6,6 +6,7 @@ light/dark palette (prefers-color-scheme), so they render correctly inside <img>
 usage: python3 tools/diagrams.py   # writes assets/diagrams/*.svg
 """
 from pathlib import Path
+import hashlib
 import html
 import re
 
@@ -428,11 +429,25 @@ DIAGRAMS = {
 }
 
 
+PAGES = [OUT.parent.parent / "portfolio.html"]
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
+    versions = {}
     for name, spec in DIAGRAMS.items():
-        (OUT / f"{name}.svg").write_text(render(spec), encoding="utf-8")
+        svg = render(spec)
+        (OUT / f"{name}.svg").write_text(svg, encoding="utf-8")
+        versions[name] = hashlib.sha1(svg.encode()).hexdigest()[:8]
         print("wrote", name)
+    # GitHub Pages caches assets for 10 min — stamp each <img> with a content hash so a push shows up at once
+    for page in PAGES:
+        src = page.read_text(encoding="utf-8")
+        out = re.sub(r'assets/diagrams/([a-z0-9-]+)\.svg(\?v=[0-9a-f]+)?',
+                     lambda m: f"assets/diagrams/{m.group(1)}.svg?v={versions[m.group(1)]}" if m.group(1) in versions else m.group(0), src)
+        if out != src:
+            page.write_text(out, encoding="utf-8")
+            print("stamped", page.name)
 
 
 if __name__ == "__main__":

@@ -23,7 +23,7 @@
     <article class="case">
       <h3>글로벌 리전 레이턴시 개선</h3>
       <div class="tags"><span class="tag">2025.11 – 2026.05</span><span class="tag">설계 · 구현 주도</span><span class="tag">DynamoDB · Redis · PostgreSQL</span><a class="tag" href="https://github.com/nurja1218/regional-write-latency-lab">재현 실험 코드 →</a></div>
-      <figure><img src="assets/diagrams/latency.svg" alt="글로벌 리전 레이턴시 개선 전후 구조"></figure>
+      <figure><img src="assets/diagrams/latency.svg?v=800758d4" alt="글로벌 리전 레이턴시 개선 전후 구조"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>해외 리전에서 쓰면 국내보다 4~5배 느리다는 피드백. 유력한 원인은 서울 리전에 묶인 DB·Redis 쓰기 왕복(1회 약 150ms)이 요청마다 여러 번 발생하는 구조.</dd>
         <dt>판단</dt><dd>Aurora Global Database·Aurora DSQL 검토 — 쓰기는 여전히 한 리전이거나 대륙 간 미지원이고 비용도 더 높아 보류. 실시간성이 강한 데이터만 리전 로컬 쓰기로 옮기기로 결정.</dd>
@@ -35,7 +35,7 @@
     <article class="case">
       <h3>지식그래프 기반 초개인화</h3>
       <div class="tags"><span class="tag">2026.01 – 2026.10</span><span class="tag">백엔드 설계 · 구현 · 상용 반영</span><span class="tag">PostgreSQL · pgvector · LLM</span></div>
-      <figure><img src="assets/diagrams/personalization.svg" alt="지식그래프 기반 초개인화 흐름"></figure>
+      <figure><img src="assets/diagrams/personalization.svg?v=3542e1cc" alt="지식그래프 기반 초개인화 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>사용자가 여러 번 고친 표기나 자신의 분야 맥락을 번역·AI 답변이 기억하지 못함.</dd>
         <dt>해결</dt><dd>사용자 활동에서 LLM이 사실을 추출하고, 기존 사실과 같은 대상인지·값이 바뀌었는지 LLM이 다시 판단해 같으면 누적, 바뀌면 과거 값을 닫고 새 값으로 사용자별 그래프에 저장. 번역에는 용어집·배경지식으로, AI 답변에는 질문과 의미가 가까운 사실만 넣음. 모든 쌓기는 백그라운드 잡.</dd>
@@ -46,7 +46,7 @@
     <article class="case">
       <h3>LLM 프롬프트 관리 체계</h3>
       <div class="tags"><span class="tag">2026.06</span><span class="tag">설계 · 구현</span><span class="tag">LangSmith</span></div>
-      <figure><img src="assets/diagrams/llm-prompt.svg" alt="LLM 프롬프트 관리 흐름"></figure>
+      <figure><img src="assets/diagrams/llm-prompt.svg?v=45a7f4ec" alt="LLM 프롬프트 관리 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>프롬프트가 코드에 있어 문장 하나를 고쳐도 배포가 필요했고, 바뀐 버전의 품질을 확인할 방법이 없음.</dd>
         <dt>해결</dt><dd>LangSmith를 원본으로 두고 서버가 직접 조회(60초 캐시, 장애 시 DB 미러 폴백). 개발/운영은 태그로 분리하고, 프롬프트를 직접 호출한 테스트 결과표를 검토해 통과한 버전만 운영 태그를 받게 함.</dd>
@@ -67,7 +67,7 @@
     <article class="case">
       <h3>로그 · 배포 운영 안정화</h3>
       <div class="tags"><span class="tag">2025.10 – 2026.05</span><span class="tag">구축 · 장애 복구</span><span class="tag">OpenSearch · Jenkins</span></div>
-      <figure><img src="assets/diagrams/ops.svg" alt="로그 파이프라인과 시크릿 변경 파이프라인"></figure>
+      <figure><img src="assets/diagrams/ops.svg?v=fcd29460" alt="로그 파이프라인과 시크릿 변경 파이프라인"></figure>
       <dl class="psr">
         <dt>로그</dt><dd>여러 리전의 서비스 로그를 OpenSearch로 수집하는 로거를 동료와 함께 구축(전송 실패가 서버에 영향 없게 설계). 이후 디스크 풀 장애는 debug 로그 유입이 원인이라 유입을 막고 보관 정책·압축·디스크 알림을 기본값으로 고정.</dd>
         <dt>배포</dt><dd>시크릿 변경을 Jenkins 파이프라인으로 일원화(변경 사유 필수 · 값 마스킹 · 운영 승인). 서버 CPU 포화 장애 뒤 불필요한 로그를 정리하고, 배포가 실패하면 이전 버전으로 되돌리는 배포·로그 보관 정책을 도입.</dd>
@@ -82,7 +82,7 @@
     <article class="case">
       <h3>추천 상품 스케줄러 재구축</h3>
       <div class="tags"><span class="tag">MySQL · MongoDB · Elasticsearch</span></div>
-      <figure><img src="assets/diagrams/recommend.svg" alt="추천 상품 스케줄러 흐름"></figure>
+      <figure><img src="assets/diagrams/recommend.svg?v=1c324d29" alt="추천 상품 스케줄러 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>상품마다 3억 건 이상의 행동 로그에서 2주치 클릭·좋아요·장바구니 수를 세는 서브쿼리를 붙이고 주문·리뷰까지 함께 조회해 실행에 60분 이상 걸림. 가중치(클릭 5 · 좋아요 10 · 장바구니 20)도 쿼리에 고정돼 3년 넘게 손대지 못함.</dd>
         <dt>해결</dt><dd>원본 로그 대신 동료가 만든 상품별·일별 행동 집계(MongoDB)를 읽도록 점수 계산을 다시 작성. 상품은 1,000개씩 읽고 점수는 100개씩 묶어 병렬로 계산한 뒤 Elasticsearch에 100건씩 bulk로 반영. 가중치는 쿼리에서 빼 설정값으로 분리하고, 작업이 실패하면 Slack으로 알림.</dd>
@@ -93,7 +93,7 @@
     <article class="case">
       <h3>알림 메시지 워커</h3>
       <div class="tags"><span class="tag">Redis 큐 · MongoDB</span></div>
-      <figure><img src="assets/diagrams/message-worker.svg" alt="알림 메시지 워커 구조"></figure>
+      <figure><img src="assets/diagrams/message-worker.svg?v=8391e6c2" alt="알림 메시지 워커 구조"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>100만 사용자 대상 주기 알림톡 발송이 API 서버에 부담을 줌.</dd>
         <dt>해결</dt><dd>API 서버는 발송 작업만 Redis 큐(Bull)에 넣고, 별도 워커 서버가 500건씩 묶어 병렬 발송하고 묶음 사이에 1초 간격을 둠. 실패한 건만 모아 최대 3회 다시 보내고, 그래도 실패하면 MongoDB에 이력 저장.</dd>
@@ -103,7 +103,7 @@
     <article class="case">
       <h3>Elasticsearch 스냅샷 마이그레이션 자동화</h3>
       <div class="tags"><span class="tag">Step Functions · Lambda · S3</span></div>
-      <figure><img src="assets/diagrams/es-migration.svg" alt="Elasticsearch 스냅샷 마이그레이션 흐름"></figure>
+      <figure><img src="assets/diagrams/es-migration.svg?v=6cf2e4a2" alt="Elasticsearch 스냅샷 마이그레이션 흐름"></figure>
       <dl class="psr">
         <dt>해결</dt><dd>스테이징 검색 데이터를 운영과 맞추기 위해 스냅샷 생성 → 상태 확인 → 복원 → 클러스터 확인을 Step Functions 단계로 자동화하고 EventBridge로 주기 실행.</dd>
       </dl>
@@ -125,7 +125,7 @@
     <article class="case">
       <h3>기능 기준 서버 분리 · 통합 관제 플랫폼</h3>
       <div class="tags"><span class="tag">NestJS · GraphQL · ECS · Lambda · InfluxDB</span></div>
-      <figure><img src="assets/diagrams/willog-servers.svg" alt="기능 기준 서버 분리 구조"></figure>
+      <figure><img src="assets/diagrams/willog-servers.svg?v=77fda380" alt="기능 기준 서버 분리 구조"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>고객사 연동 API 트래픽이 몰리면 서비스 전체가 영향을 받았고, 산업별 서비스가 따로 있어 운영 리소스가 늘어남.</dd>
         <dt>해결</dt><dd>클라이언트 API(Core) · 디바이스 시계열(DDM) · 고객사 연동(CDL) · 알림(Noti)으로 서버를 분리. Core·DDM은 ECS, 연동·알림은 Lambda로 구성. 산업별 서비스는 출고·배송·검수·도착 공통 구조의 통합 플랫폼으로 이관.</dd>
