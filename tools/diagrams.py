@@ -264,16 +264,18 @@ DIAGRAMS = {
         ],
     },
     # Flitto — log pipeline + secret change pipeline
-    # 전송기 = 앱 프로세스 안 Winston transport(당시 packages/shared/.../winston-opensearch.transport.ts, 지금 nest-common).
-    # OpenSearch = Amazon OpenSearch Service rtt-log-es (VPC) — 운영 시크릿 OPENSEARCH_ENDPOINT. Express 앱은 2026-09 제거(57dcb4be6).
+    # 전송기 = 앱 프로세스 안 Winston transport(packages/shared/.../winston-opensearch.transport.ts) — EC2 시절(2025.12~2026.06) 구성.
+    # 2026-06-18 로거가 nest-common(파일 출력만)으로 이동 → 2026-07-16 인프라가 노드별 fluent-bit-rtt DaemonSet 으로 수집 교체
+    # (flitto-infra kubernetes/manifests/elk/base/fluent-bit-rtt, 2662684). 운영 시크릿의 OPENSEARCH_ENABLED 는 읽는 코드가 없다.
+    # 디스크 알림 = OpenSearch Alerting cluster_metrics_monitor 5분 주기 → Slack (vault infra/opensearch-incident-summary.md), CloudWatch AWS/ES 알람 0건.
     "ops": {
         "w": 760, "h": 300, "alt": "로그 파이프라인과 시크릿 변경 파이프라인",
         "titles": [{"x": 20, "y": 24, "label": "로그 파이프라인"}, {"x": 20, "y": 184, "label": "시크릿 변경 · 배포"}],
         "nodes": [
-            {"id": "apps", "x": 15, "y": 40, "w": 160, "h": 80, "icon": "aws:eks", "label": ["서비스 앱", "NestJS · EKS", "5개 리전"]},
-            {"id": "tp", "x": 193, "y": 40, "w": 170, "h": 80, "icon": "g:send", "label": ["로그 전송기", "앱 프로세스 내부", "버퍼 → bulk · gzip", "지수 백오프"]},
-            {"id": "os", "x": 381, "y": 40, "w": 200, "h": 80, "kind": "new", "icon": "aws:opensearch", "label": ["OpenSearch Service", "AWS 관리형", "ISM 1일/5GB → 30일"]},
-            {"id": "al", "x": 599, "y": 40, "w": 146, "h": 80, "kind": "warn", "icon": "g:bell", "label": ["디스크 알림", "80 · 90 · 95%"]},
+            {"id": "apps", "x": 15, "y": 40, "w": 150, "h": 80, "icon": "aws:ec2", "label": ["서비스 앱", "NestJS", "당시 EC2", "여러 리전"]},
+            {"id": "tp", "x": 180, "y": 40, "w": 165, "h": 80, "icon": "g:send", "label": ["로그 전송기", "앱 프로세스 내부", "버퍼 → bulk · gzip", "지수 백오프"]},
+            {"id": "os", "x": 360, "y": 40, "w": 200, "h": 80, "kind": "new", "icon": "aws:opensearch", "label": ["OpenSearch Service", "AWS 관리형", "ISM 1일/5GB → 30일"]},
+            {"id": "al", "x": 575, "y": 40, "w": 170, "h": 80, "kind": "warn", "icon": "g:bell", "label": ["디스크 알림", "Alerting 모니터", "5분마다 · Slack", "80 · 90 · 95%"]},
             {"id": "jk", "x": 15, "y": 200, "w": 172, "h": 64, "icon": "brand:jenkins", "label": ["Jenkins 파라미터", "변경 사유 필수"]},
             {"id": "ap", "x": 205, "y": 200, "w": 158, "h": 64, "kind": "warn", "icon": "g:shield", "label": ["운영 승인 단계", "값은 *** 마스킹"]},
             {"id": "sm", "x": 381, "y": 200, "w": 200, "h": 64, "icon": "aws:secretsmanager", "label": ["Secrets Manager", "새 버전 · 감사 기록"]},
@@ -294,7 +296,7 @@ DIAGRAMS = {
             {"id": "agg", "x": 205, "y": 40, "w": 165, "h": 56, "icon": "g:funnel", "label": ["일별 행동 집계", "(동료 구현)"]},
             {"id": "mg", "x": 385, "y": 40, "w": 180, "h": 56, "kind": "new", "icon": "brand:mongodb", "label": ["MongoDB", "상품 × 일 × 행동 유형"]},
             {"id": "sc", "x": 385, "y": 156, "w": 180, "h": 72, "kind": "new", "icon": "aws:ecs", "label": ["추천 점수 계산", "스케줄러 앱 · ECS", "1,000개 읽기", "100개씩 병렬"]},
-            {"id": "adm", "x": 205, "y": 164, "w": 165, "h": 56, "icon": "g:sliders", "label": ["가중치 설정값", "쿼리에서 분리"]},
+            {"id": "adm", "x": 15, "y": 164, "w": 355, "h": 56, "icon": "g:sliders", "label": ["추천 규칙 (행동별 가중치)", "운영·기획팀이 통계를 보고 정함 · 쿼리에서 분리"]},
             {"id": "es", "x": 580, "y": 164, "w": 165, "h": 56, "icon": "brand:elasticsearch", "label": ["Elasticsearch", "100건씩 bulk 반영"]},
             {"id": "sl", "x": 580, "y": 40, "w": 165, "h": 56, "kind": "warn", "icon": "g:bell", "label": ["Slack 알림", "작업 실패 시"]},
         ],
@@ -307,31 +309,65 @@ DIAGRAMS = {
     # 근거: 워커 = ECS(EC2 launch type) amondz-terraform-v2/5.ecs/var.tfvars:9 "message-ec2", Bull Redis = ElastiCache 추정(같은 레포 다른 Bull 큐가 *.cache.amazonaws.com),
     # API 서버 = ECS 추정(같은 terraform 틀), 알림톡 = BizM(스윗트래커) API — constants/service/bizm.js:92
     "message-worker": {
-        "w": 760, "h": 220, "alt": "알림 메시지 워커 구조",
+        "w": 760, "h": 236, "alt": "알림 메시지 워커 구조",
         "nodes": [
-            {"id": "api", "x": 15, "y": 70, "w": 160, "icon": "aws:ecs", "label": ["API 서버", "발송 요청만 등록"]},
-            {"id": "q", "x": 195, "y": 70, "w": 165, "kind": "new", "icon": "aws:elasticache", "label": ["Redis 큐", "ElastiCache · Bull"]},
-            {"id": "wk", "x": 380, "y": 61, "w": 200, "h": 64, "kind": "new", "icon": "aws:ecs", "label": ["메시지 워커 (분리 서버)", "ECS", "500건씩 병렬 · 1초 간격"]},
-            {"id": "kt", "x": 605, "y": 22, "w": 140, "h": 52, "icon": "brand:kakaotalk", "label": ["알림톡", "BizM API"]},
-            {"id": "mg", "x": 605, "y": 130, "w": 140, "h": 52, "kind": "warn", "icon": "brand:mongodb", "label": ["MongoDB", "반복 실패 이력"]},
+            {"id": "api", "x": 15, "y": 40, "w": 160, "icon": "aws:ecs", "label": ["API · 스케줄러", "발송 대상만 등록"]},
+            {"id": "q", "x": 195, "y": 40, "w": 165, "kind": "new", "icon": "aws:elasticache", "label": ["Redis 큐", "ElastiCache · Bull"]},
+            {"id": "wk", "x": 380, "y": 22, "w": 200, "h": 82, "kind": "new", "icon": "aws:ecs", "label": ["메시지 워커 (분리 서버)", "ECS", "500건씩 BizM 일괄 요청", "묶음 사이 1초"]},
+            {"id": "kt", "x": 605, "y": 37, "w": 140, "h": 52, "icon": "brand:kakaotalk", "label": ["알림톡", "BizM API"]},
+            {"id": "rt", "x": 380, "y": 150, "w": 200, "h": 56, "kind": "warn", "icon": "g:rollback", "label": ["실패 건만 다시 등록", "지연 후 재시도 · 최대 3회"]},
+            {"id": "mg", "x": 605, "y": 146, "w": 140, "h": 64, "icon": "brand:mongodb", "label": ["MongoDB", "3회 넘으면 저장", "로그 워커 경유"]},
         ],
         "edges": [
             {"from": "api", "to": "q"}, {"from": "q", "to": "wk"}, {"from": "wk", "to": "kt"},
-            {"from": "wk", "to": "mg", "dashed": True, "label": "3회 재시도 후", "dx": -40, "dy": 16},
+            {"from": "wk", "to": "rt", "dashed": True, "label": "실패 건", "dx": 26, "dy": 4},
+            {"from": "rt", "to": "q", "dashed": True, "via": [(277.5, 178)], "label": "재등록", "dx": 24, "dy": 4},
+            {"from": "rt", "to": "mg", "dashed": True},
         ],
     },
-    # bejewel — ES snapshot migration (근거: 노션 이력서 "AWS Step Function, Lambda, AWS EventBridge, S3를 활용하여 Elasticsearch Migration 스케줄러 구현")
+    # bejewel — ES snapshot migration
+    # 근거: 노션 이력서 "AWS Step Function, Lambda, AWS EventBridge, S3를 활용하여 Elasticsearch Migration 스케줄러 구현",
+    # 2024 경력기술서 — repository-s3 플러그인 · IAM 역할 · "ES가 설치된 EC2" · 단계 = Node.js Lambda · 상태 확인 → restore → 클러스터·노드 확인
     "es-migration": {
-        "w": 760, "h": 200, "alt": "Elasticsearch 스냅샷 마이그레이션 자동화",
-        "groups": [{"x": 170, "y": 20, "w": 580, "h": 160, "label": "Step Functions (각 단계 = Lambda)", "icons": ["aws:stepfunctions", "aws:lambda"]}],
+        "w": 760, "h": 270, "alt": "Elasticsearch 스냅샷 마이그레이션 자동화",
+        "groups": [{"x": 168, "y": 14, "w": 587, "h": 128, "label": "Step Functions — 단계마다 Lambda (Node.js · VPC 안)", "icons": ["aws:stepfunctions", "aws:lambda"]}],
         "nodes": [
-            {"id": "eb", "x": 10, "y": 77, "w": 145, "h": 52, "icon": "aws:eventbridge", "label": ["EventBridge", "주기 실행"]},
-            {"id": "s1", "x": 182, "y": 77, "w": 132, "h": 52, "icon": "aws:s3", "label": ["스냅샷 생성", "→ S3"]},
-            {"id": "s2", "x": 326, "y": 70, "w": 132, "h": 64, "icon": "g:check", "label": ["상태 확인", "실패 시", "에러 처리"]},
-            {"id": "s3", "x": 470, "y": 77, "w": 132, "h": 52, "kind": "new", "icon": "brand:elasticsearch", "label": ["Restore", "Staging 반영"]},
-            {"id": "s4", "x": 614, "y": 77, "w": 126, "h": 52, "icon": "g:check", "label": ["클러스터", "상태 확인"]},
+            {"id": "eb", "x": 10, "y": 58, "w": 145, "h": 52, "icon": "aws:eventbridge", "label": ["EventBridge", "주기 실행"]},
+            {"id": "s1", "x": 180, "y": 52, "w": 135, "h": 64, "icon": "aws:s3", "label": ["스냅샷 생성", "운영 → S3"]},
+            {"id": "s2", "x": 325, "y": 52, "w": 135, "h": 64, "kind": "warn", "icon": "g:clock", "label": ["상태 확인", "완료까지 반복", "실패 → 중단"]},
+            {"id": "s3", "x": 470, "y": 52, "w": 135, "h": 64, "kind": "new", "icon": "brand:elasticsearch", "label": ["복원", "S3 → 스테이징"]},
+            {"id": "s4", "x": 615, "y": 52, "w": 135, "h": 64, "icon": "g:check", "label": ["클러스터 확인", "노드 상태까지"]},
+            {"id": "prod", "x": 170, "y": 190, "w": 180, "h": 56, "icon": "brand:elasticsearch", "label": ["운영 ES", "Elasticsearch · EC2"]},
+            {"id": "bk", "x": 390, "y": 190, "w": 190, "h": 56, "icon": "aws:s3", "label": ["S3 스냅샷 저장소", "repository-s3 플러그인"]},
+            {"id": "stg", "x": 620, "y": 190, "w": 130, "h": 56, "kind": "new", "icon": "brand:elasticsearch", "label": ["스테이징 ES", "EC2에 설치"]},
         ],
-        "edges": [{"from": "eb", "to": "s1"}, {"from": "s1", "to": "s2"}, {"from": "s2", "to": "s3"}, {"from": "s3", "to": "s4"}],
+        "edges": [
+            {"from": "eb", "to": "s1"}, {"from": "s1", "to": "s2"}, {"from": "s2", "to": "s3"}, {"from": "s3", "to": "s4"},
+            {"from": "prod", "to": "bk", "label": "스냅샷", "dy": -8}, {"from": "bk", "to": "stg", "label": "복원", "dy": -8},
+        ],
+    },
+    # bejewel — feature flag (근거: libs/shared/src/common/modules/feature-flag/* — feature-flag-module-builder.service.ts ·
+    # base-feature-flag.provider.ts(Jira '출시 완료' 확인) · feature-flag.service.ts(ApiExcludeEndpoint + Version(DEPRECATED_VERSION), Cron disabled,
+    # Swagger deployStatus) · typeorm-flag.config.ts(플래그별 migration 폴더))
+    "feature-flag": {
+        "w": 760, "h": 340, "alt": "Feature Flag 기반 트렁크 개발 — 앱 기동 시 플래그로 라우트를 조립하는 흐름",
+        "groups": [{"x": 260, "y": 14, "w": 270, "h": 312, "label": "앱 기동 시 (NestJS)", "icons": ["brand:nestjs"]}],
+        "nodes": [
+            {"id": "jira", "x": 15, "y": 40, "w": 225, "h": 52, "icon": "g:check", "label": ["Jira 티켓 = 플래그 키", "기능 1개 = 티켓 1개"]},
+            {"id": "rc", "x": 15, "y": 125, "w": 225, "h": 68, "kind": "new", "icon": "g:sliders", "label": ["Firebase Remote Config", "dev · prod 값을 따로", "실패 시 Flagsmith → 로컬 플래그"]},
+            {"id": "b1", "x": 272, "y": 45, "w": 246, "h": 52, "label": ["① 켜진 플래그 조회", "저장소 실패 시 다음 저장소"]},
+            {"id": "b2", "x": 272, "y": 117, "w": 246, "h": 68, "kind": "warn", "label": ["② 코드의 티켓 목록과 대조", "저장소에 없는 티켓은", "Jira '출시 완료'면 켬 · 아니면 기동 중단"]},
+            {"id": "b3", "x": 272, "y": 205, "w": 246, "h": 108, "kind": "new", "label": ["③ 데코레이터로 라우트 조립", "꺼진 API → 문서 숨김 · 기본 경로에서 제외", "같은 경로의 새·옛 구현을 플래그로 교대", "스케줄 작업(Cron) 등록도 켜고 끄기", "DB 마이그레이션도 플래그별 폴더"]},
+            {"id": "rq", "x": 548, "y": 125, "w": 197, "h": 68, "icon": "g:server", "label": ["요청 처리", "isEnabled(티켓) 분기", "QA는 헤더로 강제 켜기"]},
+            {"id": "sw", "x": 548, "y": 225, "w": 197, "h": 68, "kind": "new", "icon": "g:browser", "label": ["Swagger 배포 라벨", "dev · prod 플래그를 비교", "운영 · 개발만 · 비활성"]},
+        ],
+        "edges": [
+            {"from": "jira", "to": "rc", "dashed": True, "label": "티켓 번호로 값 등록", "dx": 58, "dy": 4},
+            {"from": "rc", "to": "b1"},
+            {"from": "jira", "to": "b2", "dashed": True, "via": [(250, 66), (250, 151)]},
+            {"from": "b1", "to": "b2"}, {"from": "b2", "to": "b3"},
+            {"from": "b3", "to": "rq"}, {"from": "b3", "to": "sw"},
+        ],
     },
     # personal — brain vault: overall loop (real wiring, 2026-11-03)
     "bv-overview": {
@@ -412,7 +448,7 @@ DIAGRAMS = {
     },
     # willog — server split by function
     # 근거: Core·DDM = ECS(EC2 launch type) legacy-nestjs/*/taskdef-prod.json:31, CDL = API Gateway + Lambda serverless/platform-client-data-loader/serverless.yml:74,
-    # Noti = Lambda + SOLAPI serverless/platform-noti-manager/.../solapi.util.ts:1, RDB = MySQL(package.json) — RDS 추정(같은 회사 다른 DB 가 Aurora 클러스터)
+    # Noti = Lambda + SOLAPI serverless/platform-noti-manager/.../solapi.util.ts:1, RDB = Aurora MySQL(2023 경력기술서 "Production DB(Aurora)" · RDS Proxy)
     "willog-servers": {
         "w": 760, "h": 300, "alt": "기능 기준 서버 분리 구조",
         "nodes": [
@@ -423,13 +459,84 @@ DIAGRAMS = {
             {"id": "cdl", "x": 240, "y": 120, "w": 220, "h": 64, "kind": "new", "icon": "aws:lambda", "label": ["CDL", "API Gateway · Lambda", "배송 데이터 연동 REST"]},
             {"id": "ddm", "x": 240, "y": 213, "w": 220, "h": 52, "kind": "new", "icon": "aws:ecs", "label": ["DDM", "디바이스 시계열 API · ECS"]},
             {"id": "noti", "x": 525, "y": 8, "w": 220, "h": 64, "icon": "aws:lambda", "label": ["Noti", "Lambda · SOLAPI", "카카오톡 · SMS"]},
-            {"id": "rdb", "x": 525, "y": 110, "w": 220, "icon": "aws:rds", "label": ["RDB (MySQL · RDS)", "배송 · 주문"]},
+            {"id": "rdb", "x": 525, "y": 110, "w": 220, "icon": "aws:rds", "label": ["RDB (Aurora MySQL)", "배송 · 고객사 · 디바이스"]},
             {"id": "inf", "x": 525, "y": 216, "w": 220, "icon": "brand:influxdb", "label": ["InfluxDB", "디바이스 측정값"]},
         ],
         "edges": [
             {"from": "cl", "to": "core"}, {"from": "cs", "to": "cdl"}, {"from": "dv", "to": "ddm"},
             {"from": "core", "to": "noti"}, {"from": "core", "to": "rdb"}, {"from": "cdl", "to": "rdb"},
             {"from": "ddm", "to": "inf"},
+        ],
+    },
+    # willog — 공통 배송 흐름 + 산업군 규칙 (근거: platform-core-backend/src/domains/transport/utils/categorize.util.ts:34 categorizeCompany,
+    # auth/enums/company-category.enum.ts BIO·GMP·OCEAN·POC). 디바이스 = 자사 · 외부 실시간(이력서 "트래킹 하드웨어 호환 처리")
+    "willog-adapter": {
+        "w": 760, "h": 290, "alt": "공통 배송 흐름과 산업군 규칙",
+        "titles": [{"x": 15, "y": 26, "label": "공통 배송 흐름 — 산업군과 무관하게 같은 단계"}],
+        "groups": [{"x": 15, "y": 120, "w": 500, "h": 154, "label": "산업군 규칙 — categorizeCompany(산업군)"},
+                   {"x": 535, "y": 120, "w": 215, "h": 154, "label": "디바이스 → 공통 측정값"}],
+        "nodes": [
+            {"id": "s1", "x": 15, "y": 40, "w": 138, "h": 52, "label": ["배송 등록", "연동 API · 엑셀 · 화면"]},
+            {"id": "s2", "x": 165, "y": 40, "w": 138, "h": 52, "label": ["출고", "디바이스 연결"]},
+            {"id": "s3", "x": 315, "y": 40, "w": 138, "h": 52, "label": ["배송 중", "측정값 수집"]},
+            {"id": "s4", "x": 465, "y": 40, "w": 138, "h": 52, "label": ["도착", "도착 · 이상 판정"]},
+            {"id": "s5", "x": 615, "y": 40, "w": 138, "h": 52, "label": ["리포트 · 알림", "인증서 · 카톡 · SMS"]},
+            {"id": "rule", "x": 30, "y": 146, "w": 470, "h": 52, "kind": "new", "label": ["산업군마다 다른 규칙만 분리 — 각 단계가 호출", "도착 판정 · 이상 판정 범위 · 대표 측정값 · 리포트 · 알림 문구 · 입력 검증"]},
+            {"id": "bio", "x": 30, "y": 212, "w": 110, "h": 46, "label": ["BIO", "의약품 배송"]},
+            {"id": "gmp", "x": 150, "y": 212, "w": 110, "h": 46, "label": ["GMP", "검증 리포트"]},
+            {"id": "ocn", "x": 270, "y": 212, "w": 110, "h": 46, "label": ["OCEAN", "해상 고가 화물"]},
+            {"id": "poc", "x": 390, "y": 212, "w": 110, "h": 46, "label": ["POC", "시범 고객사"]},
+            {"id": "d1", "x": 548, "y": 150, "w": 190, "h": 46, "icon": "g:device", "label": ["자사 디바이스", "10분 주기 업로드"]},
+            {"id": "d2", "x": 548, "y": 212, "w": 190, "h": 46, "icon": "g:device", "label": ["외부 실시간 디바이스", "형식 변환 → 공통 측정값"]},
+        ],
+        "edges": [
+            {"from": "s1", "to": "s2"}, {"from": "s2", "to": "s3"}, {"from": "s3", "to": "s4"}, {"from": "s4", "to": "s5"},
+            {"from": "rule", "to": "s3", "dashed": True},
+            {"from": "d1", "to": "s3", "dashed": True, "via": [(525, 173), (525, 106), (405, 106)]},
+        ],
+    },
+    # willog — 레거시 무중단 이관 + 고객사 DB 연동 (근거: 2023 경력기술서 §2·§3, serverless/crawler-*/lambda_function.py — pyodbc·pymysql,
+    # 'rds proxy endpoint', 건별 commit / except rollback + send_slack, migration/*2platform_migration.py)
+    "willog-migration": {
+        "w": 760, "h": 400, "alt": "레거시 무중단 이관과 고객사 DB 연동",
+        "titles": [{"x": 15, "y": 24, "label": "레거시 이관 — 고객사 서비스를 멈추지 않고"},
+                   {"x": 15, "y": 250, "label": "고객사 DB 연동 (DB2DB) — 고객사마다 주기·구조가 달라 Lambda를 따로 둠"}],
+        "nodes": [
+            {"id": "leg", "x": 15, "y": 40, "w": 185, "h": 64, "icon": "g:db", "label": ["레거시 DB", "의약품 · 물류 서비스", "배송 200만 · 시계열 5억"]},
+            {"id": "mig", "x": 225, "y": 40, "w": 205, "h": 64, "kind": "new", "icon": "aws:lambda", "label": ["이관 Lambda (Python)", "영업시간 중 Cron으로 분할", "사람이 지켜보며 이관"]},
+            {"id": "plat", "x": 470, "y": 100, "w": 275, "h": 64, "kind": "new", "icon": "aws:rds", "label": ["플랫폼 DB (Aurora MySQL)", "VPC 안 · 모든 산업군 통합"]},
+            {"id": "cs", "x": 15, "y": 160, "w": 185, "h": 56, "icon": "g:building", "label": ["고객사 시스템", "기존 연동 코드 그대로"]},
+            {"id": "gw", "x": 225, "y": 160, "w": 205, "h": 56, "kind": "new", "icon": "aws:apigateway", "label": ["API Gateway + Lambda", "기존 API 스펙 그대로"]},
+            {"id": "eb", "x": 15, "y": 270, "w": 150, "h": 56, "icon": "aws:eventbridge", "label": ["EventBridge", "고객사별 주기"]},
+            {"id": "lam", "x": 190, "y": 264, "w": 215, "h": 68, "kind": "new", "icon": "aws:lambda", "label": ["연동 Lambda (Python)", "작은 트랜잭션 단위로 커밋", "실패분만 알림 (우리 · 고객사)"]},
+            {"id": "px", "x": 430, "y": 270, "w": 140, "h": 56, "icon": "aws:rds", "label": ["RDS Proxy", "VPC 안 접속"]},
+            {"id": "rdb", "x": 595, "y": 270, "w": 150, "h": 56, "icon": "g:db", "label": ["고객사 중계 DB", "MSSQL · Oracle"]},
+        ],
+        "edges": [
+            {"from": "leg", "to": "mig"}, {"from": "mig", "to": "plat"},
+            {"from": "cs", "to": "gw"}, {"from": "gw", "to": "plat"},
+            {"from": "eb", "to": "lam"}, {"from": "lam", "to": "px"}, {"from": "px", "to": "plat"},
+            {"from": "rdb", "to": "lam", "dashed": True, "via": [(670, 370), (297, 370)], "label": "읽기 (pyodbc)", "dy": -6},
+        ],
+    },
+    # willog — 실시간 측정값 · 조회 성능 (근거: platform-device-data-manager/src/modules/realtime-batch/realtime-batch.service.ts:319 publish,
+    # platform-core-backend/src/domains/transport/resolvers/transport.resolver.ts:313 @Subscription, DDM providers/redis/cache.service.ts,
+    # 3초 → 1초 = 2023 경력기술서 §5)
+    "willog-realtime": {
+        "w": 760, "h": 205, "alt": "실시간 측정값 전달과 캐시",
+        "nodes": [
+            {"id": "dv", "x": 15, "y": 40, "w": 160, "h": 52, "icon": "g:device", "label": ["트래킹 디바이스", "10분 주기 측정값"]},
+            {"id": "ddm", "x": 200, "y": 40, "w": 190, "h": 52, "kind": "new", "icon": "aws:ecs", "label": ["DDM", "측정값 저장 · 시계열 API"]},
+            {"id": "inf", "x": 415, "y": 40, "w": 160, "h": 52, "icon": "brand:influxdb", "label": ["InfluxDB", "측정값 시계열"]},
+            {"id": "ps", "x": 200, "y": 130, "w": 190, "h": 52, "kind": "new", "icon": "aws:elasticache", "label": ["Redis Pub/Sub", "새 측정값 발행"]},
+            {"id": "core", "x": 415, "y": 124, "w": 190, "h": 64, "icon": "aws:ecs", "label": ["Core", "GraphQL Subscription", "디바이스별로 걸러 전달"]},
+            {"id": "web", "x": 620, "y": 130, "w": 125, "h": 52, "icon": "g:browser", "label": ["화면", "새로고침 없이"]},
+            {"id": "ca", "x": 15, "y": 130, "w": 170, "h": 52, "kind": "new", "icon": "aws:elasticache", "label": ["도착 완료 배송 캐시", "Redis · 조회 3초→1초"]},
+        ],
+        "edges": [
+            {"from": "dv", "to": "ddm"}, {"from": "ddm", "to": "inf"}, {"from": "ddm", "to": "ps"},
+            {"from": "ps", "to": "core"}, {"from": "core", "to": "web"},
+            {"from": "ddm", "to": "ca", "dashed": True, "label": "도착 후 안 바뀌는 데이터", "dx": -62, "dy": 0},
         ],
     },
 }

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 290" width="760" height="290" role="img" aria-label="공통 배송 흐름과 산업군 규칙">
+
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#8c959f; --box:#f6f8fa;
+          --new:#e6f4ea; --newline:#2f855a; --warn:#fff4e5; --warnline:#b7791f; --group:#fbfbfc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#6e7681; --box:#161b22;
+            --new:#12261b; --newline:#3fb950; --warn:#2a1f0d; --warnline:#d29922; --group:#10151c; }
+  }
+  .bg { fill: var(--bg); }
+  .grp { fill: var(--group); stroke: var(--line); stroke-dasharray: 4 4; }
+  .grpt { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .box { fill: var(--box); stroke: var(--line); }
+  .new { fill: var(--new); stroke: var(--newline); }
+  .warn { fill: var(--warn); stroke: var(--warnline); }
+  .t { fill: var(--fg); font-size: 13px; }
+  .s { fill: var(--muted); font-size: 11px; }
+  .title { fill: var(--fg); font-size: 14px; font-weight: 700; }
+  .e { stroke: var(--line); stroke-width: 1.4; fill: none; marker-end: url(#a); }
+  .ed { stroke: var(--line); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#a); }
+  .el { fill: var(--muted); font-size: 11px; }
+  .ah { fill: var(--line); }
+  text { font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+</style>
+
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="760" height="290"/>
+<rect class="grp" x="15" y="120" width="500" height="154" rx="10"/>
+<text class="grpt" x="27" y="138">산업군 규칙 — categorizeCompany(산업군)</text>
+<rect class="grp" x="535" y="120" width="215" height="154" rx="10"/>
+<text class="grpt" x="547" y="138">디바이스 → 공통 측정값</text>
+<text class="title" x="15" y="26">공통 배송 흐름 — 산업군과 무관하게 같은 단계</text>
+<path class="e" d="M153.0,66.0 L165.0,66.0"/>
+<path class="e" d="M303.0,66.0 L315.0,66.0"/>
+<path class="e" d="M453.0,66.0 L465.0,66.0"/>
+<path class="e" d="M603.0,66.0 L615.0,66.0"/>
+<path class="ed" d="M294.2,146.0 L354.8,92.0"/>
+<path class="ed" d="M548.0,173.0 L525.0,173.0 L525.0,106.0 L405.0,106.0 L397.6,92.0"/>
+<rect class="box" x="15" y="40" width="138" height="52" rx="8"/>
+<text class="t" x="84.0" y="62.0" text-anchor="middle">배송 등록</text>
+<text class="s" x="84.0" y="78.0" text-anchor="middle">연동 API · 엑셀 · 화면</text>
+<rect class="box" x="165" y="40" width="138" height="52" rx="8"/>
+<text class="t" x="234.0" y="62.0" text-anchor="middle">출고</text>
+<text class="s" x="234.0" y="78.0" text-anchor="middle">디바이스 연결</text>
+<rect class="box" x="315" y="40" width="138" height="52" rx="8"/>
+<text class="t" x="384.0" y="62.0" text-anchor="middle">배송 중</text>
+<text class="s" x="384.0" y="78.0" text-anchor="middle">측정값 수집</text>
+<rect class="box" x="465" y="40" width="138" height="52" rx="8"/>
+<text class="t" x="534.0" y="62.0" text-anchor="middle">도착</text>
+<text class="s" x="534.0" y="78.0" text-anchor="middle">도착 · 이상 판정</text>
+<rect class="box" x="615" y="40" width="138" height="52" rx="8"/>
+<text class="t" x="684.0" y="62.0" text-anchor="middle">리포트 · 알림</text>
+<text class="s" x="684.0" y="78.0" text-anchor="middle">인증서 · 카톡 · SMS</text>
+<rect class="new" x="30" y="146" width="470" height="52" rx="8"/>
+<text class="t" x="265.0" y="168.0" text-anchor="middle">산업군마다 다른 규칙만 분리 — 각 단계가 호출</text>
+<text class="s" x="265.0" y="184.0" text-anchor="middle">도착 판정 · 이상 판정 범위 · 대표 측정값 · 리포트 · 알림 문구 · 입력 검증</text>
+<rect class="box" x="30" y="212" width="110" height="46" rx="8"/>
+<text class="t" x="85.0" y="231.0" text-anchor="middle">BIO</text>
+<text class="s" x="85.0" y="247.0" text-anchor="middle">의약품 배송</text>
+<rect class="box" x="150" y="212" width="110" height="46" rx="8"/>
+<text class="t" x="205.0" y="231.0" text-anchor="middle">GMP</text>
+<text class="s" x="205.0" y="247.0" text-anchor="middle">검증 리포트</text>
+<rect class="box" x="270" y="212" width="110" height="46" rx="8"/>
+<text class="t" x="325.0" y="231.0" text-anchor="middle">OCEAN</text>
+<text class="s" x="325.0" y="247.0" text-anchor="middle">해상 고가 화물</text>
+<rect class="box" x="390" y="212" width="110" height="46" rx="8"/>
+<text class="t" x="445.0" y="231.0" text-anchor="middle">POC</text>
+<text class="s" x="445.0" y="247.0" text-anchor="middle">시범 고객사</text>
+<rect class="box" x="548" y="150" width="190" height="46" rx="8"/>
+<rect x="557" y="159.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="560.92" y="162.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 7h4"/><circle cx="12" cy="16" r="1.2"/></g></svg>
+<text class="t" x="661.0" y="169.0" text-anchor="middle">자사 디바이스</text>
+<text class="s" x="661.0" y="185.0" text-anchor="middle">10분 주기 업로드</text>
+<rect class="box" x="548" y="212" width="190" height="46" rx="8"/>
+<rect x="557" y="221.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="560.92" y="224.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 7h4"/><circle cx="12" cy="16" r="1.2"/></g></svg>
+<text class="t" x="661.0" y="231.0" text-anchor="middle">외부 실시간 디바이스</text>
+<text class="s" x="661.0" y="247.0" text-anchor="middle">형식 변환 → 공통 측정값</text>
+</svg>

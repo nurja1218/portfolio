@@ -65,10 +65,10 @@
 <text class="s" x="493.0" y="188.0" text-anchor="middle">스케줄러 앱 · ECS</text>
 <text class="s" x="493.0" y="204.0" text-anchor="middle">1,000개 읽기</text>
 <text class="s" x="493.0" y="220.0" text-anchor="middle">100개씩 병렬</text>
-<rect class="box" x="205" y="164" width="165" height="56" rx="8"/>
-<rect x="214" y="178.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="217.92" y="181.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M5 12h14M5 17h14"/><circle cx="9" cy="7" r="1.8" fill="#fff"/><circle cx="15" cy="12" r="1.8" fill="#fff"/><circle cx="8" cy="17" r="1.8" fill="#fff"/></g></svg>
-<text class="t" x="305.5" y="188.0" text-anchor="middle">가중치 설정값</text>
-<text class="s" x="305.5" y="204.0" text-anchor="middle">쿼리에서 분리</text>
+<rect class="box" x="15" y="164" width="355" height="56" rx="8"/>
+<rect x="24" y="178.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="27.92" y="181.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M5 12h14M5 17h14"/><circle cx="9" cy="7" r="1.8" fill="#fff"/><circle cx="15" cy="12" r="1.8" fill="#fff"/><circle cx="8" cy="17" r="1.8" fill="#fff"/></g></svg>
+<text class="t" x="210.5" y="188.0" text-anchor="middle">추천 규칙 (행동별 가중치)</text>
+<text class="s" x="210.5" y="204.0" text-anchor="middle">운영·기획팀이 통계를 보고 정함 · 쿼리에서 분리</text>
 <rect class="box" x="580" y="164" width="165" height="56" rx="8"/>
 <rect x="589" y="178.0" width="28" height="28" rx="6" fill="#005571"/><svg x="594.04" y="183.04" width="17.92" height="17.92" viewBox="0 0 24 24"><path fill="#fff" d="M13.394 0C8.683 0 4.609 2.716 2.644 6.667h15.641a4.77 4.77 0 0 0 3.073-1.11c.446-.375.864-.785 1.247-1.243l.001-.002A11.974 11.974 0 0 0 13.394 0zM1.804 8.889a12.009 12.009 0 0 0 0 6.222h14.7a3.111 3.111 0 1 0 0-6.222zm.84 8.444C4.61 21.283 8.684 24 13.395 24c3.701 0 7.011-1.677 9.212-4.312l-.001-.002a9.958 9.958 0 0 0-1.247-1.243 4.77 4.77 0 0 0-3.073-1.11z"/></svg>
 <text class="t" x="680.5" y="188.0" text-anchor="middle">Elasticsearch</text>
