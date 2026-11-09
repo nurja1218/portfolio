@@ -599,9 +599,9 @@ DIAGRAMS = {
 }
 
 
-PAGES = [OUT.parent.parent / "portfolio.html"]
+PAGES = [OUT.parent.parent / "portfolio.html", OUT.parent.parent / "apply.html"]
 ROOT = OUT.parent.parent
-STAMPED = [ROOT / "index.html", ROOT / "portfolio.html"]  # pages whose stylesheet link carries a content hash
+STAMPED = [ROOT / "index.html", ROOT / "portfolio.html", ROOT / "apply.html"]  # pages whose stylesheet link carries a content hash
 
 
 def main():

@@ -6,11 +6,11 @@
 <title>임준영 · 경력기술서</title>
 <meta name="description" content="백엔드 엔지니어 임준영 경력기술서 — 아키텍처 중심">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="assets/style.css?v=5b504c3c">
+<link rel="stylesheet" href="assets/style.css?v=e7a1025a">
 </head>
 <body>
 <main>
-  <nav class="top"><a href="./">이력서</a><a href="portfolio.html" aria-current="page">경력기술서</a><a href="assets/pdf/resume.pdf">이력서 PDF</a><a href="assets/pdf/portfolio.pdf">경력기술서 PDF</a></nav>
+  <nav class="top"><a href="./">이력서</a><a href="apply.html">경력기술서</a><a href="portfolio.html" aria-current="page">상세 경력기술서</a><a href="assets/pdf/resume.pdf">이력서 PDF</a><a href="assets/pdf/apply.pdf">경력기술서 PDF</a><a href="assets/pdf/portfolio.pdf">상세 PDF</a></nav>
 
   <header class="hero">
     <h1>경력기술서</h1>
@@ -21,7 +21,7 @@
   <section class="domain">
     <h2>플리토 · 실시간 AI 통번역</h2>
 
-    <article class="case">
+    <article class="case" id="latency">
       <h3>글로벌 리전 레이턴시 개선</h3>
       <div class="tags"><span class="tag">2025.11 – 2026.05</span><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">DynamoDB · Redis · PostgreSQL</span><a class="tag" href="https://github.com/nurja1218/regional-write-latency-lab">재현 실험 코드 →</a></div>
       <figure><img src="assets/diagrams/latency.svg?v=800758d4" alt="글로벌 리전 레이턴시 개선 전후 구조"></figure>
@@ -33,7 +33,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="personalization">
       <h3>지식그래프 기반 초개인화</h3>
       <div class="tags"><span class="tag">2026.01 – 2026.10</span><span class="tag role">단독 · 설계 · 구현 · 상용 반영</span><span class="break"></span><span class="tag">PostgreSQL · pgvector · LLM</span></div>
       <figure><img src="assets/diagrams/personalization.svg?v=e56b13aa" alt="지식그래프 기반 초개인화 흐름"></figure>
@@ -44,7 +44,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="llm-prompt">
       <h3>LLM 프롬프트 관리 체계</h3>
       <div class="tags"><span class="tag">2026.06</span><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">LangSmith</span></div>
       <figure><img src="assets/diagrams/llm-prompt.svg?v=19baf505" alt="LLM 프롬프트 관리 흐름"></figure>
@@ -55,7 +55,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="ownership">
       <h3>제품 도메인 오너 — 기획부터 개발 분배까지 문서 한 벌로</h3>
       <div class="tags"><span class="tag wip">2026.10 – 진행 중</span><span class="tag role">단독 · 기획 · 문서 · 서버</span><span class="break"></span><span class="tag">PRD · Figma 시안 · 서버/클라 명세</span><span class="tag">외부 AI 에이전트 연결(MCP) 외</span></div>
       <figure><img src="assets/diagrams/ownership.svg?v=f8cfa1c2" alt="제품 도메인 오너 — 문서 한 벌로 기획부터 개발 분배까지"></figure>
@@ -66,7 +66,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="ops">
       <h3>로그 · 배포 운영 안정화</h3>
       <div class="tags"><span class="tag">2025.10 – 2026.05</span><span class="tag role">주도 · 로그 체계 · 배포 정비</span><span class="tag">k8s 로그 수집 전환은 동료</span><span class="break"></span><span class="tag">OpenSearch · Jenkins · Ansible</span></div>
       <figure><img src="assets/diagrams/ops.svg?v=05c92276" alt="로그 파이프라인과 시크릿 변경 · 배포 · 로그 보관"></figure>
@@ -97,7 +97,7 @@
   <section class="domain">
     <h2>비주얼 · 주얼리 버티컬 커머스</h2>
 
-    <article class="case">
+    <article class="case" id="recommend">
       <h3>추천 상품 스케줄러 재구축</h3>
       <div class="tags"><span class="tag">2024.06 – 2024.11</span><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">MySQL · MongoDB · Elasticsearch · Bull</span></div>
       <figure><img src="assets/diagrams/recommend.svg?v=9e5b6bd5" alt="추천 상품 스케줄러 흐름"></figure>
@@ -110,7 +110,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="message-worker">
       <h3>알림 메시지 워커</h3>
       <div class="tags"><span class="tag">2024.07 – 2024.09</span><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">Bull(Redis) · ECS · MongoDB</span></div>
       <figure><img src="assets/diagrams/message-worker.svg?v=e6c3940b" alt="알림 메시지 워커 구조"></figure>
@@ -126,7 +126,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="es-migration">
       <h3>Elasticsearch 스냅샷 마이그레이션 자동화</h3>
       <div class="tags"><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">Step Functions · Lambda · EventBridge · S3</span></div>
       <figure><img src="assets/diagrams/es-migration.svg?v=d49807d1" alt="Elasticsearch 스냅샷 마이그레이션 흐름"></figure>
@@ -137,7 +137,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="feature-flag">
       <h3>Feature Flag 기반 Trunk-Based 개발</h3>
       <div class="tags"><span class="tag">2024.07 – 2024.10</span><span class="tag role">공동 · 설계 논의 · Swagger 배포 라벨 구현</span><span class="tag">기반 구현은 동료</span><span class="break"></span><span class="tag">Firebase Remote Config · NestJS · GitHub Actions</span></div>
       <figure><img src="assets/diagrams/feature-flag.svg?v=067f9287" alt="Feature Flag 기반 트렁크 개발 흐름"></figure>
@@ -148,7 +148,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="aws-iam">
       <h3>AWS 권한 정책</h3>
       <div class="tags"><span class="tag role">주도 · 방향 · 정책 설계</span><span class="tag">주니어 1명과 조사 · 문서화</span><span class="break"></span><span class="tag">IAM 그룹 9개 · 역할 6단계</span></div>
       <figure><img src="assets/diagrams/aws-iam.svg?v=bbbc9eed" alt="AWS 권한 그룹과 역할별 할당"></figure>
@@ -168,7 +168,7 @@
   <section class="domain">
     <h2>윌로그 · 물류 배송 모니터링</h2>
 
-    <article class="case">
+    <article class="case" id="willog-servers">
       <h3>산업군 통합 관제 플랫폼 — 기능 기준 서버 분리</h3>
       <div class="tags"><span class="tag">2022.12 – 2023.09</span><span class="tag role">참여 · Noti · 고객사 연동 Lambda 구현</span><span class="tag">전체 설계 · 배포는 사수</span><span class="break"></span><span class="tag">NestJS · GraphQL · ECS · Lambda · InfluxDB</span></div>
       <figure><img src="assets/diagrams/willog-servers.svg?v=66027e2a" alt="기능 기준 서버 분리 구조"></figure>
@@ -179,7 +179,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="willog-adapter">
       <h3>공통 배송 흐름 + 산업군 규칙</h3>
       <div class="tags"><span class="tag role">공동 · 플랫폼 백엔드 대부분 구현</span><span class="tag">사수가 전 코드 리뷰</span><span class="break"></span><span class="tag">의약품 · GMP 검증 · 해상 고가 화물</span><span class="tag">디바이스 호환</span></div>
       <figure><img src="assets/diagrams/willog-adapter.svg?v=2daab400" alt="공통 배송 흐름과 산업군 규칙"></figure>
@@ -190,7 +190,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="willog-migration">
       <h3>레거시 무중단 이관 · 고객사 DB 연동</h3>
       <div class="tags"><span class="tag">2023</span><span class="tag role">참여 · 이관 검증 쿼리 · 개발 환경 이관 테스트 · 연동 Lambda 구현</span><span class="break"></span><span class="tag">Python Lambda · API Gateway · EventBridge · RDS Proxy · Aurora</span></div>
       <figure><img src="assets/diagrams/willog-migration.svg?v=1de05bb4" alt="레거시 무중단 이관과 고객사 DB 연동"></figure>
@@ -200,7 +200,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="willog-realtime">
       <h3>실시간 측정값 · 조회 성능</h3>
       <div class="tags"><span class="tag role">참여 · 설계 논의 · 구독 필터와 WebSocket 인증 구현</span><span class="break"></span><span class="tag">InfluxDB · Redis Pub/Sub · GraphQL Subscription</span></div>
       <figure><img src="assets/diagrams/willog-realtime.svg?v=f3f7b470" alt="실시간 측정값 전달과 캐시"></figure>
@@ -211,7 +211,7 @@
       </dl>
     </article>
 
-    <article class="case">
+    <article class="case" id="willog-etc">
       <h3>문제 해결 · 협업</h3>
       <ul class="mini">
         <li><b>고객사 연동 API 지연 <span class="tag role">단독</span></b>고객사가 10분마다 1만 건 이상 보내는 배송 데이터를 저장 전에 1건씩 라벨 코드 포함 검색(LIKE)으로 중복 검사해 slow query 발생(CloudWatch에서 확인) → 라벨 코드를 100개씩 묶어 한 번에 조회해 쿼리 수를 1/100로 줄이고(1만 건 기준 1만 회 → 100회), 중복이 생길 수 있는 범위는 배송이 3일 안에 도착 처리까지 끝나는 운영 기준에 하루 여유를 더해 1개월에서 4일로 좁힘. 고객사 · 배송 정보는 메모리(Record)에 담아 다시 조회하지 않음. 실행 테스트 평균 <span class="num">20초 → 5초</span>, 이후 연동 API를 Lambda로 분리.</li>

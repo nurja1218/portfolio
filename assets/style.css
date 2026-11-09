@@ -80,6 +80,21 @@ footer { color: var(--muted); font-size: 12px; margin-top: 56px; }
   .job .meta { display: flex; flex-wrap: wrap; gap: 0 10px; align-items: baseline; }
   header.hero h1 { font-size: 24px; }
 }
+.detail-cta { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 18px 0 0; padding: 14px 18px; border: 1px solid var(--role); border-radius: 12px; color: var(--fg); text-decoration: none; }
+.detail-cta:hover { text-decoration: none; background: var(--soft); }
+.detail-cta b { display: block; color: var(--role); font-size: 15px; margin-bottom: 2px; }
+.detail-cta span:first-child { font-size: 13px; color: var(--muted); }
+.detail-cta .go { flex: none; font-weight: 700; color: var(--role); }
+.briefs { border: 1px solid var(--line); border-radius: 12px; padding: 6px 20px 4px; margin: 0 0 20px; }
+.briefs h4 { font-size: 13px; color: var(--muted); margin: 12px 0 2px; }
+.briefs ul { list-style: none; padding: 0; margin: 0; }
+.briefs li { display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; padding: 12px 0; border-top: 1px solid var(--line); }
+.briefs li:first-child { border-top: 0; }
+.briefs .bt { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; }
+.briefs .bt .tag { font-size: 11px; }
+.briefs p { grid-column: 1; margin: 0; font-size: 13.5px; color: var(--muted); }
+.briefs .more { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-size: 13px; font-weight: 700; color: var(--role); border: 1px solid var(--role); border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+.briefs .more:hover { text-decoration: none; background: var(--soft); }
 @media print {
   :root, :root:not([data-theme="light"]) {
     --bg: #ffffff; --fg: #1f2328; --muted: #57606a; --line: #d0d7de; --soft: #f6f8fa;
@@ -93,12 +108,16 @@ footer { color: var(--muted); font-size: 12px; margin-top: 56px; }
   .intro { margin-top: 10px; }
   h2 { margin: 12px 0 8px; padding-bottom: 4px; break-after: avoid; }
   .job, .skills { grid-template-columns: 130px 1fr; gap: 2px 16px; }
-  .job, .case, .skills > * { break-inside: avoid; }
+  .job, .case, .skills > *, .briefs li, .detail-cta { break-inside: avoid; }
   .job { margin-bottom: 10px; }
   .job li { margin: 1px 0; }
   .case { padding: 12px 14px; margin-bottom: 12px; }
   .case figure { padding: 4px; }
   .case figure img { min-width: 0; }
   .domain { margin-top: 18px; }
+  .apply .case { break-inside: auto; }
+  .apply .case h3, .apply .case .tags { break-after: avoid; }
+  .apply .case h3 { break-before: auto; }
+  .apply .case figure, .apply .psr > dd { break-inside: avoid; }
   header.hero .links a[href^="http"]::after { content: " · " attr(href); color: var(--muted); font-size: 8.5pt; }
 }
