@@ -52,6 +52,8 @@ h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: 
 .case h4 { font-size: 15px; margin: 16px 0 6px; }
 .case .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; font-size: 12px; }
 .tag { background: var(--tag); color: var(--tagfg); padding: 2px 8px; border-radius: 999px; }
+.tag.role { font-weight: 600; }
+.mini b .tag { display: inline-block; margin-left: 6px; font-size: 12px; }
 .tag.wip { background: var(--wip); color: var(--wipfg); }
 .case figure { margin: 0 0 14px; background: var(--soft); border-radius: 8px; padding: 8px; overflow-x: auto; }
 .case figure img { display: block; width: 100%; min-width: 560px; height: auto; }
