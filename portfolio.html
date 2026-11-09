@@ -23,7 +23,7 @@
 
     <article class="case">
       <h3>글로벌 리전 레이턴시 개선</h3>
-      <div class="tags"><span class="tag">2025.11 – 2026.05</span><span class="tag role">단독 · 설계 · 구현</span><span class="tag">DynamoDB · Redis · PostgreSQL</span><a class="tag" href="https://github.com/nurja1218/regional-write-latency-lab">재현 실험 코드 →</a></div>
+      <div class="tags"><span class="tag">2025.11 – 2026.05</span><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">DynamoDB · Redis · PostgreSQL</span><a class="tag" href="https://github.com/nurja1218/regional-write-latency-lab">재현 실험 코드 →</a></div>
       <figure><img src="assets/diagrams/latency.svg?v=800758d4" alt="글로벌 리전 레이턴시 개선 전후 구조"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>해외 리전에서 쓰면 국내보다 4~5배 느리다는 피드백. 유력한 원인은 서울 리전에 묶인 DB·Redis 쓰기 왕복(1회 약 150ms)이 요청마다 여러 번 발생하는 구조.</dd>
@@ -35,7 +35,7 @@
 
     <article class="case">
       <h3>지식그래프 기반 초개인화</h3>
-      <div class="tags"><span class="tag">2026.01 – 2026.10</span><span class="tag role">단독 · 설계 · 구현 · 상용 반영</span><span class="tag">PostgreSQL · pgvector · LLM</span></div>
+      <div class="tags"><span class="tag">2026.01 – 2026.10</span><span class="tag role">단독 · 설계 · 구현 · 상용 반영</span><span class="break"></span><span class="tag">PostgreSQL · pgvector · LLM</span></div>
       <figure><img src="assets/diagrams/personalization.svg?v=e56b13aa" alt="지식그래프 기반 초개인화 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>사용자가 여러 번 고친 용어, 직접 준 지시, 자신의 분야와 대화 맥락을 번역 · AI 답변이 기억하지 못해, 쓸수록 나에게 맞춰지는 개인화를 체감할 수 없었음.</dd>
@@ -46,7 +46,7 @@
 
     <article class="case">
       <h3>LLM 프롬프트 관리 체계</h3>
-      <div class="tags"><span class="tag">2026.06</span><span class="tag role">단독 · 설계 · 구현</span><span class="tag">LangSmith</span></div>
+      <div class="tags"><span class="tag">2026.06</span><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">LangSmith</span></div>
       <figure><img src="assets/diagrams/llm-prompt.svg?v=19baf505" alt="LLM 프롬프트 관리 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>프롬프트가 코드 안 문자열이라 문장 하나를 고쳐도 배포가 필요했고, 프롬프트 버전 관리 자체가 없어 고칠 때마다 생긴 버전들 사이의 차이와 품질을 비교할 방법이 없었음.</dd>
@@ -57,7 +57,7 @@
 
     <article class="case">
       <h3>제품 도메인 오너 — 기획부터 개발 분배까지 문서 한 벌로</h3>
-      <div class="tags"><span class="tag wip">2026.10 – 진행 중</span><span class="tag role">단독 · 기획 · 문서 · 서버</span><span class="tag">PRD · Figma 시안 · 서버/클라 명세</span><span class="tag">외부 AI 에이전트 연결(MCP) 외</span></div>
+      <div class="tags"><span class="tag wip">2026.10 – 진행 중</span><span class="tag role">단독 · 기획 · 문서 · 서버</span><span class="break"></span><span class="tag">PRD · Figma 시안 · 서버/클라 명세</span><span class="tag">외부 AI 에이전트 연결(MCP) 외</span></div>
       <figure><img src="assets/diagrams/ownership.svg?v=f8cfa1c2" alt="제품 도메인 오너 — 문서 한 벌로 기획부터 개발 분배까지"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>AI 전환(AX)을 위한 논의는 많았지만, 기존 작업 방식의 관성 때문에 실제 변화로 이어지지 않음.</dd>
@@ -68,7 +68,7 @@
 
     <article class="case">
       <h3>로그 · 배포 운영 안정화</h3>
-      <div class="tags"><span class="tag">2025.10 – 2026.05</span><span class="tag role">주도 · 로그 체계 · 배포 정비</span><span class="tag">k8s 로그 수집 전환은 동료</span><span class="tag">OpenSearch · Jenkins · Ansible</span></div>
+      <div class="tags"><span class="tag">2025.10 – 2026.05</span><span class="tag role">주도 · 로그 체계 · 배포 정비</span><span class="tag">k8s 로그 수집 전환은 동료</span><span class="break"></span><span class="tag">OpenSearch · Jenkins · Ansible</span></div>
       <figure><img src="assets/diagrams/ops.svg?v=05c92276" alt="로그 파이프라인과 시크릿 변경 · 배포 · 로그 보관"></figure>
       <h4>로그</h4>
       <dl class="psr">
@@ -99,7 +99,7 @@
 
     <article class="case">
       <h3>추천 상품 스케줄러 재구축</h3>
-      <div class="tags"><span class="tag role">단독 · 설계 · 구현</span><span class="tag">MySQL · MongoDB · Elasticsearch · Bull</span></div>
+      <div class="tags"><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">MySQL · MongoDB · Elasticsearch · Bull</span></div>
       <figure><img src="assets/diagrams/recommend.svg?v=9e5b6bd5" alt="추천 상품 스케줄러 흐름"></figure>
       <dl class="psr">
         <dt>방식</dt><dd>개인화 모델이 아니라, 브랜딩·운영팀과 기획자가 통계 데이터를 보고 정한 규칙(행동별 가중치)으로 상품 점수를 매겨 추천 순서를 내려주는 룰 기반 추천. 트렌드순 · 인기순은 운영 담당자가 정한 유효 범위의 데이터(기간 · 행동 유형) 기준으로 점수를 가산해 순서를 매김.</dd>
@@ -112,7 +112,7 @@
 
     <article class="case">
       <h3>알림 메시지 워커</h3>
-      <div class="tags"><span class="tag role">단독 · 설계 · 구현</span><span class="tag">Bull(Redis) · ECS · MongoDB</span></div>
+      <div class="tags"><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">Bull(Redis) · ECS · MongoDB</span></div>
       <figure><img src="assets/diagrams/message-worker.svg?v=e6c3940b" alt="알림 메시지 워커 구조"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>쿠폰 만료 안내 같은 알림톡을 약 100만 명에게 주기적으로 보내는 작업이 API 서버에 큰 부담을 줌. 발송에 실패한 메시지를 다시 보내거나 기록하는 체계도 없었음.</dd>
@@ -128,7 +128,7 @@
 
     <article class="case">
       <h3>Elasticsearch 스냅샷 마이그레이션 자동화</h3>
-      <div class="tags"><span class="tag role">단독 · 설계 · 구현</span><span class="tag">Step Functions · Lambda · EventBridge · S3</span></div>
+      <div class="tags"><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">Step Functions · Lambda · EventBridge · S3</span></div>
       <figure><img src="assets/diagrams/es-migration.svg?v=d49807d1" alt="Elasticsearch 스냅샷 마이그레이션 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>스테이징 환경을 새로 만들면서 개발 환경의 검색 데이터를 옮기고 주기적으로 맞춰야 했는데, 스냅샷 생성 → 완료 확인 → 복원을 사람이 순서대로 해야 했고 중간에 실패해도 알아채기 어려움.</dd>
@@ -139,7 +139,7 @@
 
     <article class="case">
       <h3>Feature Flag 기반 Trunk-Based 개발</h3>
-      <div class="tags"><span class="tag role">공동 · 설계 논의 · Swagger 배포 라벨 구현</span><span class="tag">기반 구현은 동료</span><span class="tag">Firebase Remote Config · NestJS · GitHub Actions</span></div>
+      <div class="tags"><span class="tag role">공동 · 설계 논의 · Swagger 배포 라벨 구현</span><span class="tag">기반 구현은 동료</span><span class="break"></span><span class="tag">Firebase Remote Config · NestJS · GitHub Actions</span></div>
       <figure><img src="assets/diagrams/feature-flag.svg?v=067f9287" alt="Feature Flag 기반 트렁크 개발 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>dev · release 브랜치를 따로 관리해 공통 코드 작업이 자주 충돌하고, 운영 배포가 늦어지면 개발 환경과 내용이 어긋남. 공통 모듈을 고쳐도 운영 배포 전까지는 다른 작업에서 쓰기 어려움.</dd>
@@ -150,7 +150,7 @@
 
     <article class="case">
       <h3>AWS 권한 정책</h3>
-      <div class="tags"><span class="tag role">주도 · 방향 · 정책 설계</span><span class="tag">주니어 1명과 조사 · 문서화</span><span class="tag">IAM 그룹 9개 · 역할 6단계</span></div>
+      <div class="tags"><span class="tag role">주도 · 방향 · 정책 설계</span><span class="tag">주니어 1명과 조사 · 문서화</span><span class="break"></span><span class="tag">IAM 그룹 9개 · 역할 6단계</span></div>
       <figure><img src="assets/diagrams/aws-iam.svg?v=bbbc9eed" alt="AWS 권한 그룹과 역할별 할당"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>백엔드팀이 모든 권한을 가진 단일 그룹을 함께 써서, 신규 입사자도 운영 리소스를 바꾸거나 지울 수 있는 상태였음.</dd>
@@ -170,7 +170,7 @@
 
     <article class="case">
       <h3>산업군 통합 관제 플랫폼 — 기능 기준 서버 분리</h3>
-      <div class="tags"><span class="tag">2022.12 – 2023.09</span><span class="tag role">참여 · Noti · 고객사 연동 Lambda 구현</span><span class="tag">전체 설계 · 배포는 사수</span><span class="tag">NestJS · GraphQL · ECS · Lambda · InfluxDB</span></div>
+      <div class="tags"><span class="tag">2022.12 – 2023.09</span><span class="tag role">참여 · Noti · 고객사 연동 Lambda 구현</span><span class="tag">전체 설계 · 배포는 사수</span><span class="break"></span><span class="tag">NestJS · GraphQL · ECS · Lambda · InfluxDB</span></div>
       <figure><img src="assets/diagrams/willog-servers.svg?v=66027e2a" alt="기능 기준 서버 분리 구조"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>의약품 배송 모니터링에서 시작해 산업군마다 서비스를 따로 만들다 보니 관리할 서버와 엔드포인트가 계속 늘어날 상황. 레거시에서는 고객사 연동 API 트래픽이 몰리면 서비스 전체가 영향을 받은 적이 있음.</dd>
@@ -181,7 +181,7 @@
 
     <article class="case">
       <h3>공통 배송 흐름 + 산업군 규칙</h3>
-      <div class="tags"><span class="tag role">공동 · 플랫폼 백엔드 대부분 구현</span><span class="tag">사수가 전 코드 리뷰</span><span class="tag">의약품 · GMP 검증 · 해상 고가 화물</span><span class="tag">디바이스 호환</span></div>
+      <div class="tags"><span class="tag role">공동 · 플랫폼 백엔드 대부분 구현</span><span class="tag">사수가 전 코드 리뷰</span><span class="break"></span><span class="tag">의약품 · GMP 검증 · 해상 고가 화물</span><span class="tag">디바이스 호환</span></div>
       <figure><img src="assets/diagrams/willog-adapter.svg?v=2daab400" alt="공통 배송 흐름과 산업군 규칙"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>의약품 · GMP 검증 · 해상 고가 화물은 도착을 판정하는 기준, 이상으로 보는 온도 · 습도 범위, 리포트 양식, 알림 문구가 서로 다름. 산업군마다 서비스를 새로 만들면 같은 배송 로직이 계속 복제됨.</dd>
@@ -192,7 +192,7 @@
 
     <article class="case">
       <h3>레거시 무중단 이관 · 고객사 DB 연동</h3>
-      <div class="tags"><span class="tag">2023</span><span class="tag role">참여 · 이관 검증 쿼리 · 개발 환경 이관 테스트 · 연동 Lambda 구현</span><span class="tag">Python Lambda · API Gateway · EventBridge · RDS Proxy · Aurora</span></div>
+      <div class="tags"><span class="tag">2023</span><span class="tag role">참여 · 이관 검증 쿼리 · 개발 환경 이관 테스트 · 연동 Lambda 구현</span><span class="break"></span><span class="tag">Python Lambda · API Gateway · EventBridge · RDS Proxy · Aurora</span></div>
       <figure><img src="assets/diagrams/willog-migration.svg?v=1de05bb4" alt="레거시 무중단 이관과 고객사 DB 연동"></figure>
       <dl class="psr">
         <dt>이관</dt><dd>두 레거시 서비스(의약품 · 물류)의 테이블과 기능 차이를 플랫폼 기준 대조표로 정리한 뒤(예: 의약품 서비스의 주문 단위 → 플랫폼 배송그룹), 운영 중인 고객사 서비스를 멈추지 않도록 테크 리드와 협의해 데이터는 Python Lambda로 영업시간에 Cron으로 나눠 사람이 지켜보며 옮기고, 고객사가 쓰던 API는 요청 · 응답 형식을 그대로 맞춰 API Gateway + Lambda로 다시 구축 — 고객사는 코드를 바꾸지 않고 전환. 배송 약 <span class="num">200만 건</span> · 디바이스 시계열 약 <span class="num">5억 건</span> 이관.</dd>
@@ -202,7 +202,7 @@
 
     <article class="case">
       <h3>실시간 측정값 · 조회 성능</h3>
-      <div class="tags"><span class="tag role">참여 · 설계 논의 · 구독 필터와 WebSocket 인증 구현</span><span class="tag">InfluxDB · Redis Pub/Sub · GraphQL Subscription</span></div>
+      <div class="tags"><span class="tag role">참여 · 설계 논의 · 구독 필터와 WebSocket 인증 구현</span><span class="break"></span><span class="tag">InfluxDB · Redis Pub/Sub · GraphQL Subscription</span></div>
       <figure><img src="assets/diagrams/willog-realtime.svg?v=f3f7b470" alt="실시간 측정값 전달과 캐시"></figure>
       <dl class="psr">
         <dt>시계열</dt><dd>배송 테이블에 콤마로 이어 붙인 문자열로 저장하던 측정값(온도 · 습도 · 위치 · 측정 시간)을 InfluxDB로 분리. 기존 TypeORM처럼 쓰는 조회 모듈을 만들어 서비스 코드 변경을 최소화.</dd>
