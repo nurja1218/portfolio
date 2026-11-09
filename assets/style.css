@@ -53,6 +53,9 @@ h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: 
 .case .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; font-size: 12px; }
 .tag { background: var(--tag); color: var(--tagfg); padding: 2px 8px; border-radius: 999px; }
 .tags .break { flex-basis: 100%; height: 0; }
+.tags .break ~ .tag { background: none; padding: 0; border-radius: 0; color: var(--muted); }
+.tags .break ~ a.tag { color: var(--accent); }
+.tags .break ~ .tag + .tag::before { content: "·"; color: var(--line); margin-right: 8px; }
 .tag.role { background: transparent; color: var(--role); border: 1px solid var(--role); padding: 1px 8px; font-weight: 600; }
 a.tag { color: var(--accent); }
 .mini b .tag { display: inline-block; margin-left: 6px; font-size: 12px; }
