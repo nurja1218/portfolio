@@ -78,7 +78,7 @@
     </g>
 </svg>
 <text class="t" x="265.5" y="80.0" text-anchor="middle">스냅샷 생성</text>
-<text class="s" x="265.5" y="96.0" text-anchor="middle">운영 → S3</text>
+<text class="s" x="265.5" y="96.0" text-anchor="middle">개발 → S3</text>
 <rect class="warn" x="325" y="52" width="135" height="64" rx="8"/>
 <rect x="334" y="70.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="337.92" y="73.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></g></svg>
 <text class="t" x="410.5" y="72.0" text-anchor="middle">상태 확인</text>
@@ -94,7 +94,7 @@
 <text class="s" x="700.5" y="96.0" text-anchor="middle">노드 상태까지</text>
 <rect class="box" x="170" y="190" width="180" height="56" rx="8"/>
 <rect x="179" y="204.0" width="28" height="28" rx="6" fill="#005571"/><svg x="184.04" y="209.04" width="17.92" height="17.92" viewBox="0 0 24 24"><path fill="#fff" d="M13.394 0C8.683 0 4.609 2.716 2.644 6.667h15.641a4.77 4.77 0 0 0 3.073-1.11c.446-.375.864-.785 1.247-1.243l.001-.002A11.974 11.974 0 0 0 13.394 0zM1.804 8.889a12.009 12.009 0 0 0 0 6.222h14.7a3.111 3.111 0 1 0 0-6.222zm.84 8.444C4.61 21.283 8.684 24 13.395 24c3.701 0 7.011-1.677 9.212-4.312l-.001-.002a9.958 9.958 0 0 0-1.247-1.243 4.77 4.77 0 0 0-3.073-1.11z"/></svg>
-<text class="t" x="278.0" y="214.0" text-anchor="middle">운영 ES</text>
+<text class="t" x="278.0" y="214.0" text-anchor="middle">개발 ES</text>
 <text class="s" x="278.0" y="230.0" text-anchor="middle">Elasticsearch · EC2</text>
 <rect class="box" x="390" y="190" width="190" height="56" rx="8"/>
 <svg x="399" y="204.0" width="28" height="28" viewBox="0 0 64 64">
@@ -113,5 +113,5 @@
 <rect class="new" x="620" y="190" width="130" height="56" rx="8"/>
 <rect x="629" y="204.0" width="28" height="28" rx="6" fill="#005571"/><svg x="634.04" y="209.04" width="17.92" height="17.92" viewBox="0 0 24 24"><path fill="#fff" d="M13.394 0C8.683 0 4.609 2.716 2.644 6.667h15.641a4.77 4.77 0 0 0 3.073-1.11c.446-.375.864-.785 1.247-1.243l.001-.002A11.974 11.974 0 0 0 13.394 0zM1.804 8.889a12.009 12.009 0 0 0 0 6.222h14.7a3.111 3.111 0 1 0 0-6.222zm.84 8.444C4.61 21.283 8.684 24 13.395 24c3.701 0 7.011-1.677 9.212-4.312l-.001-.002a9.958 9.958 0 0 0-1.247-1.243 4.77 4.77 0 0 0-3.073-1.11z"/></svg>
 <text class="t" x="703.0" y="214.0" text-anchor="middle">스테이징 ES</text>
-<text class="s" x="703.0" y="230.0" text-anchor="middle">EC2에 설치</text>
+<text class="s" x="703.0" y="230.0" text-anchor="middle">새 EC2</text>
 </svg>

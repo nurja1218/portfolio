@@ -291,22 +291,26 @@ DIAGRAMS = {
         ],
     },
     # bejewel — recommendation scheduler
-    # 근거: MySQL = RDS(health 체크 'rds', 노션 "AWS RDS(MySQL)"), 점수 계산 = scheduler 앱 @Cron — ECS 배포 추정(Dockerfile-scheduler · ECR, terraform 의 다른 워커와 같은 틀).
+    # 근거: scheduler recommend-products.task.ts(@Cron) → universal-worker 큐 등록 → recommend-product.service.ts(PAGE_SIZE 1000 · chunk 100 ·
+    # recommendProductSetting 컬렉션 · weightMultiplier), 노션 "추천 상품 스케줄러 설계"(가중치 · alias/블루그린 기각). MySQL = RDS, 워커 = ECS(terraform 같은 틀, 추정).
     # MongoDB·Elasticsearch 는 호스팅 근거 없음 → 제품 로고만.
     "recommend": {
-        "w": 760, "h": 260, "alt": "추천 상품 스케줄러 재구축 흐름",
+        "w": 760, "h": 316, "alt": "추천 상품 스케줄러 재구축 흐름",
         "nodes": [
-            {"id": "my", "x": 15, "y": 40, "w": 175, "h": 56, "icon": "aws:rds", "label": ["MySQL (RDS)", "유저 행동 로그 3억 건+"]},
+            {"id": "my", "x": 15, "y": 36, "w": 175, "h": 64, "icon": "aws:rds", "label": ["MySQL (RDS)", "행동 로그 3억 건+", "주문 · 후기"]},
             {"id": "agg", "x": 205, "y": 40, "w": 165, "h": 56, "icon": "g:funnel", "label": ["일별 행동 집계", "(동료 구현)"]},
             {"id": "mg", "x": 385, "y": 40, "w": 180, "h": 56, "kind": "new", "icon": "brand:mongodb", "label": ["MongoDB", "상품 × 일 × 행동 유형"]},
-            {"id": "sc", "x": 385, "y": 156, "w": 180, "h": 72, "kind": "new", "icon": "aws:ecs", "label": ["추천 점수 계산", "스케줄러 앱 · ECS", "1,000개 읽기", "100개씩 병렬"]},
-            {"id": "adm", "x": 15, "y": 164, "w": 355, "h": 56, "icon": "g:sliders", "label": ["추천 규칙 (행동별 가중치)", "운영·기획팀이 통계를 보고 정함 · 쿼리에서 분리"]},
-            {"id": "es", "x": 580, "y": 164, "w": 165, "h": 56, "icon": "brand:elasticsearch", "label": ["Elasticsearch", "100건씩 bulk 반영"]},
-            {"id": "sl", "x": 580, "y": 40, "w": 165, "h": 56, "kind": "warn", "icon": "g:bell", "label": ["Slack 알림", "작업 실패 시"]},
+            {"id": "set", "x": 580, "y": 34, "w": 165, "h": 68, "icon": "g:sliders", "label": ["추천 규칙 설정", "MongoDB 설정 컬렉션", "운영·기획팀과 정함"]},
+            {"id": "sch", "x": 15, "y": 150, "w": 175, "h": 64, "icon": "aws:ecs", "label": ["Scheduler (매일)", "작업만 큐에 등록"]},
+            {"id": "uw", "x": 385, "y": 142, "w": 180, "h": 80, "kind": "new", "icon": "aws:ecs", "label": ["Universal-worker", "1,000개씩 읽기", "100개씩 병렬 점수 계산", "점수 × (1 + 가산)"]},
+            {"id": "es", "x": 580, "y": 150, "w": 165, "h": 64, "icon": "brand:elasticsearch", "label": ["Elasticsearch", "기존 인덱스에", "100건씩 bulk 반영"]},
+            {"id": "q", "x": 205, "y": 158, "w": 165, "h": 48, "icon": "aws:elasticache", "label": ["Redis 큐 (Bull)"]},
+            {"id": "sl", "x": 580, "y": 248, "w": 165, "h": 52, "kind": "warn", "icon": "g:bell", "label": ["Slack 알림", "작업 실패 시"]},
         ],
         "edges": [
-            {"from": "my", "to": "agg"}, {"from": "agg", "to": "mg"}, {"from": "mg", "to": "sc"},
-            {"from": "adm", "to": "sc"}, {"from": "sc", "to": "es"}, {"from": "es", "to": "sl", "dashed": True},
+            {"from": "my", "to": "agg"}, {"from": "agg", "to": "mg"}, {"from": "mg", "to": "uw"},
+            {"from": "set", "to": "uw"}, {"from": "sch", "to": "q"}, {"from": "q", "to": "uw"},
+            {"from": "uw", "to": "es"}, {"from": "es", "to": "sl", "dashed": True},
         ],
     },
     # bejewel — message worker
@@ -316,11 +320,11 @@ DIAGRAMS = {
         "w": 760, "h": 236, "alt": "알림 메시지 워커 구조",
         "nodes": [
             {"id": "api", "x": 15, "y": 40, "w": 160, "icon": "aws:ecs", "label": ["API · 스케줄러", "발송 대상만 등록"]},
-            {"id": "q", "x": 195, "y": 40, "w": 165, "kind": "new", "icon": "aws:elasticache", "label": ["Redis 큐", "ElastiCache · Bull"]},
+            {"id": "q", "x": 195, "y": 40, "w": 165, "kind": "new", "icon": "aws:elasticache", "label": ["도메인별 Redis 큐", "ElastiCache · Bull"]},
             {"id": "wk", "x": 380, "y": 22, "w": 200, "h": 82, "kind": "new", "icon": "aws:ecs", "label": ["메시지 워커 (분리 서버)", "ECS", "500건씩 BizM 일괄 요청", "묶음 사이 1초"]},
             {"id": "kt", "x": 605, "y": 37, "w": 140, "h": 52, "icon": "brand:kakaotalk", "label": ["알림톡", "BizM API"]},
             {"id": "rt", "x": 380, "y": 150, "w": 200, "h": 56, "kind": "warn", "icon": "g:rollback", "label": ["실패 건만 다시 등록", "지연 후 재시도 · 최대 3회"]},
-            {"id": "mg", "x": 605, "y": 146, "w": 140, "h": 64, "icon": "brand:mongodb", "label": ["MongoDB", "3회 넘으면 저장", "로그 워커 경유"]},
+            {"id": "mg", "x": 605, "y": 146, "w": 140, "h": 64, "icon": "brand:mongodb", "label": ["MongoDB", "3회 넘으면 저장", "1주일 보관(TTL)"]},
         ],
         "edges": [
             {"from": "api", "to": "q"}, {"from": "q", "to": "wk"}, {"from": "wk", "to": "kt"},
@@ -331,19 +335,20 @@ DIAGRAMS = {
     },
     # bejewel — ES snapshot migration
     # 근거: 노션 이력서 "AWS Step Function, Lambda, AWS EventBridge, S3를 활용하여 Elasticsearch Migration 스케줄러 구현",
+    # 노션 "Elasticsearch Migration" — Lambda create-dev-es-snapshot · check-snapshot-status · migration-es-dev-to-staging, 하위 "Staging EC2 생성"
     # 2024 경력기술서 — repository-s3 플러그인 · IAM 역할 · "ES가 설치된 EC2" · 단계 = Node.js Lambda · 상태 확인 → restore → 클러스터·노드 확인
     "es-migration": {
         "w": 760, "h": 270, "alt": "Elasticsearch 스냅샷 마이그레이션 자동화",
         "groups": [{"x": 168, "y": 14, "w": 587, "h": 128, "label": "Step Functions — 단계마다 Lambda (Node.js · VPC 안)", "icons": ["aws:stepfunctions", "aws:lambda"]}],
         "nodes": [
             {"id": "eb", "x": 10, "y": 58, "w": 145, "h": 52, "icon": "aws:eventbridge", "label": ["EventBridge", "주기 실행"]},
-            {"id": "s1", "x": 180, "y": 52, "w": 135, "h": 64, "icon": "aws:s3", "label": ["스냅샷 생성", "운영 → S3"]},
+            {"id": "s1", "x": 180, "y": 52, "w": 135, "h": 64, "icon": "aws:s3", "label": ["스냅샷 생성", "개발 → S3"]},
             {"id": "s2", "x": 325, "y": 52, "w": 135, "h": 64, "kind": "warn", "icon": "g:clock", "label": ["상태 확인", "완료까지 반복", "실패 → 중단"]},
             {"id": "s3", "x": 470, "y": 52, "w": 135, "h": 64, "kind": "new", "icon": "brand:elasticsearch", "label": ["복원", "S3 → 스테이징"]},
             {"id": "s4", "x": 615, "y": 52, "w": 135, "h": 64, "icon": "g:check", "label": ["클러스터 확인", "노드 상태까지"]},
-            {"id": "prod", "x": 170, "y": 190, "w": 180, "h": 56, "icon": "brand:elasticsearch", "label": ["운영 ES", "Elasticsearch · EC2"]},
+            {"id": "prod", "x": 170, "y": 190, "w": 180, "h": 56, "icon": "brand:elasticsearch", "label": ["개발 ES", "Elasticsearch · EC2"]},
             {"id": "bk", "x": 390, "y": 190, "w": 190, "h": 56, "icon": "aws:s3", "label": ["S3 스냅샷 저장소", "repository-s3 플러그인"]},
-            {"id": "stg", "x": 620, "y": 190, "w": 130, "h": 56, "kind": "new", "icon": "brand:elasticsearch", "label": ["스테이징 ES", "EC2에 설치"]},
+            {"id": "stg", "x": 620, "y": 190, "w": 130, "h": 56, "kind": "new", "icon": "brand:elasticsearch", "label": ["스테이징 ES", "새 EC2"]},
         ],
         "edges": [
             {"from": "eb", "to": "s1"}, {"from": "s1", "to": "s2"}, {"from": "s2", "to": "s3"}, {"from": "s3", "to": "s4"},

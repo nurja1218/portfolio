@@ -98,12 +98,13 @@
 
     <article class="case">
       <h3>추천 상품 스케줄러 재구축</h3>
-      <div class="tags"><span class="tag">MySQL · MongoDB · Elasticsearch</span></div>
-      <figure><img src="assets/diagrams/recommend.svg?v=c48928df" alt="추천 상품 스케줄러 흐름"></figure>
+      <div class="tags"><span class="tag">설계 · 구현</span><span class="tag">MySQL · MongoDB · Elasticsearch · Bull</span></div>
+      <figure><img src="assets/diagrams/recommend.svg?v=5f599d3b" alt="추천 상품 스케줄러 흐름"></figure>
       <dl class="psr">
-        <dt>방식</dt><dd>개인화 모델이 아니라, 브랜딩·운영팀과 기획자가 통계 데이터를 보고 정한 규칙(행동별 가중치)으로 상품 점수를 매겨 추천 순서를 내려주는 룰 기반 추천.</dd>
+        <dt>방식</dt><dd>개인화 모델이 아니라, 브랜딩·운영팀과 기획자가 통계 데이터를 보고 정한 규칙(행동별 가중치)으로 상품 점수를 매겨 추천 순서를 내려주는 룰 기반 추천. 트렌드순은 최근 4주 행동(클릭 1 · 찜 15 · 장바구니 20), 인기순은 12주 행동에 24주 구매 · 후기까지 더해 점수를 매기고, 출시 1년 이내 · 할인 · 단독 카테고리 상품은 점수를 가산하도록 운영팀과 규칙을 다시 맞춤.</dd>
         <dt>문제</dt><dd>상품마다 3억 건 이상의 행동 로그에서 2주치 클릭·좋아요·장바구니 수를 세는 서브쿼리를 붙이고 주문·리뷰까지 함께 조회해 실행에 60분 이상 걸림. 가중치(클릭 5 · 좋아요 10 · 장바구니 20)도 쿼리에 고정돼 3년 넘게 손대지 못함.</dd>
-        <dt>해결</dt><dd>원본 로그 대신 동료가 만든 상품별·일별 행동 집계(MongoDB)를 읽도록 점수 계산을 다시 작성. 상품은 1,000개씩 읽고 점수는 100개씩 묶어 병렬로 계산한 뒤 Elasticsearch에 100건씩 bulk로 반영. 가중치는 쿼리에서 빼 설정값으로 분리하고, 작업이 실패하면 Slack으로 알림.</dd>
+        <dt>해결</dt><dd>스케줄러는 매일 작업만 큐에 넣고, 계산은 별도 워커(Universal-worker)가 맡도록 분리. 원본 로그 대신 동료가 만든 상품별 · 일별 행동 집계(MongoDB)를 읽도록 점수 계산을 다시 작성해, 상품을 1,000개씩 읽고 100개씩 병렬로 계산. 가중치 · 기간 · 정렬 조건은 쿼리에서 빼 MongoDB 설정 컬렉션으로 옮겨 코드 배포 없이 바꿀 수 있게 함(관리자 화면에서 고치는 것이 다음 목표). 작업이 실패하면 Slack으로 알림.</dd>
+        <dt>판단</dt><dd>Elasticsearch는 새 인덱스를 만들어 별칭을 바꾸는 방식이나 블루그린 인덱스가 일반적이지만, 검색 쿼리가 인덱스 이름을 직접 지정하고 있어 쓸 수 없었음 → 기존 인덱스에 100건씩 나눠 bulk로 반영하고 충돌 시 재시도해, 검색을 멈추지 않고 실패한 묶음만 다시 처리.</dd>
         <dt>결과</dt><dd>스케줄러 실행 시간 <span class="num">60분 → 15분</span>.</dd>
       </dl>
     </article>
@@ -111,21 +112,26 @@
     <article class="case">
       <h3>알림 메시지 워커</h3>
       <div class="tags"><span class="tag">설계 · 구현</span><span class="tag">Bull(Redis) · ECS · MongoDB</span></div>
-      <figure><img src="assets/diagrams/message-worker.svg?v=4a973fef" alt="알림 메시지 워커 구조"></figure>
+      <figure><img src="assets/diagrams/message-worker.svg?v=e6c3940b" alt="알림 메시지 워커 구조"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>쿠폰 만료 안내 같은 알림톡을 약 100만 명에게 주기적으로 보내는 작업이 API 서버에 큰 부담을 줌. 발송에 실패한 메시지를 다시 보내거나 기록하는 체계도 없었음.</dd>
-        <dt>해결</dt><dd>발송을 별도 워커 서버(ECS)로 분리. API·스케줄러는 발송 대상만 Redis 큐(Bull)에 넣고, 워커가 500건씩 묶어 BizM에 일괄 요청하며 묶음 사이에 1초를 둬 외부 API에 요청이 몰리지 않게 함. 응답에서 실패한 건만 모아 시도 횟수를 붙여 지연 후 큐에 다시 넣고(성공한 건은 다시 보내지 않음), 3회를 넘으면 로그 워커 큐를 거쳐 MongoDB에 실패 이력을 남김.</dd>
-        <dt>판단</dt><dd>다른 워커에서 이미 쓰던 Bull 큐를 그대로 써서 새 인프라 없이 분리. 알림톡·SMS·이메일 중 무엇으로 보낼지는 도메인별 잡이 정하게 해, 새 알림은 잡 하나로 추가할 수 있게 함.</dd>
+        <dt>해결</dt><dd>발송을 별도 워커 서버(ECS)로 분리. API · 어드민 · 스케줄러는 발송 대상만 도메인별 Redis 큐(Bull — 쿠폰 · 문의 답변 등)에 넣고, 워커가 500건씩 묶어 BizM에 일괄 요청하며 묶음 사이에 1초를 둠. 응답에서 실패한 건만 모아 시도 횟수를 붙여 지연 후 큐에 다시 넣고(성공한 건은 다시 보내지 않음), 3회를 넘으면 로그 워커 큐를 거쳐 MongoDB에 실패 이력을 1주일 보관(TTL).</dd>
+        <dt>판단</dt><dd><ul>
+          <li><b>큐 단위</b> 처음엔 채널(카카오톡 · SMS) 기준 큐로 설계했다가, 무엇으로 보낼지는 도메인 잡이 정하도록 도메인 기준으로 다시 설계 — 새 알림은 잡 하나로 추가</li>
+          <li><b>속도</b> 500건 · 1초 간격은 BizM 기술팀에 문의한 권장 처리량(초당 200~250건)과 우리 작업 시간을 함께 보고 정함</li>
+          <li><b>중복</b> 수신 번호 기준 중복 제거는 100만 건을 메모리에서 거르면 속도 · 메모리 부담이 커서 DB 조회 단계로 옮김</li>
+          <li><b>인프라</b> 다른 워커에서 이미 쓰던 Bull을 그대로 써서 새 인프라 없이 분리</li>
+        </ul></dd>
       </dl>
     </article>
 
     <article class="case">
       <h3>Elasticsearch 스냅샷 마이그레이션 자동화</h3>
       <div class="tags"><span class="tag">설계 · 구현</span><span class="tag">Step Functions · Lambda · EventBridge · S3</span></div>
-      <figure><img src="assets/diagrams/es-migration.svg?v=730a7398" alt="Elasticsearch 스냅샷 마이그레이션 흐름"></figure>
+      <figure><img src="assets/diagrams/es-migration.svg?v=d49807d1" alt="Elasticsearch 스냅샷 마이그레이션 흐름"></figure>
       <dl class="psr">
-        <dt>문제</dt><dd>스테이징 검색 데이터를 운영과 맞추려면 스냅샷 생성 → 완료 확인 → 복원을 사람이 순서대로 해야 했고, 중간에 실패해도 알아채기 어려움.</dd>
-        <dt>해결</dt><dd>EC2에 설치된 Elasticsearch에 repository-s3 플러그인과 IAM 역할을 설정해 S3를 스냅샷 저장소로 연결. 스냅샷 생성 → 완료될 때까지 상태 확인(실패면 중단) → 스테이징 복원 → 클러스터·노드 상태 확인을 Step Functions 단계로 묶고, 각 단계는 VPC 안에서 ES를 호출하는 Node.js Lambda로 작성. EventBridge로 주기 실행.</dd>
+        <dt>문제</dt><dd>스테이징 환경을 새로 만들면서 개발 환경의 검색 데이터를 옮기고 주기적으로 맞춰야 했는데, 스냅샷 생성 → 완료 확인 → 복원을 사람이 순서대로 해야 했고 중간에 실패해도 알아채기 어려움.</dd>
+        <dt>해결</dt><dd>EC2에 설치된 Elasticsearch에 repository-s3 플러그인과 S3 접근 IAM 역할을 설정해 S3를 스냅샷 저장소로 연결(플러그인 적용에 재시작이 필요해, 운영 클러스터는 사내에 미리 알리고 마스터 노드를 가장 마지막에 재시작). 개발 → S3 스냅샷 생성 → 완료될 때까지 상태 확인(실패면 중단) → 스테이징 복원 → 클러스터·노드 상태 확인을 Step Functions 단계로 묶고, 각 단계는 VPC 안에서 ES를 호출하는 Node.js Lambda로 작성. EventBridge로 주기 실행.</dd>
         <dt>판단</dt><dd>스냅샷은 데이터 크기에 따라 오래 걸려 Lambda 한 번(최대 15분) 안에서 기다리기 어려움 → 요청과 확인을 짧은 단계로 나누고, 순서·대기·실패 분기는 Step Functions가 맡게 함.</dd>
       </dl>
     </article>
@@ -136,7 +142,7 @@
       <figure><img src="assets/diagrams/feature-flag.svg?v=067f9287" alt="Feature Flag 기반 트렁크 개발 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>dev · release 브랜치를 따로 관리해 공통 코드 작업이 자주 충돌하고, 운영 배포가 늦어지면 개발 환경과 내용이 어긋남. 공통 모듈을 고쳐도 운영 배포 전까지는 다른 작업에서 쓰기 어려움.</dd>
-        <dt>방식</dt><dd>팀에서 master 하나로 개발하고 기능은 플래그로 켜고 끄는 방식을 도입. 플래그 키는 Jira 티켓 번호, 값은 Firebase Remote Config에 개발 · 운영을 따로 둠(조회 실패 시 Flagsmith → 로컬 플래그). 앱이 뜰 때 켜진 플래그를 읽어 라우트를 조립 — 꺼진 API는 문서에서 숨기고 기본 경로에서 빼며, 같은 경로의 새 · 옛 구현을 플래그로 교대하고, 스케줄 작업과 DB 마이그레이션도 플래그별로 켬. 코드에는 있는데 저장소에 없는 티켓은 Jira에서 '출시 완료'인 것만 켜고 아니면 기동을 멈춰 설정 누락을 막음. master에 병합하면 GitHub Actions가 dev · release PR을 자동 생성하고, 출시된 기능은 일정 기간 뒤 플래그와 옛 코드를 지움.</dd>
+        <dt>방식</dt><dd>팀에서 master 하나로 개발하고 기능은 플래그로 켜고 끄는 방식을 도입. 플래그 키는 Jira 티켓 번호, 값은 Firebase Remote Config에 개발 · 운영을 따로 둠(조회 실패 시 Flagsmith → 로컬 플래그). 앱이 뜰 때 켜진 플래그를 읽어 라우트를 조립 — 꺼진 API는 문서에서 숨기고 기본 경로에서 빼며, 같은 경로의 새 · 옛 구현을 플래그로 교대하고, 스케줄 작업과 DB 마이그레이션도 플래그별로 켬. 코드에는 있는데 저장소에 없는 티켓은 Jira에서 '출시 완료'인 것만 켜고 아니면 기동을 멈춰 설정 누락을 막음. master에 병합하면 GitHub Actions가 dev · release PR을 자동 생성하고, 문제가 생기면 버전을 되돌리는 대신 플래그로 기능을 닫음(Firebase 장애 시에는 켤 티켓을 코드에 직접 적어 배포). 출시 7일이 지난 티켓은 알림을 받아 플래그와 옛 코드를 지움.</dd>
         <dt>내 구현</dt><dd>동료가 만든 플래그 모듈 위에, 개발 · 운영 플래그를 비교해 Swagger에 API별 배포 상태 라벨(운영 · 개발만 · 비활성)을 자동으로 붙이는 기능 — 클라이언트 개발자가 오래 요청하던 "이 API가 어디까지 배포됐나"를 문서에서 바로 확인.</dd>
       </dl>
     </article>
@@ -178,7 +184,7 @@
       <figure><img src="assets/diagrams/willog-adapter.svg?v=2daab400" alt="공통 배송 흐름과 산업군 규칙"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>의약품 · GMP 검증 · 해상 고가 화물은 도착을 판정하는 기준, 이상으로 보는 온도 · 습도 범위, 리포트 양식, 알림 문구가 서로 다름. 산업군마다 서비스를 새로 만들면 같은 배송 로직이 계속 복제됨.</dd>
-        <dt>해결</dt><dd>등록 → 출고 → 배송 중 → 도착 → 리포트 · 알림 흐름은 하나로 두고, 산업군마다 다른 규칙(도착 판정 · 이상 판정 범위 · 대표 측정값 · 리포트 · 알림 문구 · 입력 검증)만 산업군 값 하나로 고르는 규칙 묶음으로 분리. 자사 디바이스와 외부 실시간 디바이스도 공통 측정값 형식으로 바꿔 같은 흐름에 넣음.</dd>
+        <dt>해결</dt><dd>등록 → 출고 → 배송 중 → 도착 → 리포트 · 알림 흐름은 하나로 두고, 산업군마다 다른 규칙(도착 판정 · 이상 판정 범위 · 대표 측정값 · 리포트 · 알림 문구 · 입력 검증)만 산업군 값 하나로 고르는 규칙 묶음으로 분리. 자사 디바이스와 외부 실시간 디바이스도 공통 측정값 형식으로 바꿔 같은 흐름에 넣음. 예: 도착은 전체 도착 · 부분 도착 · 임의 도착 시간으로, 반품은 부분 · 전체 반품으로 나누고, 이상 판정 범위는 고객사 → 배송그룹 → 배송 순으로 상위 값을 기본값으로 물려받게 함.</dd>
         <dt>결과</dt><dd>MVP 이후 배차 관제, 제약사 GMP 검증 플랫폼, 해상 고가 화물 플랫폼을 같은 코드베이스에 차례로 출시(2023.03 – 2023.08).</dd>
       </dl>
     </article>
@@ -188,8 +194,8 @@
       <div class="tags"><span class="tag">2023</span><span class="tag">Python Lambda · API Gateway · EventBridge · RDS Proxy · Aurora</span></div>
       <figure><img src="assets/diagrams/willog-migration.svg?v=1de05bb4" alt="레거시 무중단 이관과 고객사 DB 연동"></figure>
       <dl class="psr">
-        <dt>이관</dt><dd>운영 중인 고객사 서비스를 멈추지 않도록 테크 리드와 협의해, 데이터는 Python Lambda로 영업시간에 Cron으로 나눠 사람이 지켜보며 옮기고, 고객사가 쓰던 API는 요청 · 응답 형식을 그대로 맞춰 API Gateway + Lambda로 다시 구축 — 고객사는 코드를 바꾸지 않고 전환. 배송 약 <span class="num">200만 건</span> · 디바이스 시계열 약 <span class="num">5억 건</span> 이관.</dd>
-        <dt>연동</dt><dd>고객사가 중계 DB(MSSQL · Oracle 등)를 두는 방식은 고객사마다 주기 · 구조가 달라 고객사별 Lambda와 EventBridge 스케줄로 구성. 처음엔 Node.js였지만 DB 드라이버가 다양하고 계약 전 POC에서 가장 먼저 붙여야 하는 작업이라 Python으로 통일. VPC 안 Aurora는 RDS Proxy로 접속하고, 쓰기는 작은 트랜잭션 단위로 나눠 성공분은 커밋하고 실패분만 우리 쪽과 고객사에 알림.</dd>
+        <dt>이관</dt><dd>두 레거시 서비스(의약품 · 물류)의 테이블과 기능 차이를 플랫폼 기준 대조표로 정리한 뒤(예: 의약품 서비스의 주문 단위 → 플랫폼 배송그룹), 운영 중인 고객사 서비스를 멈추지 않도록 테크 리드와 협의해 데이터는 Python Lambda로 영업시간에 Cron으로 나눠 사람이 지켜보며 옮기고, 고객사가 쓰던 API는 요청 · 응답 형식을 그대로 맞춰 API Gateway + Lambda로 다시 구축 — 고객사는 코드를 바꾸지 않고 전환. 배송 약 <span class="num">200만 건</span> · 디바이스 시계열 약 <span class="num">5억 건</span> 이관.</dd>
+        <dt>연동</dt><dd>고객사가 중계 DB(MSSQL · Oracle 등)를 두는 방식은 고객사마다 주기 · 구조가 달라 고객사별 Lambda와 EventBridge 스케줄로 구성. 처음엔 Node.js였지만 DB 드라이버가 다양하고 계약 전 POC에서 가장 먼저 붙여야 하는 작업이라 Python으로 통일. Lambda가 실행될 때마다 DB 연결을 새로 맺지 않도록 VPC 안 Aurora에는 RDS Proxy 연결 풀로 접속(다른 서비스와 함께 쓰는 DB라 풀의 30%까지만)하고, 서버리스 전용 DB 사용자를 따로 만들어 Secrets Manager 자동 암호 교체와 IAM 인증을 적용. 쓰기는 작은 트랜잭션 단위로 나눠 성공분은 커밋하고 실패분만 우리 쪽과 고객사에 알림.</dd>
       </dl>
     </article>
 
@@ -199,7 +205,7 @@
       <figure><img src="assets/diagrams/willog-realtime.svg?v=f3f7b470" alt="실시간 측정값 전달과 캐시"></figure>
       <dl class="psr">
         <dt>시계열</dt><dd>배송 테이블에 콤마로 이어 붙인 문자열로 저장하던 측정값(온도 · 습도 · 위치 · 측정 시간)을 InfluxDB로 분리. 기존 TypeORM처럼 쓰는 조회 모듈을 만들어 서비스 코드 변경을 최소화.</dd>
-        <dt>실시간</dt><dd>DDM이 새 측정값을 Redis Pub/Sub으로 발행하고, Core의 GraphQL Subscription이 디바이스별로 걸러 화면에 새로고침 없이 전달.</dd>
+        <dt>실시간</dt><dd>DDM이 새 측정값을 Redis Pub/Sub으로 발행하고, Core의 GraphQL Subscription이 구독할 때 받은 디바이스 목록으로 걸러 화면에 새로고침 없이 전달. WebSocket은 쿠키에 토큰을 담을 수 없어, 연결할 때 받은 토큰을 요청 context에 넣어 기존 인증 가드로 확인.</dd>
         <dt>캐시</dt><dd>배송 기간이 길어지면서 시계열 조회가 느려짐 → 도착한 배송은 데이터가 더 바뀌지 않는다는 점을 이용해 Redis에 캐시, 조회 약 <span class="num">3초 → 1초</span>.</dd>
       </dl>
     </article>
