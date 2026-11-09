@@ -99,7 +99,7 @@
 
     <article class="case">
       <h3>추천 상품 스케줄러 재구축</h3>
-      <div class="tags"><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">MySQL · MongoDB · Elasticsearch · Bull</span></div>
+      <div class="tags"><span class="tag">2024.06 – 2024.11</span><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">MySQL · MongoDB · Elasticsearch · Bull</span></div>
       <figure><img src="assets/diagrams/recommend.svg?v=9e5b6bd5" alt="추천 상품 스케줄러 흐름"></figure>
       <dl class="psr">
         <dt>방식</dt><dd>개인화 모델이 아니라, 브랜딩·운영팀과 기획자가 통계 데이터를 보고 정한 규칙(행동별 가중치)으로 상품 점수를 매겨 추천 순서를 내려주는 룰 기반 추천. 트렌드순 · 인기순은 운영 담당자가 정한 유효 범위의 데이터(기간 · 행동 유형) 기준으로 점수를 가산해 순서를 매김.</dd>
@@ -112,7 +112,7 @@
 
     <article class="case">
       <h3>알림 메시지 워커</h3>
-      <div class="tags"><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">Bull(Redis) · ECS · MongoDB</span></div>
+      <div class="tags"><span class="tag">2024.07 – 2024.09</span><span class="tag role">단독 · 설계 · 구현</span><span class="break"></span><span class="tag">Bull(Redis) · ECS · MongoDB</span></div>
       <figure><img src="assets/diagrams/message-worker.svg?v=e6c3940b" alt="알림 메시지 워커 구조"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>쿠폰 만료 안내 같은 알림톡을 약 100만 명에게 주기적으로 보내는 작업이 API 서버에 큰 부담을 줌. 발송에 실패한 메시지를 다시 보내거나 기록하는 체계도 없었음.</dd>
@@ -139,7 +139,7 @@
 
     <article class="case">
       <h3>Feature Flag 기반 Trunk-Based 개발</h3>
-      <div class="tags"><span class="tag role">공동 · 설계 논의 · Swagger 배포 라벨 구현</span><span class="tag">기반 구현은 동료</span><span class="break"></span><span class="tag">Firebase Remote Config · NestJS · GitHub Actions</span></div>
+      <div class="tags"><span class="tag">2024.07 – 2024.10</span><span class="tag role">공동 · 설계 논의 · Swagger 배포 라벨 구현</span><span class="tag">기반 구현은 동료</span><span class="break"></span><span class="tag">Firebase Remote Config · NestJS · GitHub Actions</span></div>
       <figure><img src="assets/diagrams/feature-flag.svg?v=067f9287" alt="Feature Flag 기반 트렁크 개발 흐름"></figure>
       <dl class="psr">
         <dt>문제</dt><dd>dev · release 브랜치를 따로 관리해 공통 코드 작업이 자주 충돌하고, 운영 배포가 늦어지면 개발 환경과 내용이 어긋남. 공통 모듈을 고쳐도 운영 배포 전까지는 다른 작업에서 쓰기 어려움.</dd>
