@@ -600,6 +600,8 @@ DIAGRAMS = {
 
 
 PAGES = [OUT.parent.parent / "portfolio.html"]
+ROOT = OUT.parent.parent
+STAMPED = [ROOT / "index.html", ROOT / "portfolio.html"]  # pages whose stylesheet link carries a content hash
 
 
 def main():
@@ -618,6 +620,14 @@ def main():
         if out != src:
             page.write_text(out, encoding="utf-8")
             print("stamped", page.name)
+    # same 10-minute cache applies to the stylesheet
+    css_v = hashlib.sha1((ROOT / "assets" / "style.css").read_bytes()).hexdigest()[:8]
+    for page in STAMPED:
+        src = page.read_text(encoding="utf-8")
+        out = re.sub(r'assets/style\.css(\?v=[0-9a-f]+)?', f"assets/style.css?v={css_v}", src)
+        if out != src:
+            page.write_text(out, encoding="utf-8")
+            print("stamped css", page.name)
 
 
 if __name__ == "__main__":
