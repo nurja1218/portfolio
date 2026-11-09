@@ -49,6 +49,7 @@ h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: 
 .domain > h2 { margin-top: 0; }
 .case { border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin: 0 0 20px; }
 .case h3 { font-size: 18px; margin: 0 0 4px; letter-spacing: -0.01em; }
+.case h4 { font-size: 15px; margin: 16px 0 6px; }
 .case .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; font-size: 12px; }
 .tag { background: var(--tag); color: var(--tagfg); padding: 2px 8px; border-radius: 999px; }
 .tag.wip { background: var(--wip); color: var(--wipfg); }

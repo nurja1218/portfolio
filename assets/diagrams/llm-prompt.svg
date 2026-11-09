@@ -28,7 +28,7 @@
 <path class="e" d="M170.0,72.5 L295.0,87.5"/>
 <text class="el" x="238.5" y="66.0" text-anchor="middle">커밋 (서비스 무영향)</text>
 <path class="e" d="M170.0,141.5 L295.0,119.0"/>
-<text class="el" x="238.5" y="156.3" text-anchor="middle">통과 시 운영 태그</text>
+<text class="el" x="242.5" y="156.3" text-anchor="middle">비교 후 운영 태그 이동</text>
 <path class="ed" d="M400.0,130.0 L400.0,205.0"/>
 <text class="el" x="452.0" y="161.5" text-anchor="middle">웹훅 · 주기 동기화</text>
 <path class="e" d="M553.0,100.0 L505.0,100.0"/>
@@ -42,7 +42,7 @@
 <text class="s" x="108.0" y="75.0" text-anchor="middle">프롬프트 수정·커밋</text>
 <rect class="warn" x="10" y="130" width="160" height="52" rx="8"/>
 <rect x="19" y="142.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="22.92" y="145.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="16" rx="1.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></g></svg>
-<text class="t" x="108.0" y="152.0" text-anchor="middle">테스트 결과 검토</text>
+<text class="t" x="108.0" y="152.0" text-anchor="middle">버전 비교 검토</text>
 <text class="s" x="108.0" y="168.0" text-anchor="middle">직접 호출한 결과표</text>
 <rect class="new" x="295" y="70" width="210" height="60" rx="8"/>
 <rect x="304" y="86.0" width="28" height="28" rx="6" fill="#1C3C3C"/><svg x="309.04" y="91.04" width="17.92" height="17.92" viewBox="0 0 24 24"><path fill="#fff" d="M13.796 0a6.93 6.93 0 0 0-4.91 2.019L5.451 5.455l3.273 3.27 3.432-3.432a2.284 2.284 0 0 1 3.277 0 2.28 2.28 0 0 1 0 3.275L12 12.001l3.273 3.273 3.433-3.435c2.692-2.692 2.692-7.127 0-9.82A6.92 6.92 0 0 0 13.796 0m-5.07 8.728-3.433 3.434c-2.692 2.693-2.692 7.126 0 9.819A6.92 6.92 0 0 0 10.203 24a6.93 6.93 0 0 0 4.911-2.02l3.432-3.432-3.271-3.272-3.433 3.433a2.284 2.284 0 0 1-3.277 0 2.28 2.28 0 0 1 0-3.276L12 12z"/></svg>

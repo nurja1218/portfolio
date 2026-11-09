@@ -227,19 +227,19 @@ DIAGRAMS = {
         "w": 760, "h": 340, "alt": "지식그래프 기반 초개인화 쌓기와 꺼내기 흐름",
         "groups": [{"x": 180, "y": 20, "w": 565, "h": 140, "label": "백그라운드 잡 (job-worker · EKS, 응답을 막지 않음)", "icons": ["aws:eks"]}],
         "nodes": [
-            {"id": "src", "x": 10, "y": 40, "w": 155, "h": 96, "icon": "g:user", "label": ["사용자 활동", "대화 요약 · 노트", "AI 어시스턴트 대화", "용어 교정"]},
-            {"id": "ext", "x": 195, "y": 60, "w": 200, "h": 56, "icon": "g:llm", "label": ["① 추출 LLM", "사용자 관련 사실"]},
-            {"id": "jdg", "x": 420, "y": 52, "w": 310, "h": 72, "icon": "g:llm", "label": ["② 판단 LLM", "같은 대상 · 같은 값 → 누적", "값이 바뀜 → 과거 값을 닫고 새 값"]},
-            {"id": "kg", "x": 200, "y": 215, "w": 280, "h": 70, "kind": "new", "icon": "aws:rds", "label": ["사용자별 지식그래프", "RDS PostgreSQL + pgvector", "노드·관계·임베딩 · 과거 값은 닫아서 보존"]},
-            {"id": "tr", "x": 525, "y": 190, "w": 220, "h": 52, "icon": "g:translate", "label": ["번역 프롬프트", "용어집(치환) + 배경지식(이해)"]},
-            {"id": "ai", "x": 525, "y": 268, "w": 220, "h": 52, "icon": "g:chat", "label": ["AI 어시스턴트 답변", "질문과 가까운 사실만"]},
+            {"id": "src", "x": 10, "y": 40, "w": 155, "h": 96, "icon": "g:user", "label": ["사용자 직접 활동", "대화 요약 리포트", "AI 답변 피드백", "용어 교정 채택"]},
+            {"id": "ext", "x": 195, "y": 60, "w": 200, "h": 56, "icon": "g:llm", "label": ["① 추출 LLM", "활동에서 사실 뽑기"]},
+            {"id": "jdg", "x": 420, "y": 52, "w": 310, "h": 72, "icon": "g:llm", "label": ["② 비교 LLM", "같은 사실 → 관계 강도 누적", "값이 바뀜 → 과거 값에 종료 시각, 새 값 추가"]},
+            {"id": "kg", "x": 200, "y": 215, "w": 280, "h": 70, "kind": "new", "icon": "aws:rds", "label": ["사용자별 지식그래프", "RDS PostgreSQL + pgvector", "사실 = 노드 사이 관계 + 시작·종료 시각"]},
+            {"id": "tr", "x": 525, "y": 190, "w": 220, "h": 52, "icon": "g:translate", "label": ["번역 프롬프트", "도메인 · 교정 용어 · 활동 배경"]},
+            {"id": "ai", "x": 525, "y": 268, "w": 220, "h": 52, "icon": "g:chat", "label": ["AI 어시스턴트 답변", "질문 이해 → 관련 사실 최대 8개"]},
         ],
         "edges": [
             {"from": "src", "to": "ext"},
             {"from": "ext", "to": "jdg"},
             {"from": "jdg", "to": "kg", "label": "저장", "dx": 30, "dy": 8},
             {"from": "kg", "to": "tr", "label": "꺼내기", "dy": -4},
-            {"from": "kg", "to": "ai", "label": "의미 검색", "dx": -8, "dy": 22},
+            {"from": "kg", "to": "ai", "label": "골라 넣기", "dx": -8, "dy": 22},
         ],
     },
     # Flitto — LLM prompt management. 읽는 쪽 = LlmInvoker 를 쓰는 API 앱 5개 + job-worker, 호출 시점에 조회(SWR 캐시 60초)
@@ -248,7 +248,7 @@ DIAGRAMS = {
         "w": 760, "h": 300, "alt": "LLM 프롬프트 관리 체계 흐름",
         "nodes": [
             {"id": "po", "x": 10, "y": 40, "w": 160, "icon": "g:user", "label": ["PO · 개발자", "프롬프트 수정·커밋"]},
-            {"id": "gate", "x": 10, "y": 130, "w": 160, "h": 52, "kind": "warn", "icon": "g:check", "label": ["테스트 결과 검토", "직접 호출한 결과표"]},
+            {"id": "gate", "x": 10, "y": 130, "w": 160, "h": 52, "kind": "warn", "icon": "g:check", "label": ["버전 비교 검토", "직접 호출한 결과표"]},
             {"id": "ls", "x": 295, "y": 70, "w": 210, "h": 60, "kind": "new", "icon": "brand:langchain", "label": ["LangSmith (원본)", "staging / production 태그"]},
             {"id": "mir", "x": 295, "y": 205, "w": 210, "h": 60, "icon": "aws:rds", "label": ["DB 미러", "RDS PostgreSQL", "장애 대비 폴백"]},
             {"id": "api", "x": 553, "y": 60, "w": 197, "h": 80, "icon": "aws:eks", "label": ["API 앱 · job-worker", "EKS · 호출할 때 조회", "invoke(key, vars) 한 줄", "60초 캐시"]},
@@ -256,34 +256,38 @@ DIAGRAMS = {
         ],
         "edges": [
             {"from": "po", "to": "ls", "label": "커밋 (서비스 무영향)", "dx": 6, "dy": -14},
-            {"from": "gate", "to": "ls", "label": "통과 시 운영 태그", "dx": 6, "dy": 26},
+            {"from": "gate", "to": "ls", "label": "비교 후 운영 태그 이동", "dx": 10, "dy": 26},
             {"from": "ls", "to": "mir", "dashed": True, "label": "웹훅 · 주기 동기화", "dx": 52},
             {"from": "api", "to": "ls", "label": "1차 조회"},
             {"from": "api", "to": "mir", "dashed": True, "label": "2차 폴백", "dy": 16},
             {"from": "api", "to": "llm"},
         ],
     },
-    # Flitto — log pipeline + secret change pipeline
-    # 전송기 = 앱 프로세스 안 Winston transport(packages/shared/.../winston-opensearch.transport.ts) — EC2 시절(2025.12~2026.06) 구성.
-    # 2026-06-18 로거가 nest-common(파일 출력만)으로 이동 → 2026-07-16 인프라가 노드별 fluent-bit-rtt DaemonSet 으로 수집 교체
-    # (flitto-infra kubernetes/manifests/elk/base/fluent-bit-rtt, 2662684). 운영 시크릿의 OPENSEARCH_ENABLED 는 읽는 코드가 없다.
-    # 디스크 알림 = OpenSearch Alerting cluster_metrics_monitor 5분 주기 → Slack (vault infra/opensearch-incident-summary.md), CloudWatch AWS/ES 알람 0건.
+    # Flitto — log pipeline + secret change / deploy / log retention
+    # 전송기 = Winston transport 직접 구현(packages/shared/.../winston-opensearch.transport.ts — 1초 flush · 큐 상한 5만 · 영구 오류 drop,
+    # 클라이언트 maxRetries 3 · compression gzip = opensearch-logger.service.ts:66-68). EC2 시절(2025.10~2026.06) 구성.
+    # 2026-07-16 인프라가 노드별 fluent-bit-rtt DaemonSet 으로 수집 교체(flitto-infra kubernetes/manifests/elk/base/fluent-bit-rtt, 2662684).
+    # 디스크 알림 = 도메인 기본 포함 Alerting 플러그인 cluster_metrics_monitor 5분 주기 → Slack, 런북 위키 TF/1690403020.
+    # 배포·시크릿·로그 보관 = 커리어 노트 2026-01-deploy-ops-standardization(위키 TF/1490911234 · TF/1533214741, RTT-644 · RTT-717)
     "ops": {
-        "w": 760, "h": 300, "alt": "로그 파이프라인과 시크릿 변경 파이프라인",
-        "titles": [{"x": 20, "y": 24, "label": "로그 파이프라인"}, {"x": 20, "y": 184, "label": "시크릿 변경 · 배포"}],
+        "w": 760, "h": 412, "alt": "로그 파이프라인과 시크릿 변경 · 배포 · 로그 보관",
+        "titles": [{"x": 20, "y": 24, "label": "로그 파이프라인"}, {"x": 20, "y": 236, "label": "시크릿 변경 · 배포 · 로그 보관"}],
         "nodes": [
-            {"id": "apps", "x": 15, "y": 40, "w": 150, "h": 80, "icon": "aws:ec2", "label": ["서비스 앱", "NestJS", "당시 EC2", "여러 리전"]},
-            {"id": "tp", "x": 180, "y": 40, "w": 165, "h": 80, "icon": "g:send", "label": ["로그 전송기", "앱 프로세스 내부", "버퍼 → bulk · gzip", "지수 백오프"]},
-            {"id": "os", "x": 360, "y": 40, "w": 200, "h": 80, "kind": "new", "icon": "aws:opensearch", "label": ["OpenSearch Service", "AWS 관리형", "ISM 1일/5GB → 30일"]},
-            {"id": "al", "x": 575, "y": 40, "w": 170, "h": 80, "kind": "warn", "icon": "g:bell", "label": ["디스크 알림", "Alerting 모니터", "5분마다 · Slack", "80 · 90 · 95%"]},
-            {"id": "jk", "x": 15, "y": 200, "w": 172, "h": 64, "icon": "brand:jenkins", "label": ["Jenkins 파라미터", "변경 사유 필수"]},
-            {"id": "ap", "x": 205, "y": 200, "w": 158, "h": 64, "kind": "warn", "icon": "g:shield", "label": ["운영 승인 단계", "값은 *** 마스킹"]},
-            {"id": "sm", "x": 381, "y": 200, "w": 200, "h": 64, "icon": "aws:secretsmanager", "label": ["Secrets Manager", "새 버전 · 감사 기록"]},
-            {"id": "dp", "x": 599, "y": 200, "w": 146, "h": 64, "kind": "new", "icon": "g:rollback", "label": ["배포", "실패 시", "자동 롤백"]},
+            {"id": "apps", "x": 15, "y": 40, "w": 150, "h": 88, "icon": "aws:ec2", "label": ["서비스 앱", "당시 EC2", "여러 리전"]},
+            {"id": "tp", "x": 180, "y": 40, "w": 165, "h": 88, "icon": "g:send", "label": ["Winston 전송기", "앱 프로세스 안", "1초·1,000건 bulk", "gzip 압축 전송"]},
+            {"id": "os", "x": 360, "y": 40, "w": 200, "h": 88, "kind": "new", "icon": "aws:opensearch", "label": ["OpenSearch Service", "하루·5GB마다 새 인덱스", "30일 지나면 삭제", "조각 1 · 복제본 0 · 고압축"]},
+            {"id": "al", "x": 575, "y": 40, "w": 170, "h": 88, "kind": "warn", "icon": "g:bell", "label": ["디스크 알림", "Alerting 플러그인", "80·90·95% → Slack", "위키 런북"]},
+            {"id": "fb", "x": 180, "y": 152, "w": 165, "h": 52, "label": ["2026.07~ fluent-bit", "노드별 파드가 파일 읽어 전송"]},
+            {"id": "jk", "x": 15, "y": 252, "w": 172, "h": 64, "icon": "brand:jenkins", "label": ["Jenkins 파라미터", "변경 사유 필수"]},
+            {"id": "ap", "x": 205, "y": 252, "w": 158, "h": 64, "kind": "warn", "icon": "g:shield", "label": ["운영 승인 단계", "값은 *** 마스킹"]},
+            {"id": "sm", "x": 381, "y": 252, "w": 200, "h": 64, "icon": "aws:secretsmanager", "label": ["Secrets Manager", "새 버전 · Slack 기록"]},
+            {"id": "dp", "x": 15, "y": 334, "w": 290, "h": 60, "kind": "new", "icon": "g:rollback", "label": ["Ansible 배포 — 실패 시 롤백", "새 폴더 삭제 → 백업 복원 → 이전 버전 재시작"]},
+            {"id": "lr", "x": 320, "y": 330, "w": 290, "h": 68, "icon": "g:server", "label": ["서버 로그 로테이션", "10MB마다 새 파일 · 30개 gz 보관", "pm2 로그도 배포 때 자동 설정"]},
         ],
         "edges": [
             {"from": "apps", "to": "tp"}, {"from": "tp", "to": "os"}, {"from": "os", "to": "al"},
-            {"from": "jk", "to": "ap"}, {"from": "ap", "to": "sm"}, {"from": "sm", "to": "dp"},
+            {"from": "fb", "to": "os", "dashed": True},
+            {"from": "jk", "to": "ap"}, {"from": "ap", "to": "sm"},
         ],
     },
     # bejewel — recommendation scheduler
@@ -537,6 +541,27 @@ DIAGRAMS = {
             {"from": "dv", "to": "ddm"}, {"from": "ddm", "to": "inf"}, {"from": "ddm", "to": "ps"},
             {"from": "ps", "to": "core"}, {"from": "core", "to": "web"},
             {"from": "ddm", "to": "ca", "dashed": True, "label": "도착 후 안 바뀌는 데이터", "dx": -62, "dy": 0},
+        ],
+    },
+    # Flitto — 제품 도메인 오너 작업 흐름 (근거: ~/.claude/skills/feature-docs/SKILL.md 의 산출물 4종 · 순서, MCP PRD 위키 TF/1879670888,
+    # vault specs/mcp/00-spec.md · 커리어 노트 2026-10-vogl-mcp-feature-ownership). 클라 명세는 서버 API 확정 뒤 작성(MCP 는 아직 없음).
+    "ownership": {
+        "w": 760, "h": 326, "alt": "제품 도메인 오너 — 문서 한 벌로 기획부터 개발 분배까지",
+        "groups": [{"x": 185, "y": 14, "w": 225, "h": 300, "label": "문서 한 벌 — 직군별 기존 양식 그대로"}],
+        "nodes": [
+            {"id": "own", "x": 15, "y": 115, "w": 155, "h": 96, "kind": "new", "icon": "g:user", "label": ["도메인 오너 (나)", "기능 제안", "코드 · 타사 조사", "AI로 문서 작성"]},
+            {"id": "prd", "x": 197, "y": 40, "w": 200, "h": 56, "icon": "g:check", "label": ["PRD", "팀 PRD 양식 · 위키"]},
+            {"id": "fig", "x": 197, "y": 108, "w": 200, "h": 56, "icon": "g:browser", "label": ["Figma 시안", "화면 · 흐름도 · 문구 키"]},
+            {"id": "sv", "x": 197, "y": 176, "w": 200, "h": 56, "icon": "g:server", "label": ["서버 명세", "코드 근거 · API 계약"]},
+            {"id": "cl", "x": 197, "y": 244, "w": 200, "h": 56, "icon": "g:device", "label": ["클라 명세", "화면별 API · WS 호출"]},
+            {"id": "rv1", "x": 440, "y": 64, "w": 145, "h": 70, "kind": "warn", "icon": "g:user", "label": ["PO · UXD", "기획 · 디자인", "컨펌"]},
+            {"id": "rv2", "x": 440, "y": 200, "w": 145, "h": 70, "kind": "warn", "icon": "g:user", "label": ["엔지니어", "명세 리뷰", "컨펌"]},
+            {"id": "dist", "x": 610, "y": 118, "w": 140, "h": 96, "kind": "new", "icon": "g:fanout", "label": ["작업 분배", "서버: 직접 구현", "웹·앱: 담당 할당", "디자인: UXD"]},
+        ],
+        "edges": [
+            {"from": "own", "to": "prd"}, {"from": "own", "to": "fig"}, {"from": "own", "to": "sv"}, {"from": "own", "to": "cl"},
+            {"from": "prd", "to": "rv1"}, {"from": "fig", "to": "rv1"}, {"from": "sv", "to": "rv2"}, {"from": "cl", "to": "rv2"},
+            {"from": "rv1", "to": "dist"}, {"from": "rv2", "to": "dist"},
         ],
     },
 }

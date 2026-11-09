@@ -43,22 +43,22 @@
 <path class="e" d="M480.0,233.9 L525.0,228.7"/>
 <text class="el" x="502.5" y="227.3" text-anchor="middle">꺼내기</text>
 <path class="e" d="M480.0,270.9 L525.0,277.6"/>
-<text class="el" x="494.5" y="296.2" text-anchor="middle">의미 검색</text>
+<text class="el" x="494.5" y="296.2" text-anchor="middle">골라 넣기</text>
 <rect class="box" x="10" y="40" width="155" height="96" rx="8"/>
 <rect x="19" y="74.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="22.92" y="77.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3.1-6 7-6s7 2 7 6"/></g></svg>
-<text class="t" x="105.5" y="68.0" text-anchor="middle">사용자 활동</text>
-<text class="s" x="105.5" y="84.0" text-anchor="middle">대화 요약 · 노트</text>
-<text class="s" x="105.5" y="100.0" text-anchor="middle">AI 어시스턴트 대화</text>
-<text class="s" x="105.5" y="116.0" text-anchor="middle">용어 교정</text>
+<text class="t" x="105.5" y="68.0" text-anchor="middle">사용자 직접 활동</text>
+<text class="s" x="105.5" y="84.0" text-anchor="middle">대화 요약 리포트</text>
+<text class="s" x="105.5" y="100.0" text-anchor="middle">AI 답변 피드백</text>
+<text class="s" x="105.5" y="116.0" text-anchor="middle">용어 교정 채택</text>
 <rect class="box" x="195" y="60" width="200" height="56" rx="8"/>
 <rect x="204" y="74.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="207.92" y="77.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 7.2L21 12l-7.2 1.8L12 21l-1.8-7.2L3 12l7.2-1.8z" fill="#fff"/></g></svg>
 <text class="t" x="313.0" y="84.0" text-anchor="middle">① 추출 LLM</text>
-<text class="s" x="313.0" y="100.0" text-anchor="middle">사용자 관련 사실</text>
+<text class="s" x="313.0" y="100.0" text-anchor="middle">활동에서 사실 뽑기</text>
 <rect class="box" x="420" y="52" width="310" height="72" rx="8"/>
 <rect x="429" y="74.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="432.92" y="77.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 7.2L21 12l-7.2 1.8L12 21l-1.8-7.2L3 12l7.2-1.8z" fill="#fff"/></g></svg>
-<text class="t" x="593.0" y="76.0" text-anchor="middle">② 판단 LLM</text>
-<text class="s" x="593.0" y="92.0" text-anchor="middle">같은 대상 · 같은 값 → 누적</text>
-<text class="s" x="593.0" y="108.0" text-anchor="middle">값이 바뀜 → 과거 값을 닫고 새 값</text>
+<text class="t" x="593.0" y="76.0" text-anchor="middle">② 비교 LLM</text>
+<text class="s" x="593.0" y="92.0" text-anchor="middle">같은 사실 → 관계 강도 누적</text>
+<text class="s" x="593.0" y="108.0" text-anchor="middle">값이 바뀜 → 과거 값에 종료 시각, 새 값 추가</text>
 <rect class="new" x="200" y="215" width="280" height="70" rx="8"/>
 <svg x="209" y="236.0" width="28" height="28" viewBox="0 0 64 64">
     
@@ -71,13 +71,13 @@
 </svg>
 <text class="t" x="358.0" y="238.0" text-anchor="middle">사용자별 지식그래프</text>
 <text class="s" x="358.0" y="254.0" text-anchor="middle">RDS PostgreSQL + pgvector</text>
-<text class="s" x="358.0" y="270.0" text-anchor="middle">노드·관계·임베딩 · 과거 값은 닫아서 보존</text>
+<text class="s" x="358.0" y="270.0" text-anchor="middle">사실 = 노드 사이 관계 + 시작·종료 시각</text>
 <rect class="box" x="525" y="190" width="220" height="52" rx="8"/>
 <rect x="534" y="202.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="537.92" y="205.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h9M8.5 3v2M6 5c.5 3 2.5 5.5 5 6.5M11 5c-.5 3-2.5 5.5-5 6.5"/><path d="M13 20l3.5-8 3.5 8M14.2 17.5h4.6"/></g></svg>
 <text class="t" x="653.0" y="212.0" text-anchor="middle">번역 프롬프트</text>
-<text class="s" x="653.0" y="228.0" text-anchor="middle">용어집(치환) + 배경지식(이해)</text>
+<text class="s" x="653.0" y="228.0" text-anchor="middle">도메인 · 교정 용어 · 활동 배경</text>
 <rect class="box" x="525" y="268" width="220" height="52" rx="8"/>
 <rect x="534" y="280.0" width="28" height="28" rx="6" fill="#6e7781"/><svg x="537.92" y="283.92" width="20.16" height="20.16" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10h-9l-4 4v-4H4z"/></g></svg>
 <text class="t" x="653.0" y="290.0" text-anchor="middle">AI 어시스턴트 답변</text>
-<text class="s" x="653.0" y="306.0" text-anchor="middle">질문과 가까운 사실만</text>
+<text class="s" x="653.0" y="306.0" text-anchor="middle">질문 이해 → 관련 사실 최대 8개</text>
 </svg>
