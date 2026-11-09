@@ -35,9 +35,9 @@
       <ul>
         <li>해외 리전 응답 지연 해결 — DynamoDB Global Tables · 리전별 Redis 전환 (Close API <span class="num">1,673 → 327ms</span>, Create API <span class="num">2,630 → 90ms</span>)</li>
         <li>실시간 메시지는 모든 리전 Redis에 발행하고 각 리전이 로컬에서 구독, 저장보다 발행을 먼저 해 저장 지연이 메시지 전달을 늦추지 않게 함</li>
-        <li>사용자별 지식그래프(PostgreSQL + pgvector) 기반 번역·AI 어시스턴트 초개인화 개발 및 상용 반영</li>
-        <li>LangSmith 기반 LLM 프롬프트 관리 체계 구축 — 배포 없이 1분 내 반영, 프롬프트를 직접 호출한 테스트 결과표를 검토해 통과한 버전만 운영 반영</li>
-        <li>외부 AI 에이전트 연결(MCP) 기능 제안 — PRD · Figma 시안 · 서버 명세 작성 (검토 후 구현 예정)</li>
+        <li>용어 교정 · AI 지시를 쌓는 사용자별 지식그래프로 번역·AI 어시스턴트 초개인화, 상용 반영</li>
+        <li>LangSmith 프롬프트 버전 관리 — 배포 없이 1분 내 반영, 결과표로 버전 비교 후 운영 태그 이동</li>
+        <li>제품 도메인 오너 — PRD · Figma 시안 · 서버/클라 명세 작성, 직군별 컨펌 후 개발 분배 (진행 중)</li>
         <li>멀티 리전 로그 수집(OpenSearch) 공동 구축, 시크릿 변경 파이프라인 · 실패 시 자동 롤백 배포 도입</li>
       </ul>
     </div>
@@ -51,7 +51,7 @@
         <li>선물 가능 상품 영역 확대로 선물 주문 건수 <span class="num">10배</span> 이상 증대</li>
         <li>추천 상품 스케줄러 재구축 — 행동 집계 기반 점수 계산 · 배치 병렬 처리 (<span class="num">60분 → 15분</span>)</li>
         <li>알림톡 발송을 Redis 큐 기반 메시지 워커로 분리 · 재시도 설계</li>
-        <li>Feature Flag 기반 Trunk-Based 개발 도입 참여, 최소 권한 기반 AWS 권한 정책 수립</li>
+        <li>Feature Flag 기반 Trunk-Based 개발 도입 참여(Swagger 배포 상태 라벨), AWS 최소 권한 정책</li>
       </ul>
     </div>
   </section>
@@ -61,7 +61,7 @@
     <div>
       <p class="desc">물류 배송 모니터링 솔루션 · 시드 라운드 합류, MVP부터 시리즈 B까지</p>
       <ul>
-        <li>물류 통합 관제 플랫폼 설계 · 레거시 이관 (배송 약 <span class="num">200만 건</span>, 시계열 약 <span class="num">5억 건</span>)</li>
+        <li>물류 통합 관제 플랫폼 설계 · 산업군 규칙 분리 · 무중단 이관 (배송 약 <span class="num">200만 건</span>, 시계열 약 <span class="num">5억 건</span>)</li>
         <li>기능 기준 서버 분리 (Core · 디바이스 · 고객사 연동 · 알림)</li>
         <li>고객사 연동 API 지연 개선 — 중복 검사 쿼리 묶음 조회 (<span class="num">20초 → 5초</span>)</li>
         <li>InfluxDB로 디바이스 시계열 분리, GraphQL Subscription 실시간 업데이트</li>
@@ -85,7 +85,7 @@
     <dt>Backend</dt><dd>TypeScript · NestJS · Express · GraphQL · REST · TypeORM</dd>
     <dt>Data</dt><dd>PostgreSQL (pgvector) · MySQL · DynamoDB · Redis · MongoDB · Elasticsearch / OpenSearch · InfluxDB</dd>
     <dt>AI</dt><dd>LLM 연동 · 프롬프트 관리 (LangSmith) · 임베딩 검색</dd>
-    <dt>Infra</dt><dd>AWS (EC2 · ECS · Lambda · Step Functions · S3 · CloudFront · Secrets Manager) · Jenkins · Docker</dd>
+    <dt>Infra</dt><dd>AWS (EC2 · ECS · Lambda · Step Functions · S3 · CloudFront · Secrets Manager) · Jenkins · Ansible · Docker</dd>
   </dl>
 
   <h2>Etc</h2>
