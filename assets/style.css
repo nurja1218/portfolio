@@ -115,9 +115,10 @@ footer { color: var(--muted); font-size: 12px; margin-top: 56px; }
   .case figure { padding: 4px; }
   .case figure img { min-width: 0; }
   .domain { margin-top: 18px; }
-  .apply .case { break-inside: auto; }
-  .apply .case h3, .apply .case .tags { break-after: avoid; }
-  .apply .case h3 { break-before: auto; }
-  .apply .case figure, .apply .psr > dd { break-inside: avoid; }
+  .apply .case { break-inside: avoid; }
+  .apply .case figure img { width: 86%; margin: 0 auto; }
+  .apply header.hero { margin-bottom: 0; }
+  .apply .detail-cta { margin-top: 10px; padding: 8px 14px; }
+  .apply .briefs { break-inside: avoid; }
   header.hero .links a[href^="http"]::after { content: " · " attr(href); color: var(--muted); font-size: 8.5pt; }
 }
