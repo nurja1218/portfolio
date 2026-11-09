@@ -628,14 +628,6 @@ def main():
         if out != src:
             page.write_text(out, encoding="utf-8")
             print("stamped css", page.name)
-    # PDFs are linked from the nav — same cache, same fix
-    for page in STAMPED:
-        src = page.read_text(encoding="utf-8")
-        out = re.sub(r'assets/pdf/([a-z]+)\.pdf(\?v=[0-9a-f]+)?',
-                     lambda m: f"assets/pdf/{m.group(1)}.pdf?v=" + hashlib.sha1((ROOT / "assets" / "pdf" / f"{m.group(1)}.pdf").read_bytes()).hexdigest()[:8], src)
-        if out != src:
-            page.write_text(out, encoding="utf-8")
-            print("stamped pdf", page.name)
 
 
 if __name__ == "__main__":
