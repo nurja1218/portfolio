@@ -275,7 +275,7 @@ DIAGRAMS = {
         "nodes": [
             {"id": "apps", "x": 15, "y": 40, "w": 150, "h": 88, "icon": "aws:ec2", "label": ["서비스 앱", "당시 EC2", "여러 리전"]},
             {"id": "tp", "x": 180, "y": 40, "w": 165, "h": 88, "icon": "g:send", "label": ["Winston 전송기", "앱 프로세스 안", "1초·1,000건 bulk", "gzip 압축 전송"]},
-            {"id": "os", "x": 360, "y": 40, "w": 200, "h": 88, "kind": "new", "icon": "aws:opensearch", "label": ["OpenSearch Service", "하루·5GB마다 새 인덱스", "30일 지나면 삭제", "조각 1 · 복제본 0 · 고압축"]},
+            {"id": "os", "x": 360, "y": 40, "w": 200, "h": 88, "kind": "new", "icon": "aws:opensearch", "label": ["OpenSearch Service", "AWS 관리형", "debug 등 불필요 로그 제외", "30일 지나면 자동 정리"]},
             {"id": "al", "x": 575, "y": 40, "w": 170, "h": 88, "kind": "warn", "icon": "g:bell", "label": ["디스크 알림", "Alerting 플러그인", "80·90·95% → Slack", "위키 런북"]},
             {"id": "fb", "x": 180, "y": 152, "w": 165, "h": 52, "label": ["2026.07~ fluent-bit", "노드별 파드가 파일 읽어 전송"]},
             {"id": "jk", "x": 15, "y": 252, "w": 172, "h": 64, "icon": "brand:jenkins", "label": ["Jenkins 파라미터", "변경 사유 필수"]},

@@ -58,6 +58,9 @@ h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: 
 .psr { display: grid; grid-template-columns: 56px 1fr; gap: 4px 12px; margin: 0; font-size: 14px; }
 .psr dt { color: var(--muted); font-weight: 600; }
 .psr dd { margin: 0; }
+.psr ul { margin: 0; padding-left: 16px; }
+.psr li { margin: 1px 0; }
+.psr li b { margin-right: 6px; }
 .mini { list-style: none; padding: 0; margin: 0; }
 .mini li { border-top: 1px solid var(--line); padding: 12px 0; font-size: 14px; }
 .mini li:first-child { border-top: 0; }
