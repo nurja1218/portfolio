@@ -564,6 +564,33 @@ DIAGRAMS = {
             {"from": "rv1", "to": "dist"}, {"from": "rv2", "to": "dist"},
         ],
     },
+    # bejewel — AWS 권한 정책 (근거: 노션 "AWS 권한 관리 정책 문서" 13470fc3-36e5-800d-bed4-f38ccb62339b — §3 권한 그룹 9개 · 그룹 구성 그림,
+    # §3.1.2 dev-full "쓰기는 dev 또는 test 이름을 갖는 리소스만", §4 부여 절차 그림(역할 6단계)). 회사명 접두(amondz-)는 뺐다.
+    "aws-iam": {
+        "w": 760, "h": 360, "alt": "AWS 권한 그룹과 역할별 할당",
+        "titles": [{"x": 15, "y": 22, "label": "① 권한 그룹 — 사용자에게 정책을 직접 붙이지 않고, 정책을 묶은 그룹만 할당"},
+                   {"x": 15, "y": 196, "label": "② 역할별 할당 — 신규는 읽기만, 역할이 올라갈수록 그룹을 더함"}],
+        "groups": [{"x": 15, "y": 34, "w": 365, "h": 136, "label": "환경별"},
+                   {"x": 390, "y": 34, "w": 355, "h": 136, "label": "리소스별"}],
+        "nodes": [
+            {"id": "ar", "x": 25, "y": 62, "w": 112, "h": 92, "label": ["access-read", "모든 리소스", "읽기 전용"]},
+            {"id": "df", "x": 143, "y": 62, "w": 112, "h": 92, "kind": "new", "label": ["dev-full", "읽기는 전부", "쓰기는 이름에", "dev·test만"]},
+            {"id": "pf", "x": 261, "y": 62, "w": 112, "h": 92, "kind": "warn", "label": ["prod-full", "dev-full 포함", "모든 리소스 쓰기"]},
+            {"id": "cc", "x": 400, "y": 60, "w": 108, "h": 44, "label": ["cicd-full", "CI/CD 서비스"]},
+            {"id": "sr", "x": 514, "y": 60, "w": 108, "h": 44, "label": ["secret-read", "시크릿 읽기"]},
+            {"id": "sf", "x": 628, "y": 60, "w": 108, "h": 44, "kind": "warn", "label": ["secret-full", "시크릿 관리"]},
+            {"id": "ef", "x": 400, "y": 112, "w": 108, "h": 44, "label": ["etc-full", "CDN·Lambda·DNS"]},
+            {"id": "ac", "x": 514, "y": 112, "w": 108, "h": 44, "kind": "warn", "label": ["account-full", "IAM"]},
+            {"id": "ad", "x": 628, "y": 112, "w": 108, "h": 44, "kind": "warn", "label": ["admin-full", "전체 관리자"]},
+            {"id": "r1", "x": 15, "y": 210, "w": 116, "h": 132, "label": ["신규 · 인턴", "access-read"]},
+            {"id": "r2", "x": 139, "y": 210, "w": 116, "h": 132, "label": ["dev 개발자", "access-read", "dev-full", "secret-read"]},
+            {"id": "r3", "x": 263, "y": 210, "w": 116, "h": 132, "label": ["prod 개발자", "access-read", "prod-full", "secret-read", "cicd-full"]},
+            {"id": "r4", "x": 387, "y": 210, "w": 116, "h": 132, "kind": "warn", "label": ["매니저", "access-read", "dev · prod-full", "secret-full", "cicd · etc-full"]},
+            {"id": "r5", "x": 511, "y": 210, "w": 116, "h": 132, "kind": "warn", "label": ["팀장", "매니저 그룹 전부", "+ account-full"]},
+            {"id": "r6", "x": 635, "y": 210, "w": 116, "h": 132, "kind": "warn", "label": ["최상위 관리자", "admin-full"]},
+        ],
+        "edges": [{"from": "r1", "to": "r2"}, {"from": "r2", "to": "r3"}, {"from": "r3", "to": "r4"}, {"from": "r4", "to": "r5"}, {"from": "r5", "to": "r6"}],
+    },
 }
 
 

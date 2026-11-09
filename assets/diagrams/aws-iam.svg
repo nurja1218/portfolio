@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" width="760" height="360" role="img" aria-label="AWS 권한 그룹과 역할별 할당">
+
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#8c959f; --box:#f6f8fa;
+          --new:#e6f4ea; --newline:#2f855a; --warn:#fff4e5; --warnline:#b7791f; --group:#fbfbfc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#6e7681; --box:#161b22;
+            --new:#12261b; --newline:#3fb950; --warn:#2a1f0d; --warnline:#d29922; --group:#10151c; }
+  }
+  .bg { fill: var(--bg); }
+  .grp { fill: var(--group); stroke: var(--line); stroke-dasharray: 4 4; }
+  .grpt { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .box { fill: var(--box); stroke: var(--line); }
+  .new { fill: var(--new); stroke: var(--newline); }
+  .warn { fill: var(--warn); stroke: var(--warnline); }
+  .t { fill: var(--fg); font-size: 13px; }
+  .s { fill: var(--muted); font-size: 11px; }
+  .title { fill: var(--fg); font-size: 14px; font-weight: 700; }
+  .e { stroke: var(--line); stroke-width: 1.4; fill: none; marker-end: url(#a); }
+  .ed { stroke: var(--line); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#a); }
+  .el { fill: var(--muted); font-size: 11px; }
+  .ah { fill: var(--line); }
+  text { font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+</style>
+
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="bg" width="760" height="360"/>
+<rect class="grp" x="15" y="34" width="365" height="136" rx="10"/>
+<text class="grpt" x="27" y="52">환경별</text>
+<rect class="grp" x="390" y="34" width="355" height="136" rx="10"/>
+<text class="grpt" x="402" y="52">리소스별</text>
+<text class="title" x="15" y="22">① 권한 그룹 — 사용자에게 정책을 직접 붙이지 않고, 정책을 묶은 그룹만 할당</text>
+<text class="title" x="15" y="196">② 역할별 할당 — 신규는 읽기만, 역할이 올라갈수록 그룹을 더함</text>
+<path class="e" d="M131.0,276.0 L139.0,276.0"/>
+<path class="e" d="M255.0,276.0 L263.0,276.0"/>
+<path class="e" d="M379.0,276.0 L387.0,276.0"/>
+<path class="e" d="M503.0,276.0 L511.0,276.0"/>
+<path class="e" d="M627.0,276.0 L635.0,276.0"/>
+<rect class="box" x="25" y="62" width="112" height="92" rx="8"/>
+<text class="t" x="81.0" y="96.0" text-anchor="middle">access-read</text>
+<text class="s" x="81.0" y="112.0" text-anchor="middle">모든 리소스</text>
+<text class="s" x="81.0" y="128.0" text-anchor="middle">읽기 전용</text>
+<rect class="new" x="143" y="62" width="112" height="92" rx="8"/>
+<text class="t" x="199.0" y="88.0" text-anchor="middle">dev-full</text>
+<text class="s" x="199.0" y="104.0" text-anchor="middle">읽기는 전부</text>
+<text class="s" x="199.0" y="120.0" text-anchor="middle">쓰기는 이름에</text>
+<text class="s" x="199.0" y="136.0" text-anchor="middle">dev·test만</text>
+<rect class="warn" x="261" y="62" width="112" height="92" rx="8"/>
+<text class="t" x="317.0" y="96.0" text-anchor="middle">prod-full</text>
+<text class="s" x="317.0" y="112.0" text-anchor="middle">dev-full 포함</text>
+<text class="s" x="317.0" y="128.0" text-anchor="middle">모든 리소스 쓰기</text>
+<rect class="box" x="400" y="60" width="108" height="44" rx="8"/>
+<text class="t" x="454.0" y="78.0" text-anchor="middle">cicd-full</text>
+<text class="s" x="454.0" y="94.0" text-anchor="middle">CI/CD 서비스</text>
+<rect class="box" x="514" y="60" width="108" height="44" rx="8"/>
+<text class="t" x="568.0" y="78.0" text-anchor="middle">secret-read</text>
+<text class="s" x="568.0" y="94.0" text-anchor="middle">시크릿 읽기</text>
+<rect class="warn" x="628" y="60" width="108" height="44" rx="8"/>
+<text class="t" x="682.0" y="78.0" text-anchor="middle">secret-full</text>
+<text class="s" x="682.0" y="94.0" text-anchor="middle">시크릿 관리</text>
+<rect class="box" x="400" y="112" width="108" height="44" rx="8"/>
+<text class="t" x="454.0" y="130.0" text-anchor="middle">etc-full</text>
+<text class="s" x="454.0" y="146.0" text-anchor="middle">CDN·Lambda·DNS</text>
+<rect class="warn" x="514" y="112" width="108" height="44" rx="8"/>
+<text class="t" x="568.0" y="130.0" text-anchor="middle">account-full</text>
+<text class="s" x="568.0" y="146.0" text-anchor="middle">IAM</text>
+<rect class="warn" x="628" y="112" width="108" height="44" rx="8"/>
+<text class="t" x="682.0" y="130.0" text-anchor="middle">admin-full</text>
+<text class="s" x="682.0" y="146.0" text-anchor="middle">전체 관리자</text>
+<rect class="box" x="15" y="210" width="116" height="132" rx="8"/>
+<text class="t" x="73.0" y="272.0" text-anchor="middle">신규 · 인턴</text>
+<text class="s" x="73.0" y="288.0" text-anchor="middle">access-read</text>
+<rect class="box" x="139" y="210" width="116" height="132" rx="8"/>
+<text class="t" x="197.0" y="256.0" text-anchor="middle">dev 개발자</text>
+<text class="s" x="197.0" y="272.0" text-anchor="middle">access-read</text>
+<text class="s" x="197.0" y="288.0" text-anchor="middle">dev-full</text>
+<text class="s" x="197.0" y="304.0" text-anchor="middle">secret-read</text>
+<rect class="box" x="263" y="210" width="116" height="132" rx="8"/>
+<text class="t" x="321.0" y="248.0" text-anchor="middle">prod 개발자</text>
+<text class="s" x="321.0" y="264.0" text-anchor="middle">access-read</text>
+<text class="s" x="321.0" y="280.0" text-anchor="middle">prod-full</text>
+<text class="s" x="321.0" y="296.0" text-anchor="middle">secret-read</text>
+<text class="s" x="321.0" y="312.0" text-anchor="middle">cicd-full</text>
+<rect class="warn" x="387" y="210" width="116" height="132" rx="8"/>
+<text class="t" x="445.0" y="248.0" text-anchor="middle">매니저</text>
+<text class="s" x="445.0" y="264.0" text-anchor="middle">access-read</text>
+<text class="s" x="445.0" y="280.0" text-anchor="middle">dev · prod-full</text>
+<text class="s" x="445.0" y="296.0" text-anchor="middle">secret-full</text>
+<text class="s" x="445.0" y="312.0" text-anchor="middle">cicd · etc-full</text>
+<rect class="warn" x="511" y="210" width="116" height="132" rx="8"/>
+<text class="t" x="569.0" y="264.0" text-anchor="middle">팀장</text>
+<text class="s" x="569.0" y="280.0" text-anchor="middle">매니저 그룹 전부</text>
+<text class="s" x="569.0" y="296.0" text-anchor="middle">+ account-full</text>
+<rect class="warn" x="635" y="210" width="116" height="132" rx="8"/>
+<text class="t" x="693.0" y="272.0" text-anchor="middle">최상위 관리자</text>
+<text class="s" x="693.0" y="288.0" text-anchor="middle">admin-full</text>
+</svg>
