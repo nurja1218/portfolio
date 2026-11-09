@@ -298,7 +298,7 @@ DIAGRAMS = {
         "w": 760, "h": 316, "alt": "추천 상품 스케줄러 재구축 흐름",
         "nodes": [
             {"id": "my", "x": 15, "y": 36, "w": 175, "h": 64, "icon": "aws:rds", "label": ["MySQL (RDS)", "행동 로그 3억 건+", "주문 · 후기"]},
-            {"id": "agg", "x": 205, "y": 40, "w": 165, "h": 56, "icon": "g:funnel", "label": ["일별 행동 집계", "(동료 구현)"]},
+            {"id": "agg", "x": 205, "y": 36, "w": 165, "h": 64, "icon": "g:funnel", "label": ["행동 집계 스케줄러", "매시간 로그 id 기록", "매일 상품별 집계"]},
             {"id": "mg", "x": 385, "y": 40, "w": 180, "h": 56, "kind": "new", "icon": "brand:mongodb", "label": ["MongoDB", "상품 × 일 × 행동 유형"]},
             {"id": "set", "x": 580, "y": 34, "w": 165, "h": 68, "icon": "g:sliders", "label": ["추천 규칙 설정", "MongoDB 설정 컬렉션", "운영·기획팀과 정함"]},
             {"id": "sch", "x": 15, "y": 150, "w": 175, "h": 64, "icon": "aws:ecs", "label": ["Scheduler (매일)", "작업만 큐에 등록"]},
